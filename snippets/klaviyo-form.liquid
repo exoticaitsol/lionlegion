@@ -1,0 +1,171 @@
+<div class="klaviyo_modal" id="k_id_modal" style="display: none;">
+  <div class="klaviyo_inner">
+    <div class="klaviyo_fieldset klaviyo_title">
+      {% render 'logo' %}
+      <h2 class="klaviyo_header hide_on_submit">Join Lion Legion and enjoy <span>10% off</span> your first purchase.</h2>
+    </div>
+    <a href="#" class="klaviyo_close_modal klaviyo_header_close">×</a>
+    <form action="//manage.kmail-lists.com/subscriptions/subscribe" method="POST" novalidate="novalidate" class="klaviyo_subscription_form hide_on_submit">
+      <input type="hidden" name="g" value="UxjaW4">
+      <div class="klaviyo_fieldset">
+        <div class="klaviyo_field_group exclusive_offer_email_klaviyo">
+          <input type="email" id="k_id_modal_$email" name="email" placeholder="enter email address"></div>
+      </div> 
+      <div class="klaviyo_fine_print"></div>
+      <div class="klaviyo_form_actions">
+        <button type="submit" class="klaviyo_submit_button">
+          <span>Join Now</span>
+        </button>
+      </div>
+      <div class="klaviyo_fieldset klaviyo-exclusive-offer">
+        <p class="klaviyo_header">But wait, you'll also get:</p>
+        <p class="klaviyo_subheader">Members-only exclusive offers,<br>early access to new designs, and
+          <br>other benefits guaranteed to knock your socks off.</p>
+      </div>
+      <div class="klaviyo_below_submit" ></div>
+      <p style="text-align:center; margin-top: 1rem;"><a class="klaviyo_close_modal"><u>No thanks</u></a></p>
+    </form>
+    <div class="error_message" ></div>
+    <div class="success_message" style="display: none;">
+      Thank you! Your discount is 
+      <div class="coupon_code">get10now</div>
+      This has automatically been applied to your basket and you should recieve an email reminder shortly.
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+<style>
+  .klaviyo_modal {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+  }
+  .klaviyo_modal .klaviyo_inner{
+    width: 500px !important;
+    top: unset !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-height: unset !important;
+    margin: 0 auto !important;
+  }
+
+  .klaviyo_modal .klaviyo_fieldset, 
+  .klaviyo_modal .klaviyo_form_actions {
+    border-top: none !important;
+  }
+
+  .klaviyo_modal .klaviyo_inner:not(.success) {
+    background: -moz-linear-gradient(151deg, #2D39CE 0%,#012169 57%,#fff 57.2%,#fff 100%) !important;
+    background: -webkit-linear-gradient(151deg, #2D39CE 0%,#012169 57%,#fff 57.2%,#fff 100%) !important;
+    background: linear-gradient(151deg, #2D39CE 0%,#012169 57%,#fff 57.2%,#fff 100%) !important;
+  }
+  .klaviyo_title svg {
+    width: 60%;
+    height: 60%;
+  }
+  .klaviyo_title h2 {
+    line-height: 32px !important;
+    padding: 0 27px !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-size: 30px !important;
+  }
+
+  .klaviyo_title h2 span {
+    color: #FF0051;
+    font-weight: 600;
+    font-size: 32px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .klaviyo_title {
+    text-align: center;
+  }
+  .klaviyo_modal .klaviyo_header_close {
+    color: #fff;
+    font-size: 42px !important;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .klaviyo_field_group.exclusive_offer_email_klaviyo input[type="email"] {
+    padding: 10px 36px !important;
+    font-size: 17px !important;
+    text-align: center;
+    border-radius: 50px !important;
+    border: 2px solid #012169 !important;
+    height: auto !important;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  }
+  .klaviyo_field_group.exclusive_offer_email_klaviyo input[type="email"]:focus {
+    border-color: #C8102E !important;
+  }
+  .klaviyo_modal .klaviyo_submit_button {
+    background-color: unset !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  button.klaviyo_submit_button span {
+    background: #C8102E !important;
+    font-size: 17px !important;
+    text-align: center;
+    border-radius: 50px !important;
+    border: 2px solid #C8102E !important;
+    height: auto !important;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  }
+  .klaviyo-exclusive-offer p {
+    text-align: left !important;
+    margin: 0 5rem !important;
+  }
+  .klaviyo_modal .klaviyo_inner.success {
+    background:#012169;
+  }
+
+  .klaviyo_inner.klaviyo_inner.success .success_message {
+    color: white;
+  }
+  .coupon_code {
+    font-weight: 700;
+    letter-spacing: .3em;
+    border-width: 2px;
+    border-style: dashed;
+    padding: .5rem 1rem;
+    border-color: white;
+    margin: 1rem auto;
+    font-size: 1.25rem;
+  }
+  
+  @media only screen and (max-width: 480px)
+  {
+    .klaviyo_modal .klaviyo_inner {
+      max-height: 100vh !important;
+      width: 100vw !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      overflow: scroll !important;
+      position: relative;
+    }
+    .klaviyo-exclusive-offer p {
+      text-align: left !important;
+      margin: 0 2.5rem !important;
+    }
+    .klaviyo_modal .klaviyo_inner:not(.success) {
+    background: -moz-linear-gradient(151deg, #2D39CE 0%,#012169 53%,#fff 53.2%,#fff 100%) !important;
+    background: -webkit-linear-gradient(151deg, #2D39CE 0%,#012169 53%,#fff 53.2%,#fff 100%) !important;
+    background: linear-gradient(151deg, #2D39CE 0%,#012169 53%,#fff 53.2%,#fff 100%) !important;
+    }
+  }
+  
+  @media screen and (max-height: 700px) {
+    .klaviyo-exclusive-offer {
+      display: none;
+    }
+    .klaviyo_modal .klaviyo_inner:not(.success) {
+    background: -moz-linear-gradient(151deg, #2D39CE 0%,#012169 68%,#fff 68.2%,#fff 100%) !important;
+    background: -webkit-linear-gradient(151deg, #2D39CE 0%,#012169 68%,#fff 68.2%,#fff 100%) !important;
+    background: linear-gradient(151deg, #2D39CE 0%,#012169 68%,#fff 68.2%,#fff 100%) !important;
+    }
+  }
+</style>

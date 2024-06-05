@@ -1,0 +1,51 @@
+<!-- start product-info.liquid (SNIPPET) -->
+<form id="AddToCartForm" action="/cart/add" method="post" class="form-add-to-cart jq-cart-add-product" enctype="multipart/form-data" data-productid="{{ product.id }}">
+    <div class="product-variant-wrapper">
+      
+      {%- if product.variants.size == 1 and product.variants.first.title contains 'Default' -%}
+        
+      {%- endif -%}
+
+      {%- section 'swatch' -%}
+    </div>
+
+    {%- if settings.product_enabled_recharge -%}
+      {%- render 'subscription-product' -%}
+    {%- endif -%}
+
+    <div class="product-quantity">
+      <div class="product-form-label">{{ 'products.product.quantity' | t }}</div>
+
+      <div class="product-quantity-wrapper">
+        <button id="ButtonMinus" aria-label="Button Minus" type="button" class="btn btn-minus">{% render 'icon-minus' %}</button>
+        <input id="ProductQuantity" class="quantity" pattern="[0-9]*" name="quantity" min="1" value="1" step="1" type="number"/>
+        <button id="ButtonPlus" aria-label="Button Plus" type="button" class="btn btn-plus">{% render 'icon-plus' %}</button>
+      </div>
+    </div>
+
+    {%- if settings.enabled_upsell_product -%}
+      {%- section 'upsell' -%}
+    {%- endif -%}
+
+    <button type="submit" class="{% if settings.disable_cartDrawer != true %} cart-icon {% endif %} btn btn-add-tocart {% if settings.enabled_show_atc_all_variants_choosed and product.variants.size > 1 %} hide {% endif %}" id="AddToCart">
+      <span class="btn-money money">{{ product.price | money }}</span>
+      <span class="btn-label"> - {{ settings.add_to_cart_label }}</span>
+      <span class="btn-svg">{% render 'icon-cart' %}</span>
+      <span class="btn-items">1 {{ 'products.product.item' | t }}</span>
+      <span class="btn-progress"></span>
+    </button>
+
+    <div id="id-btn-label"  class="btn btn-choose-variant {% if settings.enabled_show_atc_all_variants_choosed == false or product.variants.size == 1 %} hide {% endif %}">
+      <span class="btn-label">{{ settings.product_button_choose_variant }}</span>
+    </div>
+</form>
+
+{%- if settings.product_enabled_revenue_bump -%}
+<!-- Addon Apps -->
+{%- render 'custom-addon-app' -%}
+{%- endif -%}
+
+
+<div class="trust-badges">
+{%- section 'trust-badges' -%}
+</div>

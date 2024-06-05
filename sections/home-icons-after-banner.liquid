@@ -1,0 +1,56 @@
+
+<section class="featured_in">
+      <div class="featured_in_title">
+    <h2 class="title_h2">{{ section.settings.title }}</h2>
+    </div>
+  <div class="featured_in_inner">
+{% for block in section.blocks  %}
+   <div class="featured_in_box">
+     <img src="{{ block.settings.icon | img_url: "original" }}" alt="img">
+    </div>
+    {% endfor %}
+
+   
+  </div>
+</section>
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Home Icons",
+    "settings": [
+      {
+        "type": "text",
+        "id"  : "title",
+        "label": "Title"
+      }
+    ],
+      "blocks": [
+    {
+      "type": "icon",
+      "name": "icon",
+      "settings": [
+        {
+          "id": "icon",
+          "type": "image_picker",
+          "label": "Add Icon"
+        }
+      ]
+    }
+  ],
+    "presets": [
+      {
+        "name": "Home Icons"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

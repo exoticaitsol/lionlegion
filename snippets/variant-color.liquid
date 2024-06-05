@@ -1,0 +1,8 @@
+<style>
+ {% for block in section.blocks %}
+
+span[data-color="{{ block.settings.color_name }}"] {
+    background-color: {{ block.settings.color_code }} !important;
+}
+{% endfor %}
+</style>

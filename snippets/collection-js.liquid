@@ -1,0 +1,102 @@
+<!-- start collection-js.liquid (SNIPPET) -->
+<script>
+    (function($){
+        $(document).ready(function(){
+            var $btnSeeMore = $('#btn-see-more'),
+                btnSeeMoreLabel = {
+                    closed: "{{ 'collections.general.see_more' | t }}",
+                    opened: "{{ 'collections.general.see_less' | t }}"
+                };
+
+            var $descriptionContent = $btnSeeMore.closest('.description-content');
+
+            if( $descriptionContent.height() > 80 ) {
+                $btnSeeMore.html(btnSeeMoreLabel.closed);
+            }
+                
+            $btnSeeMore.click(function(){
+                var $self = $(this);
+
+                if ($descriptionContent.hasClass('closed')) {
+                    $descriptionContent.removeClass('closed');
+                    $self.html(btnSeeMoreLabel.opened);
+                } else {
+                    $descriptionContent.addClass('closed');
+                    $self.html(btnSeeMoreLabel.closed);
+                }
+            });
+            
+    
+            Shopify.queryParams = Shopify.queryParams || {};
+    
+            /**
+            * Filter Sorts By
+            * @function[<sort_by>]
+            *
+            * This function sorts the collection filter
+            * 
+            * Dependencies: none
+            * 
+            * @param: none   
+            * 
+            */ 
+            VastaShop.Variables._sort_by.change(function(){
+                Shopify.queryParams.sort_by = $(this).val();
+                location.search = $.param(Shopify.queryParams);
+            });
+            
+            /**
+            * Filter Per Interest
+            * @function[<filter_interest>]
+            *
+            * This function filters the collection for interest
+            * 
+            * Dependencies: none
+            * 
+            * @param: none   
+            * 
+            */
+            VastaShop.Variables._filter_interest.change(function(){
+                location.href = $(this).val();
+            });
+            
+            /**
+            * Collection Swatch
+            * @function[<swatch-value-color-hover>]
+            *
+            * This function handles swatch variations when you hover over the
+            * 
+            * Dependencies: none
+            * 
+            * @param: none   
+            * 
+            */
+              
+            {%- comment -%}
+            $('.swatch-value-color').hover(function(){
+                $(this).closest('.item-single').find('.background-image').css('background-image', 'url(' + $(this).attr('data-img') + ')').css('transition','0s');
+                $(this).closest('.item-single').find('.background-image img').css('opacity','0')
+               // $(this).parents('.swatch-element').find('.swatch-value-checked').show();
+            });
+            {%- endcomment -%}
+          
+          
+            /**
+            * Swatch Variations Select
+            * @function[<swatch-value-color>]
+            *
+            * This function handles swatch variations when you select the
+            * 
+            * Dependencies: none
+            * 
+            * @param: none   
+            * 
+            */
+            $('.swatch-value-color').mouseleave(function(){
+               $(this).closest('.item-single').find('.background-image').css('background-image', 'none');
+              $(this).closest('.item-single').find('.background-image img').css('opacity','1').css('transition','0s')
+              //  $(this).parents('.swatch-element').find('.swatch-value-checked').hide();
+            });
+        });
+    })($);
+    </script>

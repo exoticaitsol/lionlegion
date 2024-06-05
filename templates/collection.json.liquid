@@ -1,0 +1,46 @@
+{%- layout none -%}
+{%- paginate collection.products by 36 -%}
+{
+    "products":[
+        {%- for prod in collection.products -%}
+            {
+                "id":"{{ prod.id }}",
+                "title":"{{ prod.title }}",
+                "tags":[
+
+                ],
+                "image":"{{ prod.featured_image | image_url: width: 720 }}",
+                "price":"{{ prod.price | money_with_currency }}",
+                "colors":"
+                    {%- for product_option in prod.options_with_values -%}
+                            {%- if product_option.name == 'Colour' -%}
+                                {%- for value in product_option.values -%}
+                                    {{ value }}{%- unless forloop.last -%},{%- endunless -%}
+                                {%- endfor -%}
+                            {%- endif -%}
+                    {%- endfor -%}",
+                "variations":[
+                    {%- for product_option in prod.options_with_values -%}
+                        {%- if product_option.name == 'Colour' -%}
+                            {%- for value in product_option.values -%}
+                                {%- for variant in prod.variants -%}
+                                    {%- if variant.options contains value and variant.featured_image != blank -%}
+                                        {%- assign img_swatch = variant.featured_image | image_url: width: 720 -%}
+                                        {%- assign url_variant = variant.url -%}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                                {
+                                    "color":"{{ value }}",
+                                    "imgSwatch":"{{ img_swatch }}",
+                                    "url":"{{ url_variant }}",
+                                    "parentID":"{{ prod.id }}"
+                                }{%- unless forloop.last -%},{%- endunless -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                ]
+            }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+    ]
+}
+{%- endpaginate -%}

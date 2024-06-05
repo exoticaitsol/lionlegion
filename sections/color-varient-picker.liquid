@@ -1,0 +1,47 @@
+<style>
+ {% for block in section.blocks %}
+
+span[data-color="{{ block.settings.color_name| downcase }}"] {
+    background-color: {{ block.settings.color_code }} !important;
+}
+{% endfor %}
+</style>
+
+
+ 
+{% schema %}
+  {
+    "name": "Color variant ",
+    "settings": [],
+    "blocks": [
+    {
+      "type": "Slector",
+      "name": "Slector",
+      "settings": [
+
+        {
+        "type": "text",
+        "id": "color_name",
+        "label":"Color name"
+      },     {
+        "type": "color",
+        "id": "color_code",
+        "label":"Color code"
+      }
+      ]
+    }
+  ],
+    
+     "presets": [
+        {
+       "name": "Color variant"
+       }
+     ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

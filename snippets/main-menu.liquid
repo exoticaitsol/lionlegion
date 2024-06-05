@@ -1,0 +1,48 @@
+<!-- start main-menu (SNIPPET) -->
+<nav class="main-menu no-mobile {{ pos }}">
+    <!-- <h3 class="hide">Header Menu</h3> -->
+
+    <div class="wrapper">
+        <ul class="main-menu-items child-number-1">
+            {%- for link in linklists[link_list].links -%}
+                {%- assign child1 = forloop.index -%}
+
+                {%- if link.links != blank -%}
+                    <li class="menu-item {% if link.active %}nav-active{% endif %}">
+                    <a id="hdr-nav-menu-{{ child1 }}" class="menu-link {{ link_text_transform }}" href="{{ link.url }}">
+                        {{ link.title }}
+                        {%- render 'icon-arrow-down' -%}
+                    </a>
+                    <ul class="main-menu-items child-number-2">
+                      <div class="expand-menu-area">
+
+                        {%- for childlink in link.links -%}
+                        {%- assign child2 = forloop.index -%}
+                        <div class="expand-menu-li">
+                          <li class="menu-item {% if link.active %}nav-active{% endif %}">
+                            <a id="hdr-nav-menu-{{ child1 }}-{{ child2 }}" class="menu-link {{ link_text_transform }}" href="{{ childlink.url }}">{{ childlink.title }}</a>
+                            {%- if childlink.links != blank -%}
+                            {%- render 'icon-arrow-down' -%}
+                            <ul class="main-menu-items child-number-3">
+                              {%- for child in childlink.links -%}
+                              <li class="menu-item !w-full !ml-0 {% if link.active %}nav-active{% endif %}"><a id="hdr-nav-menu-{{ child1 }}-{{ child2 }}-{{ forloop.index }}" class="menu-link {{ link_text_transform }}" href="{{ child.url }}">{{ child.title }}</a></li>
+                              {%- endfor -%}
+                            </ul>
+                            {%- endif -%}
+                          </li>
+                        </div>
+                        {%- endfor -%}
+                      </div>
+                      <div class="expand-menu-area" style="height: 42px">
+                      </div>
+                    </ul>
+                    </li>
+                {%- else -%}
+                    <li class="menu-item {% if link.active %}nav-active{% endif %}">
+                    <a id="hdr-nav-menu-{{ child1 }}" class="menu-link {{ link_text_transform }}" href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                {%- endif-%}
+            {%- endfor -%}
+        </ul>
+    </div>
+</nav>

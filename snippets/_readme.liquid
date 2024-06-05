@@ -1,0 +1,189 @@
+Follow this steps to update the Custom Edits
+
+1 - Go to sections/shipping_bar.liquid, search and replace: 
+    "max": 500,
+    "step": 5,
+
+for: 
+    "max": 100,
+    "step": 1,
+
+2 - Go to your live theme, Edit --> Code --> Config --> settings_data.json, copy all content. 
+Inside the new theme go to Edit --> Code --> Config --> Add a new config, create the file and paste the content from the old theme.
+
+3 - Open snippets/vasta-scripts.liquid search for: 
+
+  <script src="{{ 'swatch.js' | asset_url }}" defer></script>
+
+and replace for
+
+  <script src="{{ 'custom-swatch.js' | asset_url }}" defer></script>
+
+4 - Still inside snippets/vasta-scripts.liquid search for: 
+
+  {% render 'product-js' %}
+
+and replace for:
+
+  {% render 'custom-product-js' %}
+
+5 - Go to sections/shippingtext.liquid, search and replace:
+
+  {%- case block.settings.icon_shipping -%}
+    {%- when 'icon-fighter-jet' -%}
+    	{%- render 'icon-fighter-jet' -%}
+    {%- when 'icon-compass' -%}
+    	{%- render 'icon-compass' -%}
+    {%- when 'icon-refresh' -%}
+    	{%- render 'icon-refresh' -%}
+    {%- when 'icon-clock' -%}
+    	{%- render 'icon-clock' -%}
+  {%- endcase -%}
+
+with
+
+  {% case block.settings.icon_shipping %}
+    {% when 'icon-fighter-jet' %}
+    	{% render 'icon-fighter-jet' %}
+    {% when 'icon-compass' %}
+    	{% render 'icon-compass' %}
+    {% when 'icon-refresh' %}
+    	{% render 'icon-refresh' %}
+    {% when 'icon-clock' %}
+    	{% render 'icon-clock' %}
+    {% when 'icon-person' %}
+    	{% render 'icon-person' %}
+    {% when 'icon-medal' %}
+    	{% render 'icon-medal' %}
+    {% when 'icon-flag' %}
+    	{% render 'icon-flag' %}
+  {% endcase %}
+
+6. Still inside sections/shippingtext.liquid, search and replace:
+
+  {
+    "label": "Fighter Jet",
+    "value": "icon-fighter-jet"
+  },
+  {
+    "label": "Compass",
+    "value": "icon-compass"
+  },
+  {
+    "label": "Clock",
+    "value": "icon-clock"
+  },
+  {
+    "label": "Refresh",
+    "value": "icon-refresh"
+  }
+
+with
+
+  {
+    "label": "Fighter Jet",
+    "value": "icon-fighter-jet"
+  },
+  {
+    "label": "Compass",
+    "value": "icon-compass"
+  },
+  {
+    "label": "Clock",
+    "value": "icon-clock"
+  },
+  {
+    "label": "Refresh",
+    "value": "icon-refresh"
+  },
+  {
+    "label": "Person",
+    "value": "icon-person"
+  },
+  {
+    "label": "Medal",
+    "value": "icon-medal"
+  },
+  {
+    "label": "Flag",
+    "value": "icon-flag"
+  }
+
+7. Go to sections/footer.liquid, search and replace: ( Please note, it will be done twice on same file)
+
+{%- if block.settings.address != blank -%}<a title="Adress" id="ftr-info-adress" href="{%- if block.settings.address_link -%}{{ block.settings.address_link }}{%- else -%} # {%- endif -%}" target="_blank"> {%- render "icon-pin" -%}<p>{{ block.settings.address }}</p></a>{%- endif -%}
+
+with
+
+{% if block.settings.address != blank %}
+  {% if block.settings.address_link == blank %}
+    <p title="Adress" id="ftr-info-adress" href="{% if block.settings.address_link %}{{ block.settings.address_link }}{% else %} # {% endif %}" target="_blank">
+      {% render "icon-pin" %}
+      <span>{{ block.settings.address }}</span>
+    </p>
+  {% else %}
+    <a title="Adress" id="ftr-info-adress" href="{% if block.settings.address_link %}{{ block.settings.address_link }}{% else %} # {% endif %}" target="_blank">
+      {% render "icon-pin" %}
+      <p>{{ block.settings.address }}</p>
+    </a>
+  {% endif %}
+{% endif %}
+
+8. Go to section/header.liquid, search and replace:
+
+"class": "main-header",
+
+with
+
+"class": "main-header fixed",
+
+9. Go to section/collection.liquid, search and replace:
+
+{%- assign products_amount = settings.products_amount | plus: 0 -%}
+{%- if paginate.items > products_amount -%}
+	<div class="paginate">{{ paginate | default_pagination: next: '→', previous: '←' }}</div>
+{%- endif -%}
+
+with
+
+{% comment %}
+  {%- assign products_amount = settings.products_amount | plus: 0 -%}
+  {%- if paginate.items > products_amount -%}
+      <div class="paginate">{{ paginate | default_pagination: next: '→', previous: '←' }}</div>
+  {%- endif -%}
+{% endcomment %}
+
+10. In the same file, search for 
+
+</section>
+    </div>
+
+with
+
+</section>
+      
+        {%- assign products_amount = settings.products_amount | plus: 0 -%}
+        {%- if paginate.items > products_amount -%}
+          <div id="AjaxinatePagination">
+            {% if paginate.next %}
+            	<a href="{{ paginate.next.url }}">Show More</a>
+            {% endif %}
+          </div>
+        {%- endif -%}
+    </div>
+
+11. In the same file, search for 
+
+<section class="collection-items">
+  
+with
+  
+<section class="collection-items" id="AjaxinateContainer">
+  
+12. Go to snippets/vasta-scripts
+  
+and paste below code right after "<script src="{{ 'lazysizes.min.js' | asset_url }}"></script>" at line 4
+  
+  {% if template contains 'collection' %}
+  <script src="{{ 'ajaxinate.min.js' | asset_url }}"></script>
+  {% endif %}

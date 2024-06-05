@@ -1,0 +1,34 @@
+<!-- start earch-bar.liquid (SNIPPET) -->
+{% comment %}
+
+  A snippet to include a search bar anywhere in your theme.
+  Note we are using 'input-group' for the layout. Look under Forms > Input Groups for some demos.
+
+  More information:
+   - http://docs.shopify.com/themes/liquid-variables/search
+
+  To return only products in results:
+    - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
+    - Or manually add type=product to the search URL as a query parameter
+    - Uncomment hidden input with value="product" below
+
+{% endcomment %}
+
+<form action="/search" method="get" class="input-group search-bar">
+  {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
+  <input id="search-input" type="text" name="q" value="{{ search.terms | escape }}" placeholder="{{ placeholder }}" class="input-group-field" aria-label="{{ settings.header_searchbar_placeholder | t }}">
+  <span class="input-group-btn">
+    <button aria-label="search-button" id="search-button" type="submit" class="btn jq-icon-fallback-text">
+      <span class="icon icon-search" aria-hidden="true"></span>
+      <span class="fallback-text search-button-span">{% render "icon-search" %}</span>
+    </button>
+  </span>
+</form>
+
+<script>
+  document.querySelector('#NavDrawer form.search-bar').addEventListener('focusin',(e)=>{
+    if(isp_is_mobile) {
+      document.body.classList.remove('js-drawer-open-left')
+    }
+  },true)
+</script>

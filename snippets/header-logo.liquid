@@ -1,0 +1,27 @@
+<!-- start header-logo (SNIPPET) -->
+{%- assign dimension =  'max-width: ' | append: logo_max_width | append: 'px' -%}
+{%- if choose_custom_dimensions == 'height' -%}
+{%- assign dimension =  'max-height: ' | append: logo_max_height | append: 'px' -%}
+{%- endif -%}
+
+<div id="Header{{ section_title }}" class="logo-image {{ text_transform }}">
+    <a title="{{ logo_alt | default: shop.name | strip_html | escape }}" href="/" class="main-logo-link">
+        {%- if enable_svg_logo == true -%}
+            <div>{{ svg_code }}</div>
+        {%- elsif logo != blank -%}
+            {%- assign image_size = logo_max_width | times: 2 -%}
+
+            {%- render 'responsive-image',
+              id_prefix: logo_alt, 
+              image: logo,
+              max_width: image_size,
+              custom_style: dimension,
+              active_lazy: false,
+              no_wrap: true, 
+              alt_text: logo_alt
+            -%}
+        {%- else -%}
+            {{ shop.name }}
+        {%- endif -%}
+    </a>
+</div>

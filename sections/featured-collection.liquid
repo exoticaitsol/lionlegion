@@ -1,0 +1,287 @@
+<!-- start featured-collection.liquid (SECTION) -->
+<section class="featured-collection {{ section.settings.custom_class }}">
+      <div class="wrapper">
+        <h2 class="section-title collection-title">{{ section.settings.title }}</h2>
+
+        <product-grid class="grid grid-cols-2 gap-2 mx-auto lg:grid-cols-3">
+        {%- assign collection_temp = collections[section.settings.collection] -%}
+        {%- assign amount = section.settings.products_per_rows | times: section.settings.rows -%}
+        {%- for product in collection_temp.products limit: amount -%}
+        {%- liquid
+            assign firstVariant = product.first_available_variant
+            if section.settings.show_swatches and product.options contains 'Colour'
+                assign hasColor = true
+                capture obj
+                    echo '{'
+                    for color in product.options_by_name['Colour'].values
+                        echo "'" | append: color | append: "':'"
+                        for variant in product.variants
+                            if variant.options contains color
+                                echo variant.image | image_url: width: 360
+                                break
+                            endif
+                        endfor
+                        echo "'"
+                        unless forloop.last
+                            echo ','
+                        endunless
+                    endfor
+                    echo '}'
+                endcapture
+            else
+                assign hasColor = false
+                assign obj = "'none'"
+            endif
+        -%}
+            <product-card  class="block w-full min-h-[max-content]"
+                {% if hasColor -%}
+                x-data="colorSwatches({
+                    starting: '{{ firstColor }}',
+                    colors: {{ obj }}})"
+                {%- endif -%}>
+                <a href="{{ product.url }}" aria-label="{{ product.title }}" class="w-full mx-auto">
+                  {%- if hasColor -%}
+                    <img class="w-full h-auto" src="{{ product.featured_image | image_url: width: 360 }}" sizes="(max-width: 768px) 48vw, (min-width: 1280px) 410px, 32vw" srcset="" {%- if hasColor %} x-rias="image||'{{ product.featured_image | image_url: width: 360 }}'" {%- endif %} alt="{{ firstVariant.image.alt }}" data-sizes="auto" {% if forloop.index > 3 %}loading="lazy"{%- else -%} loading="eager"{%- endif -%} width="{{ firstVariant.image.width }}" height="{{ firstVariant.image.height }}"/>
+                  {%- else -%}
+                    {%- liquid
+                      if forloop.index > 3
+                        assign lazy = true
+                      else
+                        assign lazy = false
+                      endif
+                      render 'responsive-image', image_class: 'w-full h-auto', active_lazy: lazy, image: firstVariant.image, size_mobile: 48, size_desk: 30, custom_class: true
+                    -%}
+                  {%- endif -%}
+                </a>
+
+                {%- if section.settings.show_swatches -%}
+                   <swatch-wrapper class="flex flex-row justify-center w-full gap-1 pt-2 no-js-hidden" aria-hidden="true" x-cloak {%- unless section.settings.show_single_swatch %} x-show="Object.keys(colors).length>1"
+                   {%- endunless -%}>
+                       {%- for color in product.options_by_name['Colour'].values -%}
+                       <button class="w-6 h-6 border-2 border-solid rounded-full shadow-md hover:border-cta-500 disabled:!border-cta-500" data-swatch="{{ color }}" aria-label="{{ color }}" @click.prevent="selected='{{ color }}'" :disabled="selected=='{{ color }}'"></button>
+                       {%- endfor -%}
+                   </swatch-wrapper>
+                {%- endif -%}
+
+                <card-info class="flex flex-col items-center w-full gap-1 pt-2">
+                    <a class="text-center text-blue-800" href="{{ product.url }}" tabindex="-1">
+                        {{ product.title }}
+                    </a>
+                    {% if product.metafields.stamped.reviews_count %}
+                        <a href="{{ product.url }}#Reviews">
+                            <span data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-title="{{ product.title }}" data-product-type="{{ product.producttype }}" class="block mx-auto text-center max-w-max stamped-product-reviews-badge"></span>
+                        </a>
+                    {% else %}
+                        <span class="text-base new-product-no-review">New product, no reviews</span>
+                    {%- endif -%}
+                    <card-price class="block w-full text-center">
+                        <new-price class="text-lg {%- if product.compare_at_price %} text-lg{%- endif -%}">{{ product.price | money }}</new-price>
+                        {%- if product.compare_at_price -%}
+                            <old-price>{{ product.compare_at_price | money }}</old-price>
+                        {%- endif -%}
+                    </card-price>
+                </card-info>
+
+            </product-card>
+        {% endfor %}
+          </product-grid>
+    </div>
+</section>
+
+{% style %}
+  .shopify-section.banner + #shopify-section-{{ section.id }} {
+    position: relative;
+    top: -{{ section.settings.top_margin_featured_products }}px;
+    margin-bottom: -{{ section.settings.top_margin_featured_products }}px;
+  }
+  #shopify-section-{{ section.id }} .grid-products .grid-product-title{
+    text-transform: {{ section.settings.text_transform_product_title }};
+  }
+
+  #shopify-section-{{ section.id }} .section-title {
+      text-transform: {{ section.settings.text_transform_title }};
+  }
+
+  #shopify-section-{{ section.id }} .section-title {
+      text-transform: {{ section.settings.text_transform_title }};
+  }
+
+  {% if section.settings.top_margin_featured_products %}
+    .shopify-section.banner + #shopify-section-{{ section.id }} > .wrapper {
+      display: block;
+      margin: 0 auto;
+      background: #fff;
+      padding: 0 10px;
+    }
+  {% endif %}
+
+  @media only screen and (max-width: 767px ){
+    .shopify-section.banner + #shopify-section-{{ section.id }} {
+      top: 0;
+      margin-bottom: 0;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Featured products",
+  "class": "featured-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Featured products"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "range",
+      "id": "top_margin_featured_products",
+      "info": "Only works if section above is the banner",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Position On/Off Banner",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Headline Text",
+      "default": "Featured products"
+    },
+    {
+      "type": "select",
+      "id": "text_transform_title",
+      "label": "Headline Text Transform",
+      "options": [
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "none",
+          "label": "Same as Input"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "text_transform_product_title",
+      "label": "Product Title Text Transform",
+      "options": [
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "none",
+          "label": "Same as Input"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "Collection"
+    },
+    {
+      "id": "products_per_rows",
+      "label": "Products Per Row",
+      "type": "select",
+      "options": [
+        {
+          "label": "2 products",
+          "value": "2"
+        },
+        {
+          "label": "3 products",
+          "value": "3"
+        },
+        {
+          "label": "4 products",
+          "value": "4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "id": "rows",
+      "label": "Number of Rows",
+      "type": "select",
+      "options": [
+        {
+          "label": "1 row",
+          "value": "1"
+        },
+        {
+          "label": "2 rows",
+          "value": "2"
+        },
+        {
+          "label": "3 rows",
+          "value": "3"
+        },
+        {
+          "label": "4 rows",
+          "value": "4"
+        },
+        {
+          "label": "5 rows",
+          "value": "5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show Price"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Show Colour Swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_single_swatch",
+      "label": "Show Swatch when only a single option is available",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}
+<!-- end featured-collection.liquid -->
+
+<style>
+  .collection-title{
+    padding-top: 0px!important;
+  }
+</style>

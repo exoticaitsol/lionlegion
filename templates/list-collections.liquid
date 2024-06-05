@@ -1,0 +1,131 @@
+<!-- start list-collections.liquid (TEMPLATE) -->
+{%- assign og_col = collections | first -%}
+{%- assign og_prod = og_col.products | first -%}
+{%- assign og_def_image = og_prod.featured_image -%}
+{%- assign below_title_position = '' -%}
+{%- if settings.breadcrumb_position == 'below' -%}
+{%- assign below_title_position = 'below' -%}
+{%- endif -%}
+<div class="wrapper">
+  {%- if settings.enable_breadcrumbs_list -%}
+    {%- if settings.breadcrumb_position == 'above' -%}
+      <div class="breadcrumb-wrapper">
+        {%- render 'breadcrumb' -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+  {%- if settings.collection_list_page_title != blank -%}
+  <h1 class="{% if settings.enable_breadcrumbs_list %}rte-h1 {{ below_title_position }}{%else%}rte-h1-no-breadcrumb{% endif %}">{{ settings.collection_list_page_title }}</h1>
+  {%- endif -%}
+  {%- if settings.enable_breadcrumbs_list -%}
+    {%- if settings.breadcrumb_position == 'below' -%}
+      <div class="breadcrumb-wrapper">
+          {%- render 'breadcrumb' -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+  <div class="list-collection">
+
+    {%- unless settings.enable_custom_list_collections -%}
+      <ul class="list-collections">
+        {%- for collection in collections -%}
+          {%- assign image = collection -%}
+          {%- assign product = collection.products | first -%}
+          {%- assign exemplo = product.featured_image -%}
+
+          {%- if image contains '/no-image' -%}
+          {%- assign image = product.featured_image -%}
+          {%- endif -%}
+
+          {%- if image contains '/no-image' -%}
+          {%- assign image = settings.share_imag | default: og_def_image -%}
+          {%- endif -%}
+
+          <li class="list-item-collection collection-{{ forloop.index }}">
+            <a title="{{ collection.title | strip_html | escape }}" href="/collections/{{ collection.handle }}" id="CollectionLink-{{ forloop.index }}" class="collection-link" >
+              <!--sssss{{ exemplo }}-->
+              <span class="list-item-collection-title">{{ collection.title | escape }}</span>
+              {% if forloop.index > 4 %}
+              {% render 'responsive-image',
+                id_prefix: 'blog-posts',
+                image: image,
+                active_lazy: true,
+                max_width: 600,
+                no_wrap: true,
+                alt_text: image.alt,
+                size_large: 648,
+                size_mobile: 45,
+                size_desk: 20
+              %}
+              {% else %}
+                {% render 'responsive-image',
+                  id_prefix: 'blog-posts',
+                  image: image,
+                  active_lazy: false,
+                  max_width: 600,
+                  no_wrap: true,
+                  alt_text: image.alt,
+                  size_large: 648,
+                  size_mobile: 45,
+                  size_desk: 20
+                %}
+              {% endif %}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+    {%- else -%}
+
+      <ul class="list-collections">
+        {%- assign list_collection = settings.custom_list_collections | split: ',' -%}
+        {%- for collection in collections -%}
+          {%- assign image = collection.image -%}
+          {%- assign exemplo = image -%}
+
+          {%- if image == blank -%}
+          {%- assign product = collection.products | first -%}
+          {%- assign image = product.featured_image -%}
+          {%- endif -%}
+
+          {%- if image == blank -%}
+          {%- assign image = settings.share_image | default: og_def_image -%}
+          {%- endif -%}
+            {%- unless list_collection contains collection.handle -%}
+              <li class="list-item-collection collection-{{ forloop.index }}">
+                <a title="{{ collection.title | strip_html | escape }}" href="/collections/{{ collection.handle }}" id="CollectionLink-{{ forloop.index }}" class="collection-link" >
+                  <span class="list-item-collection-title">{{ collection.title | escape }}</span>
+                  {% if forloop.index > 4 %}
+                  {%- render 'responsive-image',
+                  id_prefix: 'list-collections',
+                    image: image,
+                    active_lazy: true,
+                    max_width: 600,
+                    no_wrap: true,
+                    alt_text: image.alt,
+                    size_large: 648,
+                    size_mobile: 45,
+                    size_desk: 20
+                  -%}
+                  {% else %}
+                  {%- render 'responsive-image',
+                  id_prefix: 'list-collections',
+                    image: image,
+                    active_lazy: false,
+                    max_width: 600,
+                    no_wrap: true,
+                    alt_text: image.alt,
+                    size_large: 648,
+                    size_mobile: 45,
+                    size_desk: 20
+                  -%}
+                  {% endif %}
+                </a>
+
+              </li>
+            {%- endunless -%}
+        {%- endfor -%}
+      </ul>
+    {%- endunless -%}
+  </div>
+</div>

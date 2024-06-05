@@ -1,0 +1,45 @@
+
+<div class="container">
+ <div class="hide_show_on_click">
+  <div class="readmore_desc">{{section.settings.text | truncatewords: 30 }}</div>
+  <div class="readless_desc">{{section.settings.text }}</div>
+  <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/Mask_group_19.png?v=1704977055" class="fixed-img single_product">
+</div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.fixed-img').click(function() {
+      $('.readmore_desc, .readless_desc').toggle();
+    });
+  });
+</script>
+
+<style>
+    .readless_desc {
+      display: none;
+    }
+  </style>
+
+
+
+
+
+{% schema %}
+  {
+    "name": "Above Footer Text",
+    "settings": [
+             {
+        "type": "richtext",
+        "id": "text",
+        "label":"Text"
+      }
+    ],
+     "presets": [
+       {
+       "name": "Above Footer Text"
+       }
+     ]
+  }
+    
+ 
+{% endschema %}

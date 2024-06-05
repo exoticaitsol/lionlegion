@@ -1,0 +1,11 @@
+<!-- start 404.liquid (TEMPLATE) -->
+<div class="wrapper">
+    <h2 class="content-h2">{{ 'general.404.title' | t }}</h2>
+    <p class="content-p">{{ 'general.404.subtext_html' | t }}</p>
+    <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/404_page__new_copy.png?v=1606381234"; />
+</div>
+    {%- if settings.show_404_promotional == 'collection_list' -%}
+        {%- section 'collection-list' -%}
+    {%- elsif settings.show_404_promotional == 'slider_promotional' -%}
+        {%- section 'slider-promotional' -%}
+    {%- endif -%}

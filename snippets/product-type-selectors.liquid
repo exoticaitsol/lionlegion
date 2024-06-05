@@ -1,0 +1,54 @@
+{% comment %}New Demo Variant{% endcomment %}
+<div class="swatch" id="productType">
+  <label class="product-form-label">Styles</label>
+  <type-buttons class="flex flex-wrap w-full gap-2">
+    {%- liquid
+      assign hasTypes = false
+      assign types = settings.productTypes | split: ';'
+      assign images = settings.productTypeImages | split: ';'
+      assign handleBase = product.handle
+      for type in types
+        assign aliases = type | split: ','
+        for alias in aliases
+          assign handleBase = handleBase | remove: alias
+        endfor
+      endfor
+    -%}
+    {% for type in types %}
+      {%- liquid
+        assign aliases = type | split: ','
+        for alias in aliases
+          assign typeHandle = handleBase | append: alias
+          assign typeProduct = all_products[typeHandle]
+          if typeProduct.available == true
+            assign hasTypes = true
+            break
+          endif
+        endfor
+        if typeProduct.available != true
+          continue
+        endif
+        assign isSame = false
+        if typeProduct == product
+          assign isSame = true
+        endif
+      -%}
+      <type-button class="block bg-[#ddd] p-0 m-0 border-solid rounded-sm group relative cursor-pointer{%- if isSame %} border-[#26b522] border-2 {% else %} border border-[#ccc] hover:border-[#888] {%- endif -%}" data-target='{{ typeProduct.url }}' data-handle="{{ typeHandle }}" {% if isSame -%} disabled {%- endif %}>
+        <img class="object-cover w-20 h-20 p-0 m-0 rounded-sm bg-white" src="{{ images[forloop.index0] | asset_img_url: '180x' }}" srcset="{% render 'responsive-srcset', image: images[forloop.index0], asset: true, max: 540 %}" alt="{{ typeProduct.product_type }}" width="100" height="100" loading="lazy">
+        {%- if isSame -%}
+        <active-check class="absolute text-white flex justify-center items-center rounded-full bg-[#26b522] right-0 top-0 transform translate-x-1/2 -translate-y-1/2 h-4 w-4 fill-current">
+          {%- render 'icon-check', class: 'fill-current max-w-[60%] max-h-[60%]' -%}
+        </active-check>
+        {%- endif -%}
+      </type-button>
+    {% endfor %}
+  </type-buttons>
+  {%- unless hasTypes -%}
+    <style>
+      #productType {
+        display: none;
+      }
+    </style>
+  {%- endunless -%}
+</div>
+{% comment %}New Demo Variant{% endcomment %}

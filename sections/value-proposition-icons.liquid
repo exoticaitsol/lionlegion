@@ -1,0 +1,131 @@
+<!-- start value-proposition-icons.liquid (SECTION) -->
+{%- assign doubled_width = section.settings.icon_uvp_width | times: 2 -%}
+
+{%- assign sizes_length = 0 -%}
+{%- for block in section.blocks -%}
+    {%- if "icon" == block.type -%}
+        {%- assign sizes_length = sizes_length | plus: 1 -%}
+    {%- endif -%}
+{%- endfor -%}
+
+<div class="featured-icons featured-icons-col-{{ sizes_length }} {%- if section.settings.enabled_icon_text -%}featured-icons-m-text{%- endif -%} {{ section.settings.custom_class }}">
+    <div class="wrapper">
+        {%- for block in section.blocks -%}
+            {%- if "icon" == block.type -%}
+            <div class="uvp-icon-item {% if section.settings.enabled_text_below_img %}featured-icon-text-below-img featured-icon-{{ forloop.index }} {% else %} featured-icon featured-icon-{{ forloop.index }} {% endif %}">
+                {%- assign image_temp = block.settings.icon | image_url: width: 4, height: 6 -%}
+                {%- unless image_temp contains '/no-image' -%}
+                    {%- if block.settings.icon.alt != blank -%}
+                      {%- assign image_alt = block.settings.icon.alt | strip_html | escape -%}
+                    {%- elsif block.settings.text != blank -%}
+                      {%- assign image_alt = block.settings.text | strip_html | escape -%}
+                    {%- else -%}
+                      {%- assign image_alt = "Image without description." -%}
+                    {%- endif -%}
+
+                    <div class="uvp-image-wrapper">
+                        {% assign image_id_prefix = 'value-proposition-icon' | append: forloop.index %}
+                        {% render 'responsive-image',
+                            id_prefix: image_id_prefix, 
+                            image: block.settings.icon, 
+                            active_lazy: true,
+                            image_class: 'icon-img load',
+                            no_wrap: true, 
+                            alt_text: image_alt,
+                            max_width: doubled_width
+                        %}
+                    </div>
+                {%- endunless -%}
+
+                {%- if section.settings.enabled_icon_text -%}
+                    <span class="icon-text">{{ block.settings.text }}</span>
+                {%- endif -%}
+            </div>
+            {%- endif -%}
+        {%- endfor -%}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "UVP 1",
+  "class": "proposition-icons",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Unique Value Propositions"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_icon_text",
+      "label": "Enable Icon Text",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_text_below_img",
+      "label": "Enable Icon Text Below Image",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "icon_uvp_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Icon width",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Icon",
+      "type": "icon",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Block Title",
+          "placeholder": "Block title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Icon Text",
+          "placeholder": "Type icon text."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Unique Value Proposition",
+      "category": "Unique Value Proposition"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+#shopify-section-{{ section.id }} {
+    position: relative;
+}
+
+:root{
+    --icon_uvp_width: {{ section.settings.icon_uvp_width }}px;
+}
+{% endstyle %}
+

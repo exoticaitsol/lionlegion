@@ -1,0 +1,185 @@
+	<!-- start videos.liquid (SECTION) -->
+  <section id="video-slider-{{ section.id }}" data-slider="{{ section.id }}" data-section-type="video" class="wrapper {{ section.settings.video_custom_class }}">
+  {%- if section.settings.enable_section_title and section.settings.section_title != blank -%}
+    <h2 class="section-title">{{ section.settings.section_title }}</h2>
+  {%- endif -%}
+
+  <div class="videos-widget-wrapper">
+    <div id="slider-{{ section.id }}" class="videos-widget video-slider">
+      {%- for block in section.blocks -%}
+         {%- assign url = block.settings.video_url -%}
+          <div class="video-wrapper">
+            {%- assign platform = '' -%}
+            {%- if url contains 'youtube' or url contains 'youtu.be' -%}
+              {%- assign platform = 'youtube' -%}
+              {%- if url contains 'youtu.be' -%}
+                  {%- assign videoID = url | split: '/' | last -%}
+              {%- elsif url contains '&' -%}
+                {%- assign videoID = url | split: '?v=' | last | split: '&' | first -%}
+              {%- elsif url contains 'embed' -%}
+                {%- assign videoID = url | split: 'embed/' | last -%}
+              {%- else -%}
+                  {%- assign videoID = url | split: '?v=' | last -%}
+              {%- endif -%}
+            {%- elsif url contains 'vimeo' -%}
+                {%- assign platform = 'vimeo' -%}
+            {%- endif -%}
+              <iframe  class="lazyload {{ platform }}{%- if slideshow -%}hide-player{%- endif -%}"
+					data-video-url="{{ url }}"
+                    width="560"
+                    height="315"
+                    data-src="{% if platform == 'youtube' %}https://www.youtube.com/embed/{{ videoID }}
+                         {% else %}
+                         	{{ url }}
+                         {% endif %}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Videos Section",
+  "class": "videos-slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_custom_class",
+      "label": "Custom Class"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_section_title",
+      "label": "Enable Section Title"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "placeholder": "Section title"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add videos in your page adding blocks. One block for each video."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block_video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Video Block Title"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Slider",
+      "category": "Video"
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+
+window.SectionVideoSlider = (function(){
+  function SectionVideoSlider() {
+    this.settings = {
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      prevArrow: '<button type="button" class="slick-prev">&lang;</button>',
+      nextArrow: '<button type="button" class="slick-next">&rang;</button>',
+      infinite: true
+    };
+
+    this._run();
+  }
+
+  SectionVideoSlider.prototype = {
+    onLoad: function() {
+      this._run();
+    },
+
+    _run: function() {
+      var slider,
+          settings = this.settings;
+
+      jQuery('[id^="video-slider-"]').each(function(){
+        slider = '#slider-' + $(this).data('slider');
+
+        jQuery(slider).not('.slick-initialized').slick( settings );
+      });
+    }
+  };
+
+  return new SectionVideoSlider;
+})();
+
+{% endjavascript %}
+
+{% style %}
+
+.videos-widget-wrapper {
+	max-width: 768px;
+	margin: 0 auto;
+}
+
+.video-wrapper {
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-top: 60%;
+}
+
+.video-wrapper iframe {
+	position: absolute;
+    top: 0;
+    left: 50%;
+    width: 95%;
+    height: 100%;
+    border: none;
+    transform: translateX(-50%);
+}
+
+.videos-widget-wrapper .slick-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1;
+	font-size: 3rem;
+	opacity: .5;
+	line-height: 1;
+}
+
+.videos-widget-wrapper .slick-arrow:hover {
+	opacity: 1;
+}
+
+.videos-widget-wrapper .slick-prev {
+	left: 0;
+}
+
+.videos-widget-wrapper .slick-next {
+	right: 0;
+}
+
+@media (max-width: 767px) {
+	.video-wrapper iframe {
+		width: 90%;
+	}
+}
+{% endstyle %}

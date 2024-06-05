@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#EF081F;}
+	.st3{fill:#001F80;}
+	.st4{fill:#022168;}
+</style>
+<g>
+	<defs>
+		<circle id="SVGID_1_" cx="100" cy="100" r="100"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<g class="st0">
+		<g>
+			<rect x="-89.52" y="0.02" class="st1" width="378.95" height="199.66"/>
+			<polygon class="st2" points="289.45,79.91 122.6,79.91 122.6,0.03 77.05,0.03 77.05,79.91 -89.37,79.91 -89.37,119.83 
+				77.05,119.83 77.05,199.67 122.6,199.67 122.6,119.83 289.45,119.83 			"/>
+		</g>
+		<g>
+			<polygon class="st3" points="-43.92,0.01 -45.13,0.06 62.04,56.73 62.04,0.01 			"/>
+			<polygon class="st2" points="37.67,66.46 -89.52,0.02 -89.52,15.68 7.37,66.46 			"/>
+			<polygon class="st2" points="162.33,133.21 289.52,199.65 289.52,183.99 192.64,133.21 			"/>
+		</g>
+		<g>
+			<polygon class="st3" points="-43.92,200 -45.13,199.94 62.04,143.28 62.04,200 			"/>
+			<polygon class="st2" points="37.02,133.21 -89.44,199.62 -59.86,199.65 62.16,135.91 62.16,133.21 			"/>
+		</g>
+		<g>
+			<polygon class="st3" points="243.92,0 245.14,0.05 137.96,56.72 137.96,0 			"/>
+			<polygon class="st2" points="289.4,0.09 260.95,0.09 138.07,64.28 138.07,66.53 164.07,66.53 			"/>
+		</g>
+		<g>
+			<polygon class="st3" points="243.92,199.98 245.14,199.93 137.96,143.26 137.96,199.98 			"/>
+		</g>
+	</g>
+</g>
+</svg>

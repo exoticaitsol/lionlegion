@@ -1,0 +1,51 @@
+<!-- snippets/product-badges [START] -->
+{% if product.price_min < product.compare_at_price_min %}
+  <label class="absolute -top-4 -right-2 w-16 h-16">
+    <div class="product-badge-sale">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(50 50)"><rect x="0" y="0" rx="15" width="76" height="76" transform="rotate(45) translate(-38 -38)" stroke="white"/></g>
+        <text x="50%" y="56%" dominant-baseline="auto" text-anchor="middle" fill="white" style="font-size:2.2rem">
+          {% if product.compare_at_price_max > product.price %}
+            {{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0' }}%
+          {% endif %}
+        </text>
+        <text x="50%" y="60%" dominant-baseline="hanging" text-anchor="middle" fill="white" style="font-size:1.5rem">OFF</text>
+      </svg>
+    </div>
+  </label>
+{% elsif product.tags contains 'bestSeller'%}
+  <label class="absolute -top-4 -right-2 w-16 h-16">
+    <div class="product-badge-best">
+      <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="0" width="95" height="50" stroke="white"/>
+        <text x="50%" y="48%" dominant-baseline="Auto" text-anchor="middle" fill="white" font-size="22">BEST</text>
+        <text x="50%" y="52%" dominant-baseline="hanging" text-anchor="middle" fill="white" font-size="22">SELLING</text>
+      </svg>
+    </div>
+  </label>
+{% elsif product.tags contains 'MikesPick'%}
+  <label class="absolute -top-4 -right-2 w-16 h-16">
+    <div class="product-badge-mike">
+    </div>
+  </label>
+{% else %}
+  {%- liquid
+    assign days = 21
+    assign period_time = days | times: 24 | times: 60 | times: 60
+    assign date_now = 'now' | date: '%s'
+    assign date_finished = product.published_at | date: '%s' | plus: period_time | date: '%s'
+    -%}
+  {% if date_finished > date_now %}
+    <label class="absolute -top-4 -right-2 w-16 h-16">
+      <div class="product-badge-new">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="50" rx="48" ry="25" stroke="white"/>
+          <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="28">NEW</text>
+        </svg>
+      </div>
+    </label>
+  {% endif %}
+
+{% endif %}
+
+<!-- snippets/product-badges [END] -->

@@ -1,0 +1,346 @@
+<!-- start trust-badges.liquid (SECTION) -->
+{%- assign cols = 0 -%}
+{%- for block in section.blocks -%}
+  {%- assign cols = section.settings.vasta_badges_size | plus: 0 -%}
+{%- endfor -%}
+{%- assign trustBageSize = 0 -%}
+{%- case cols -%}
+  {%- when 1 -%}
+    {%- assign trustBageSize = 578 | times: 2 -%}
+  {%- when 2 -%}
+    {%- assign trustBageSize = 250 | times: 2 -%}
+  {%- when 3 -%}
+   {%- assign trustBageSize = 164 | times: 2 -%}
+  {%- when 4 -%}
+    {%- assign trustBageSize = 120 | times: 2 -%}
+  {%- when 5 -%}
+    {%- assign trustBageSize = 94 | times: 2 -%}
+  {%- else -%}
+    {%- assign trustBageSize = 82 | times: 2 -%}
+{%- endcase -%}
+<div class="container-trust-badges">
+  {%- if section.settings.trust_badges_text != blank -%}
+  <label>{{ section.settings.trust_badges_text }}</label>
+  {%- endif -%}
+  <div class="container-trust-badges-bottom">
+    {%- for block in section.blocks -%}
+      {%- if block.settings.filter_by_tags == blank -%}
+        <div class="trust-badges-img col-{{ cols }}">
+          {%- if block.settings.enable_img_trust_badge_cart -%}
+            {%- if block.settings.img_trust_badges.alt != blank -%}
+              {%- assign image_alt = block.settings.img_trust_badges.alt | strip_html | escape -%}
+            {%- elsif block.settings.title_trust_badges != blank -%}
+              {%- assign image_alt = block.settings.title_trust_badges | strip_html | escape -%}
+            {%- else -%} 
+              {%- assign image_alt = "Image without description." -%}
+            {%- endif -%}
+            {%- assign image_id_prefix = 'trust-badges-img' | append: forloop.index -%}
+            {%- render 'responsive-image',
+              id_prefix: image_id_prefix, 
+              image: block.settings.img_trust_badges, 
+              active_lazy: true,
+              image_class: 'img-badges',
+              no_wrap: true, 
+              alt_text: image_alt,
+              max_width: trustBageSize
+            -%}
+          {%- else -%}
+            {%- if block.settings.enable_custom_trust_badge_svg -%}
+            <div class="custom-svg">
+              {%- assign trust_badge_svg = block.settings.custom_trust_badge_svg_html -%}
+              {{ trust_badge_svg }}
+            
+            </div>
+            {%- else -%}
+            {%- assign image_id_prefix = 'trust-badges-icon' | append: forloop.index -%}
+              {%- assign trust_badge = 'icon-' | append: block.settings.svg_trust_badge_cart | append: '.svg' -%}
+              {%- assign image_alt = block.settings.svg_trust_badge | escape | replace: "-", " " | capitalize -%}
+                <img class="lazyload" src="{{ 'basic.png' | asset_img_url: '10x' }}"  data-src="{{ trust_badge | asset_url }}" alt="{{ image_alt | escape | replace: "-", " " | capitalize | default: 'Image without description.' }}" />
+                   
+            {%- endif -%}
+          {%- endif -%}
+            {%- if section.settings.announcement_show_title_badges -%}
+              <span class="title-badges {{ section.settings.trust_badges_text_transform }} {{ section.settings.trust_badges_text_weight }}">{{ block.settings.title_trust_badges }}</span>
+            {%- endif -%}
+        </div>
+      {%- else -%}
+      {%- assign list_filter_tags =  block.settings.filter_by_tags | split: ";" -%}
+      {%- for tag_temp in list_filter_tags -%}
+          {%- assign contain_tag = false -%}
+            {%- for tag in product.tags -%}
+          {%- assign handle_tag = tag | handleize -%}
+              {%- if tag_temp == handle_tag -%}
+                  {%- assign contain_tag = true -%}
+              {%- endif -%}
+          {%- endfor -%}
+          {%- if contain_tag -%}
+            <div class="trust-badges-img col-{{ cols }}">
+              {%- if block.settings.enable_img_trust_badge_cart -%}
+                {%- if block.settings.img_trust_badges.alt != blank -%}
+                  {%- assign image_alt = block.settings.img_trust_badges.alt | strip_html | escape -%}
+                {%- elsif block.settings.title_trust_badges != blank -%}
+                  {%- assign image_alt = block.settings.title_trust_badges | strip_html | escape -%}
+                {%- else -%} 
+                  {%- assign image_alt = "Image without description." -%}
+                {%- endif -%}
+                {%- render 'responsive-image',
+                  id_prefix: 'trust-badges-image-tag', 
+                  image: block.settings.img_trust_badges, 
+                  active_lazy: true,
+                  image_class: 'img-badges',
+                  no_wrap: true, 
+                  alt_text: image_alt,
+                  max_width: trustBageSize
+                -%}
+              {%- else -%}
+                {%- if block.settings.enable_custom_trust_badge_svg -%}
+                  <div class="custom-svg">{{ block.settings.custom_trust_badge_svg_html }}</div>
+                {%- else -%}    
+                  {%- assign trust_badge = 'icon-' | append: block.settings.svg_trust_badge_cart | append: '.svg' -%}
+                  {%- assign image_alt = block.settings.svg_trust_badge | escape | replace: "-", " " | capitalize -%}
+                  <img class="lazyload" src="{{ 'basic.png' | asset_img_url: '10x' }}"  data-src="{{ trust_badge | asset_url }}" alt="{{ image_alt | escape | replace: "-", " " | capitalize | default: 'Image without description.' }}" />
+                  
+                {%- endif -%}
+              {%- endif -%}
+                {%- if section.settings.announcement_show_title_badges -%}
+                  <span class="title-badges {{ section.settings.trust_badges_text_transform }} {{ section.settings.trust_badges_text_weight }}">{{ block.settings.title_trust_badges }}</span>
+                {%- endif -%}
+            </div>
+        {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "class": "trust-badges-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "text",
+      "id": "trust_badges_text",
+      "label": "Trust Badges Title Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_show_title_badges",
+      "label": "Show Text Below Trust Badges",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "vasta_copy_badges",
+      "min": 8,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "label": "Trust Badges Title Font Size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "vasta_badges_size",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Trust Badges Per Row",
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "trust_badges_text_weight",
+      "label": "Trust Badges Text Weight",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "trust_badges_text_transform",
+      "label": "Trust Badges Text Transform",
+      "options": [
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "uppercase",
+          "label": "UPPERCASE"
+        },
+        {
+          "value": "lowercase",
+          "label": "lowercase"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "color",
+      "id": "color_text_trust_badges",
+      "label": "Trust Badges Text Color",
+      "default": "#000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badges",
+      "name": "Trust Badges",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Block Title",
+          "placeholder": "Block title"
+        },
+        {
+          "type": "select",
+          "id": "svg_trust_badge_cart",
+          "label": "Choose SVG Trust Badge",
+          "options": [
+            {
+              "value": "amazon",
+              "label": "Amazon"
+            },
+            {
+              "value": "amex",
+              "label": "Amex"
+            },
+            {
+              "value": "apple-pay",
+              "label": "Apple Pay"
+            },
+            {
+              "value": "bitcoin",
+              "label": "Bitcoin"
+            },
+            {
+              "value": "discover",
+              "label": "Discover"
+            },
+            {
+              "value": "diners-club",
+              "label": "Diners Club"
+            },
+            {
+              "value": "google-pay",
+              "label": "Google Pay"
+            },
+            {
+              "value": "jcb",
+              "label": "JCB"
+            },
+            {
+              "value": "master",
+              "label": "Master"
+            },
+            {
+              "value": "paypal",
+              "label": "Pay Pal"
+            },
+            {
+              "value": "porteg",
+              "label": "Porteg"
+            },
+            {
+              "value": "shopify",
+              "label": "Shopify"
+            },
+            {
+              "value": "shopify-pay",
+              "label": "Shopify Pay"
+            },
+            {
+              "value": "venmo",
+              "label": "Venmo"
+            },
+            {
+              "value": "visa",
+              "label": "Visa"
+            },
+            {
+              "value": "natural-product",
+              "label": "Natural Product"
+            },
+            {
+              "value": "free-shipping",
+              "label": "Free Shipping"
+            },
+            {
+              "value": "made-usa",
+              "label": "Made in USA"
+            },
+            {
+              "value": "money-back",
+              "label": "30 Days Money Back"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_trust_badge_svg",
+          "label": "Enable Custom SVG Trust Badges",
+          "default": false
+        },
+        {
+          "type": "html",
+          "id": "custom_trust_badge_svg_html",
+          "label": "Custom SVG Trust Badges"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_img_trust_badge_cart",
+          "label": "Enable Trust Badge Image",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "img_trust_badges",
+          "label": "Trust Badges Image",
+          "info": "100x68"
+        },
+        {
+          "type": "text",
+          "id": "title_trust_badges",
+          "label": "Trust Badges Title"
+        },
+        {
+          "type": "textarea",
+          "id": "filter_by_tags",
+          "label": "Show Badges Only On Products With Tags",
+          "placeholder": "Type the tags",
+          "info": "Separate tags handle for ( ; )."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+
+  :root{
+    --fontSizeTrustBadge: 
+    --color-text-trust-bradges:{{ section.settings.color_text_trust_badges }};
+    --copy-badges:{{ section.settings.vasta_copy_badges }}px;
+  }
+  @media (max-width: 1019px) {
+    .title-badges {
+        font-size: {{ section.settings.vasta_copy_badges | divided_by: 16.0 }}rem;
+    }
+}
+{% endstyle %}

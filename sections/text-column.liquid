@@ -1,0 +1,104 @@
+<!-- start text-column.liquid (SECTION) -->
+<div class="wrapper text-column-wrapper {{ section.settings.custom_class }}">
+    {%- for block in section.blocks -%}
+      {%- if "text_column" == block.type -%}
+      <div class="half-content shipwholetext1">
+        {%- if block.settings.title_column != blank -%}
+            <h5 class="text-1"><strong>{{ block.settings.title_column }}</strong></h5>
+        {%- endif -%}
+  
+        {%- assign image_url = block.settings.image | image_url -%}
+        
+        {%- unless image_url contains 'no-image' or block.settings.enabled_image == false -%}
+        {%- if block.settings.image.alt != blank -%}
+          {%- assign image_alt = block.settings.image.alt | strip_html | escape -%}
+        {%- elsif  block.settings.title_column != blank -%}
+          {%- assign image_alt =  block.settings.title_column | strip_html | escape -%}
+        {%- else -%}
+          {%- assign image_alt = "Image without description." -%}
+        {%- endif -%}
+        {%- assign styleTextColumn = 'max-width: 100px; float: left; margin: 0 15px 15px 0;' -%}
+        <div class="text-collumn-image-wrapper">
+          {%- render 'responsive-image',
+            id_prefix: 'text-column', 
+            image: block.settings.image,
+            image_class: 'lazyload',
+            max_width: 200,
+            active_lazy: true,
+            no_wrap: true,
+            custom_style: styleTextColumn ,
+            alt_text: image_alt
+          -%}
+        </div>
+        {%- endunless -%}
+  
+        <p>{{ block.settings.content_column }}</p>
+      </div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- if section.blocks.size == 1 -%}
+  <div class="half-content shipwholetext1">
+    <h5><strong>Secure Checkout</strong></h5>
+    <p>We use encrypted SSL security to ensure that your credit card information is 100% protected.</p>
+  </div>
+  {%- elsif section.blocks.size == 0 -%}
+  <div class="half-content shipwholetext1">
+    <h5><strong>Unhappy With Your Product? We'll Take It Back!</strong></h5>
+    <p>We stand by our high-quality products and your satisfaction is 100% guaranteed. For all returns please email: info@yourdomain.com.</p>
+  </div>
+  <div class="half-content shipwholetext1">
+    <h5><strong>Secure Checkout</strong></h5>
+    <p>We use encrypted SSL security to ensure that your credit card information is 100% protected.</p>
+  </div>
+  {%- endif -%}
+</div>
+   
+  {% schema %}
+{
+  "name": "Text Columns",
+  "class": "text-columns",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Column",
+      "type": "text_column",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enabled_image",
+          "label": "Enable Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Select the column image (200x100)."
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title_column"
+        },
+        {
+          "type": "html",
+          "label": "Content",
+          "id": "content_column"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text Columns",
+      "category": "Text Columns"
+    }
+  ]
+}
+{% endschema %}

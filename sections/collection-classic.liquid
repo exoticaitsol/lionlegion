@@ -1,0 +1,106 @@
+{% render 'collection-filter' %}
+        <product-grid class="max-w-screen-xl grid-cols-2 lg:grid-cols-3">
+           
+            {% paginate collection.products by 36 %}
+                {% for product in collection.products %}
+                  {%- liquid
+                    assign firstImage = product.featured_image
+                    assign firstImageRIAS = firstImage | image_url: width: 360
+                    if product.options contains 'Colour'
+                    assign hasColor = true
+                    capture obj
+                    echo '{'
+                      for color in product.options_by_name['Colour'].values
+                      echo "'" | append: color | append: "':'"
+                      for variant in product.variants
+                      if variant.options contains color
+                      echo variant.image | image_url: width: 360
+                      break
+                      endif
+                      endfor
+                      echo "'"
+                      unless forloop.last
+                      echo ','
+                      endunless
+                      endfor
+                      echo '}'
+                      endcapture
+                      else
+                      assign hasColor = false
+                      assign obj = "'none'"
+                      endif
+                      -%}
+                      <product-card
+                        {% if hasColor -%}
+                          x-data="colorSwatches({
+                            colors: {{ obj }},
+                            firstImage: '{{ firstImageRIAS }}',
+                          })"
+                        {%- endif -%}
+                        class="relative">
+                        {% render 'product-badges', product: product %}
+                        <a href="{{ product.url }}" aria-label="{{ product.title }}" class="w-full mx-auto">
+                            <img class="w-full h-auto" src="{{ firstImage | image_url: width: 360 }}" sizes="(max-width: 768px) 48vw, (min-width: 1280px) 410px, 32vw" srcset="{%- render 'responsive-srcset', image: firstImage -%}" {%- if hasColor %} x-rias="image" {%- endif %} alt="{{ firstImage.alt }}" data-sizes="auto" {% if forloop.index > 3 %}loading="lazy"{%- else -%} loading="eager"{%- endif -%} width="{{ firstImage.width }}" height="{{ firstImage.height }}"/>
+                        </a>
+
+                        <swatch-wrapper class="flex flex-row justify-center w-full gap-2 pt-2 no-js-hidden" aria-hidden="true">
+                            {%- for color in product.options_by_name['Colour'].values -%}
+                            {%- liquid
+                                    if color == 'white'
+                                        assign classes = "selected == '" | append: color | append: "' ? 'ring-green-500' : 'ring-gray-400'"
+                                    else
+                                        assign classes = "selected == '" | append: color | append: "' ? 'ring-green-500' : 'ring-white'"
+                                    endif
+                                    for variant in product.variants
+                                        if variant.options contains color
+                                            assign thisVariant = variant
+                                            break
+                                        endif
+                                    endfor
+                            -%}
+
+                            <button class="color-swatch swatch-{{ color | handleize }} ring-gray-700" :class="{{ classes }}" aria-label="{{ color | handleize }}" @click.prevent="selected='{{ color }}';variant='{{ thisVariant.id }}'" ></button>
+                            {%- endfor -%}
+                        </swatch-wrapper>
+
+                        <card-info class="flex flex-col items-center w-full gap-1 pt-2">
+                            <a class="text-neutral-900 text-center text-md" href="{{ product.url }}" tabindex="-1">
+                              <h3>  {{ product.title }} </h3>
+                            </a>
+                              <a href="{{ product.url }}#Reviews" class="!text-center">
+                                <!-- Stamped - Begin badge -->
+                                <span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}" data-product-type="{{ product.type }}" style="display: block;">{{ product.metafields.stamped.badge }}</span>
+                                <!-- Stamped - End badge -->
+                              </a>
+                            <card-price>
+                                <new-price class="{%- if product.compare_at_price %} text-lg{%- endif -%}">{{ product.price | money }}</new-price>
+                                {%- if product.compare_at_price -%}
+                                    <old-price>{{ product.compare_at_price | money }}</old-price>
+                                {%- endif -%}
+                            </card-price>
+                        </card-info>
+
+                    </product-card>
+                {% endfor %}
+
+          
+  <div class="hide">            
+ {% if paginate.previous.url %}
+  <a href="{{ paginate.previous.url }}" rel="prev">Previous</a>
+{% endif %}
+
+{% if paginate.next.url %}
+  <a href="{{ paginate.next.url }}" rel="next">Next</a>
+{% endif %}
+  </div>   
+            {% endpaginate %}
+        </product-grid>
+         <load-more class="flex flex-col items-center w-full py-4 no-js-hidden" x-data="loadMore({
+            perpage: 36,
+            totalItems: {{ collection.products_count }},
+            page: {{ current_page }}
+        })">
+        <label for="shown-items" class="block" x-text="`You've viewed ${shownItems} products out of ${totalItems}`">You've viewed 36 products out of {{ collection.products_count }}</label>
+        <progress class="mt-2 load-more" id="shown-items" max="{{ collection.products_count }}" :max="totalItems" value="{{ 36 }}" :value="shownItems" x-text="`${(shownItems/totalItems*100)}%`"></progress>
+        <button class="mx-auto mt-2 bg-gradient-to-t px-4 py-2 shadow-md hover:bg-gradient-to-b hover:shadow-inner disabled:pointer-events-none disabled:from-neutral-600 disabled:to-neutral-500 disabled:text-gray-50 from-green-700 to-green-600 text-gray-50 hover:text-white" @click.prevent="load()" x-show="!complete" :disabled="loading" x-text="loading ? 'Loading...' : 'Load More'">Loading...</button>
+        </load-more>

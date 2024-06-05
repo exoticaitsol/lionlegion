@@ -1,0 +1,164 @@
+<!-- start shippingtext.liquid (SECTION) -->
+<div class="shipping-text {{ section.settings.custom_class }}">
+  <div class="wrapper">
+    {%- for block in section.blocks -%}
+      {%- if "shipping_text" == block.type -%}
+        <div class="shipping-text-content">
+          <p class="shipping-text-text">{{ block.settings.text_content }}</p>
+          {%- if block.settings.use_custom_svg -%}
+
+            {{ block.settings.custom_svg_html }}
+          {%- elsif block.settings.use_custom_image -%}
+            {%- render 'responsive-image', 
+              id_prefix: 'shippingtext', 
+            	image: block.settings.custom_img, 
+            	active_lazy: true,
+            	image_class: 'custom-img-shipping-text',
+            	max_width: 100,
+            	no_wrap: true, 
+            	alt_text: block.settings.title
+            -%}
+          {%- else  -%}
+            {% case block.settings.icon_shipping %}
+              {% when 'icon-fighter-jet' %}
+              	{% render 'icon-fighter-jet' %}
+              {% when 'icon-compass' %}
+              	{% render 'icon-compass' %}
+              {% when 'icon-refresh' %}
+              	{% render 'icon-refresh' %}
+              {% when 'icon-clock' %}
+              	{% render 'icon-clock' %}
+              {% when 'icon-person' %}
+              	{% render 'icon-person' %}
+              {% when 'icon-medal' %}
+              	{% render 'icon-medal' %}
+              {% when 'icon-flag' %}
+              	{% render 'icon-flag' %}
+            {% endcase %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% style %}
+  #shopify-section-{{ section.id }} .shipping-text .shipping-text-content .shipping-text-text{
+    color:{{ section.settings.text_color }};
+  }
+  #shopify-section-{{ section.id }} .shipping-text .shipping-text-content svg,
+  #shopify-section-{{ section.id }} .shipping-text .shipping-text-content svg .supertheme{
+      fill:{{ section.settings.icons_color }};
+  }
+{% endstyle %}
+
+
+{% schema %}
+{
+  "name": "UVP 2",
+  "class": "shipping-text-uvp-2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#aaaaaa"
+    },
+    {
+      "type": "color",
+      "id": "icons_color",
+      "label": "Icons color",
+      "default": "#aaaaaa"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shipping_text",
+      "name": "Shipping Text",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text_content",
+          "label": "Text",
+          "placeholder": "Type Your Text Here"
+        },
+        {
+          "type": "select",
+          "id": "icon_shipping",
+          "label": "Choose Icon",
+          "options": [
+            {
+              "label": "Fighter Jet",
+              "value": "icon-fighter-jet"
+            },
+            {
+              "label": "Compass",
+              "value": "icon-compass"
+            },
+            {
+              "label": "Clock",
+              "value": "icon-clock"
+            },
+            {
+              "label": "Refresh",
+              "value": "icon-refresh"
+            },
+            {
+              "label": "Person",
+              "value": "icon-person"
+            },
+            {
+              "label": "Medal",
+              "value": "icon-medal"
+            },
+            {
+              "label": "Flag",
+              "value": "icon-flag"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_svg",
+          "label": "Enable Custom SVG",
+          "default": false
+        },
+        {
+          "type": "html",
+          "id": "custom_svg_html",
+          "label": "Custom SVG"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_image",
+          "label": "Enable Custom Image ",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_img",
+          "label": "Custom Image",
+          "info": "32x32"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping Text",
+      "category": "Shipping Text"
+    }
+  ]
+}
+{% endschema %}

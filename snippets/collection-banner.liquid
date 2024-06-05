@@ -1,0 +1,14 @@
+{% assign show_banner = true %}
+{% if settings.collection_featured_image_filter contains collection.handle and settings.enabled_collection_featured_image_filter %}
+    {% assign show_banner = false %}
+{% endif %}
+
+{% if settings.enabled_collection_featured_image and show_banner and collection.image != blank %}
+        <div class="banner">
+        <div class="banner-img homepage-style-1 banner" style="background: #fff url('{{ collection.image | image_url }}') no-repeat center center / cover;">
+            {% if settings.enabled_collection_featured_image_filter %}
+            <h2 class="banner-title" style="position:absolute;top:{{ settings.title_vertical_position }}%; left:{{ settings.title_horizontal_position }}%; font-size:{{ settings.title_font_size }}px; color:{{ settings.title_color }};">{{ collection.title }}</h2>
+            {% endif %}
+        </div>
+        </div>
+{% endif %}

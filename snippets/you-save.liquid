@@ -1,0 +1,33 @@
+<!-- start you-save.liquid (SNIPPET) -->
+
+{%- assign compare_at_price = product.selected_or_first_available_variant.compare_at_price -%}
+{%- assign price = product.selected_or_first_available_variant.price -%}
+
+{%- if enable_you_save and compare_at_price > price -%}
+    {%- if compare_at_price > price -%}
+        {%- assign temp =  price | times: 100.0 -%}
+        {%- assign temp = temp | divided_by: compare_at_price -%}
+    {%- endif -%}
+   
+    <span class="you-save-price {% unless compare_at_price > price %}hide{% endunless %}">
+        {{ settings.you_save_text }}
+        {%- if settings.you_save_show_options == 'you_save_price' -%} 
+        <span class="money" data-usd="{{ compare_at_price | minus: price }}">
+            {{ compare_at_price | minus: price | money_with_currency }}
+        </span>
+        {%- endif -%}
+        {%- if settings.you_save_show_options == 'you_save_percentagem_value' -%} 
+        <span class="compare_percent"> 
+            ({{ 100 | minus: temp | round: 2 }}%)
+        </span> 
+        {%- endif -%}
+        {%- if settings.you_save_show_options == 'you_save_both' -%}
+        <span class="money" data-usd="{{ compare_at_price | minus: price }}">
+            {{ compare_at_price | minus: price | money_with_currency }}
+        </span>
+        <span class="compare_percent"> 
+            ({{ 100 | minus: temp | round: 2 }}%)
+        </span> 
+        {%- endif -%}
+    </span>
+{%- endif -%}

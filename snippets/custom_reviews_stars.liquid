@@ -1,0 +1,28 @@
+{% case settings.app_review %}
+    {% when 'stamped' %}
+{% if product.metafields.stamped.reviews_count %}
+<a href="#stamped-main-widget"><span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-title="{{ product.title }}" data-product-type="{{ product.type }}" style="display: block;"></span></a>
+    {% comment %}<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{product.id}}" data-product-title="{{product.title}}" data-product-type="{{product.type}}" style="display: block;"></span>{% endcomment %}
+{% else %}
+<span class="new-product-no-review">New product, no reviews</span>
+
+{% endif %}
+    {% when 'judgeme' %}
+        {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
+    {% when 'loox' %}
+        <a title="Number Reviews" id="id-loox-rating" href="#looxReviews"><div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}"></div></a>
+    {% when 'yotpo' %}
+        <div class="yotpo bottomLine"
+            data-appkey="{{ settings.yotpo_key }}"
+            data-domain="{{ shop.permanent_domain | escape }}"
+            data-product-id="{{ product.id }}"
+            data-product-models="{{ product.id }}"
+            data-name="{{ product.title | escape }}"
+            data-url="{{ shop.url }}{{ product.url }}"
+            data-image-url="{{ product.featured_image | product_img_url: '200x' | replace: '?', '%3F' | replace: '&', '%26' }}"
+            data-description="{{ product.description | escape }}"
+            data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}">
+        </div>
+    {% when 'product_reviews' %}
+        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+{% endcase %}

@@ -1,0 +1,48 @@
+<!-- start header-sitewide (SNIPPET) -->
+
+<div class="wrap wrapper">
+    <div class="grid__item one-fifth mobile">
+        <div class="site-nav--mobile">
+            <button type="button" id="IconMenuTextMobile" class="mobile jq-icon-fallback-text site-nav__link js-drawer-open-left" aria-controls="NavDrawer" aria-expanded="false">
+                {%- render 'icon-hamburger' -%}
+                <span class="fallback-text menu-text">MENU</span>
+            </button>
+        </div>
+    </div>
+
+    {%- render 'header-logo', text_transform: text_transform, logo: logo, logo_alt: logo_alt, logo_max_width: logo_max_width, svg_code: svg_code, enable_svg_logo: enable_svg_logo, logo_max_height: logo_max_height, section_title: "Logo", header_logo: "main-logo", choose_custom_dimensions: choose_custom_dimensions -%}
+
+    {%- if enabled_search_bar -%}
+        {%- render 'header-searchbar', header_searchbar_placeholder: section.settings.header_searchbar_placeholder -%}
+    {%- else -%}
+        {%- if section.settings.enable_menu_into_header and enabled_search_bar == false -%}
+            {%- render 'main-menu', link_list: link_list, link_text_transform: link_text_transform, pos: "midlle" -%}
+        {%- endif -%}
+    {%- endif -%}
+
+    <div class="cart-icon-wrap">
+     <span class="search_span">  <a class="head-search" href="https://lionlegion.co.uk/search">  <img class="head-search-icon" src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/search-interface-symbol_6_1.png?v=1704950028"></a> </span>
+        {%- if settings.disable_cartDrawer and template.name != 'cart' -%}
+            <a title="CART" href="/cart" id="id-cart-icon-2">
+        {%- else -%}
+            <span {% if template.name != 'cart' %} class="cart-icon open-drawer" {% endif %}>
+        {%- endif -%}
+
+        <span id="cart-count" class="cart-count {{ section.settings.header_menu_caps }}">
+            {%- render 'icon-cart' -%}
+            <span class="count">{{ cart.item_count }}</span>
+        </span>
+
+        {%- if section.settings.enable_cart_title == true -%}
+            <span class="fallback-text cart-text">{{ section.settings.cart_title_text }}</span>
+        {%- else -%}
+            <span class="fallback-text cart-text cart-title-desktop">{{ section.settings.cart_title_text }}</span>
+        {%- endif -%}
+
+        {%- if settings.disable_cartDrawer and template.name != 'cart' -%}
+            </a>
+        {%- else -%}
+            </span>
+        {%- endif -%}
+    </div>
+</div>

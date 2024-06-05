@@ -1,0 +1,58 @@
+<!-- start article.liquid (TEMPLATE) -->
+<div class="wrapper wrapper-article">
+  {%- render 'breadcrumb' -%}
+  <div class="article-wrapper  grid blog-grid">
+    <div class="article-section">
+      <article class="article">
+        <header class="section-header">
+          <div class="section-header__left">
+            <h1>{{ article.title }}</h1>
+            {%- capture author -%}<strong>{%- if settings.author_custom != blank -%}{{ settings.author_custom }}{%- else -%}{{ article.author }}{%- endif -%}</strong>{%- endcapture -%}
+            {%- capture date -%}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>{%- endcapture -%}
+            <p>{{ 'blogs.article.author_on_date_html' | t: author: author, date: date }}</p>
+          </div>
+        </header>
+        <div class="article-contect">
+          <div class="article_img">
+            {%- if article.image -%}
+                  <a title="{{ article.title | strip_html | escape }}" class="article__featured-image single-post" href="{{ article.url }}">
+                    {%- render 'responsive-image',
+                      id_prefix: 'footer-logo-desktop', 
+                      image: article.image,
+                      active_lazy: true,
+                      max_width: 2044,
+                      no_wrap: true, 
+                      alt_text: article.image.alt,
+                      size_large: 1022, 
+                      size_mobile: 39, 
+                      size_desk: 10
+                    -%}
+                  </a>
+            {%- endif -%}
+          </div>
+          <div class="rte">
+            {{ article.content }}
+          </div>
+        </div>
+      </article>
+
+      {%- if blog.next_article or blog.previous_article -%}
+        <div class="buttons-prev-next-wrapper">
+          {%- if blog.previous_article -%}
+            <span id="buttons-prev-left" class="left">
+              &larr; {{ 'blogs.article.older_post' | t | link_to: blog.previous_article }}
+            </span>
+          {%- endif -%}
+          {%- if blog.next_article -%}
+            <span id="buttons-prev-right" class="right">
+              {{ 'blogs.article.newer_post' | t | link_to: blog.next_article }} &rarr;
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <aside class="grid__item large--one-quarter sidebar">
+      {%- section 'blog-sidebar' -%}
+    </aside>
+  </div>
+</div>

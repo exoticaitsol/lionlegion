@@ -1,0 +1,92 @@
+<script>
+  (function () {
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(";");
+      ca = ca.map((c) => {
+        while (c.charAt(0) == " ") {
+          c = c.substring(1);
+        }
+        return c;
+      });
+      return ca
+        .find((c) => {
+          if (c.indexOf(name) == 0) return true;
+        })
+        ?.substring(name.length);
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    let referralBlock = document.referrer.toLowerCase().includes("google.com");
+
+    if (getCookie("klaClosedPopup") || getCookie("Wheelio")) {
+      setCookie("klaClosedPopup", 1, -7);
+      setCookie("Wheelio", 1, -7);
+      setCookie("showPopup", false, 45);
+    }
+    if (getCookie("showPopup") || referralBlock)
+      return console.log("Blocking Email Capture");
+    if (!getCookie("showPopup") && !referralBlock)
+      window.addEventListener("load", () =>
+        setTimeout(loadWheelio, 40000)
+      );
+
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function retryWheelio() {
+      let retry = true;
+      while (retry) {
+        await sleep(1000);
+        try {
+          appWlo.StartApp();
+          retry = false;
+        } catch (e) {
+          console.log("Wheelio App Unable to Start");
+        }
+      }
+      retry = true;
+      while (retry) {
+        await sleep(1000);
+        try {
+          (function () {
+            let button = document.getElementById("try_luck_btn");
+            let email = document.getElementById("cfl_email");
+            if (!button || !email) throw "No Elements Found";
+
+            function validateEmail(mail) {
+              return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail);
+            }
+            button.addEventListener("click", () =>
+              validateEmail(email.value)
+                ? ga("send", "event", "wheelio", "submitted")
+                : console.log("Email Improper")
+            );
+          })();
+          retry = false;
+        } catch (e) {
+          console.log("Wheelio App Has Not Started");
+        }
+      }
+    }
+
+    function loadWheelio() {
+      console.log("Loading Wheelio");
+      ga("send", "event", "wheelio", "isShown");
+      const s = document.createElement("script");
+      s.src =
+        "https:\/\/wheelioapp.azureedge.net\/app\/index.min.js?version=20240208103621345\u0026shop=lion-legion.myshopify.com";
+      s.async = true;
+      s.onload = () => setTimeout(retryWheelio, 2000);
+      document.querySelector("head").appendChild(s);
+    }
+  })();
+</script>

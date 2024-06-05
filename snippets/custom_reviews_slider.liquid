@@ -1,0 +1,12 @@
+{% case settings.app_review %}
+    {% when 'stamped' %}
+        <div id="stamped-reviews-widget" data-widget-type="carousel"  data-tags="photo"></div>
+    {% when 'judgeme' %}
+        {% render 'judgeme_widgets', widget_type: 'judgeme_featured_carousel', concierge_install: false %}
+    {% when 'loox' %}
+        <!-- App No Slider -->
+    {% when 'yotpo' %}
+        <!-- App No Free Slider-->
+    {% when 'product_reviews' %}
+        <!-- App No Slider -->
+{% endcase %}

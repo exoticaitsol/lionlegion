@@ -1,0 +1,204 @@
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="relative pb-56 sm:pb-64 bg-neutral-800 flex flex-col gap-y-12 sm:gap-y-16 pt-12 px-4 sm:pt-20 sm:px-6 lg:px-8">
+  <div class="absolute inset-0">
+      <img class="w-full h-full object-cover"
+        src="{{ section.settings.backdrop | image_url: width: 360 }}"
+        srcset="{%- render 'responsive-srcset', image: section.settings.backdrop -%}"
+        width="{{ section.settings.backdrop.width }}"
+        height="{{ section.settings.backdrop.height }}"
+        loading="lazy"
+        alt="">
+    <div class="absolute inset-0 bg-neutral-800 mix-blend-multiply" aria-hidden="true"></div>
+  </div>
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'img' -%}
+        <div class="flex
+          {%- if forloop.first %} md:flex-row {% else %} md:flex-row-reverse {% endif -%}
+          flex-col items-center gap-8 w-full justify-center">
+          {%- if block.settings.use_stamped -%}
+            <div id="stamped-reviews-widget" data-widget-type="site-badge" data-badge-type="badge" class="relative [&>#stamped-badge-3]:!h-[10rem] mb-8"></div>
+          {%- else -%}
+            <div class="relative max-w-[75%] sm:max-w-1/2 md:max-w-1/4">
+              <img src="{{ block.settings.img | image_url: width: 200 }}"
+                srcset="{%- render 'responsive-srcset', image: block.settings.img -%}"
+                sizes="75vw"
+                alt="{{ block.settings.img.alt }}"
+                class="shadow shadow-neutral-800/70 w-full h-auto"
+                width="{{ block.settings.img.width }}"
+                height="{{ block.settings.img.height }}"
+                loading="lazy">
+            </div>
+          {%- endif -%}
+          <div class="relative max-w-7xl">
+            <h2 class="text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">{{ block.settings.header }}</h2>
+            {%- assign paragraphs = block.settings.content | split: '<!--break-->' -%}
+            {%- for para in paragraphs -%}
+              <p class="mt-6 max-w-3xl text-xl text-neutral-300">{{ para }}</p>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="flex items-center gap-8 w-full justify-center">
+          <div class="relative max-w-7xl">
+            <h2 class="text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">{{ block.settings.header }}</h2>
+            <p class="mt-6 max-w-3xl text-xl text-neutral-300">Following an extremely thorough vetting process, Lion Legion possess a Licence issued by the Secretary of State for Defence to sell products that use official MOD British Forces insignia, logos, badges and emblems.</p>
+            <p class="mt-6 max-w-3xl text-xl text-neutral-300"> The MOD conduct regular audits and checks to make sure that we maintain their strict quality and service requirements, but we welcome that.</p>
+          </div>
+        </div>
+    {%- endcase -%}
+
+  {%- endfor -%}
+</div>
+
+<section class="-mt-52 max-w-7xl mx-auto relative z-10 pb-12 px-4 sm:px-6 lg:px-8" aria-labelledby="contact-heading">
+  <h2 class="sr-only" id="contact-heading">Reviews from Happy Customers</h2>
+
+  {%- if section.settings.show_UGC -%}
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2" x-data="reviewSection">
+      <template x-for="review in reviews.slice(0,pagesToShow*4)" :key="review.id">
+        <div class="flex flex-row bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="w-full max-w-1/2">
+            <img src="https://placekitten.com/600/600"
+              :src="review.UGC"
+              @error="removeReview(review.id)"
+              loading="lazy"
+              width="9"
+              height="16"
+              class="w-full h-full object-cover"
+              alt="">
+          </div>
+          <div class="flex flex-col">
+            <div class="flex-1 flex flex-col justify-center relative p-4 md:px-8 gap-y-4">
+              <h3 class="text-xl font-medium text-neutral-900" x-text="review.productName">Sales</h3>
+              {%- render 'review-stars' -%}
+              <p class="text-base text-neutral-500" x-text="review.reviewMessage">Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.</p>
+              <p class="text-neutral-400">
+                <span x-text="review.author" class="font-bold"></span> -
+                <span x-text="review.reviewDate"></span>
+              </p>
+            </div>
+            <div class="p-6 bg-neutral-50 rounded-bl-2xl rounded-br-2xl md:px-8">
+              <a href="#" class="text-base font-medium text-indigo-700 hover:text-indigo-600" :href="review.productUrl">See Full Review<span aria-hidden="true"> &rarr;</span></a>
+            </div>
+          </div>
+        </div>
+      </template>
+      <button type="button" class="bg-cta-600 text-white font-bold py-2 px-4 rounded-lg shadow-md text-lg lg:col-span-2 lg:w-1/2 lg:mx-auto" @click="loadMore" x-show="!reviews.length || reviews.length > pagesToShow * 4">
+        <svg class="block w-12 h-12 p-2 mx-auto align-middle fill-current animate-spin"  viewbox="0 0 24 24" x-show="isLoading">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4" stroke="currentColor"></circle>
+            <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+        </svg>
+        <div class="p-2" x-show="!isLoading" style="display: none;">
+          Load More
+        </div>
+      </button>
+    </div>
+  {%- else -%}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-20 gap-x-8 lg:grid-cols-3" x-data="reviewSection">
+      <template x-for="review in reviews.slice(0,pagesToShow*6)" :key="review.id">
+        <div class="flex flex-col bg-white rounded-2xl shadow-xl">
+          <div class="flex-1 relative pt-16 px-6 pb-8 md:px-8">
+            <div class="absolute top-0 inline-block bg-indigo-600 rounded-xl shadow-lg transform -translate-y-1/2 w-20 h-20 overflow-hidden">
+              <img :src="review.productImageThumbnailUrl" loading="lazy" alt="" class="w-40 h-40 -mt-8 object-cover" />
+            </div>
+            <h3 class="text-xl font-medium text-neutral-900 mb-4" x-text="review.productName">Sales</h3>
+            {%- render 'review-stars' -%}
+            <p class="mt-4 text-base text-neutral-500" x-text="review.reviewMessage">Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.</p>
+            <p class="mt-4 text-neutral-400">
+              <span x-text="review.author" class="font-bold"></span> -
+              <span x-text="review.reviewDate"></span>
+            </p>
+          </div>
+          <div class="p-6 bg-neutral-50 rounded-bl-2xl rounded-br-2xl md:px-8">
+            <a href="#" class="text-base font-medium text-indigo-700 hover:text-indigo-600" :href="review.productUrl">See Full Review<span aria-hidden="true"> &rarr;</span></a>
+          </div>
+        </div>
+      </template>
+      <button type="button" class="bg-cta-600 text-white font-bold py-2 px-4 rounded-lg shadow-md text-lg lg:col-span-2 lg:w-1/2 lg:mx-auto" @click="loadMore" x-show="!reviews.length || reviews.length > pagesToShow * 6">
+        <svg class="block w-12 h-12 p-2 mx-auto align-middle fill-current animate-spin"  viewbox="0 0 24 24" x-show="isLoading">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4" stroke="currentColor"></circle>
+            <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+        </svg>
+        <div class="p-2" x-show="!isLoading" style="display: none;">
+          Load More
+        </div>
+      </button>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Reviews Updated",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "backdrop",
+      "label": "Backdrop Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_UGC",
+      "label": "Show User Review Images",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "img",
+      "name": "Text with Image",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "use_stamped",
+          "label": "Use Stamped Badge",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "img",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Header",
+          "default": "We've got great stuff"
+        },
+        {
+          "type": "html",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    },
+    {
+      "type": "txt",
+      "name": "Just Text",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Header",
+          "default": "We've got great stuff"
+        },
+        {
+          "type": "html",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Banner",
+      "name": "Custom Reviews"
+    }
+  ]
+}
+{% endschema %}

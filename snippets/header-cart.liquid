@@ -1,0 +1,25 @@
+<!-- start header-cart.liquid (SNIPPET) -->
+
+{%- if settings.enable_use_general_data -%}
+{%- assign phone = settings.text_tel -%}
+{%- assign email = settings.text_email -%}
+{%- endif -%}
+
+<div class="wrapper header-cart-wrapper" {% if settings.only_shipping_bar != false %}style="max-width: 100%;"{% endif %}>
+
+    {%- render 'header-logo', text_transform: text_transform, logo: logo, logo_alt: logo_alt, logo_max_width: logo_max_width, svg_code: svg_code, enable_svg_logo: enable_svg_logo, logo_max_height: logo_max_height, section_title: "Logo", header_logo: "main-logo", choose_custom_dimensions: choose_custom_dimensions -%}
+
+    <div class="info-header">
+        {%- if phone != blank -%}
+        <a title="Telephone" href="tel:{{ phone | replace: ' ', '' }}" id="phone-cart" class="phone-cart">{% render 'icon-phone' %} {{ phone }}</a>
+        {%- endif -%}
+
+        {%- if email != blank -%}
+            <a title="E-mail" href="mailto:{{ email }}" id="email-cart" class="email-cart">{% render 'icon-envelope' %} {{ email }}</a>
+        {%- endif -%}
+
+        {%- if operating_message != blank -%}
+            <p class="content-cart-text">{{ operating_message }}</p>
+        {%- endif -%}
+    </div>
+</div>

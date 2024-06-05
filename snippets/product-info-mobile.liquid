@@ -1,0 +1,26 @@
+<div class="mobile" >
+    <p class="product-title">{{ product.title }}</p>
+
+
+
+{% comment %}
+
+    {%- if settings.product_enabled_app_reviews -%}
+
+        <div class="products-reviews-stars">
+          {%- render 'custom_reviews_stars' -%}
+        </div>
+    {%- endif -%}
+
+    {% endcomment %}
+
+
+    <div class="product-price">
+      {%- if product.compare_at_price_max > product.price -%}
+        <span class="compare-price money" >{{ product.compare_at_price | money }}</span>
+      {%- endif -%}
+      <span class="current-price price money" id="ProductPrice2">{{ product.price | money }}</span>
+      <br>
+      {%- render 'you-save', enable_you_save: settings.enable_you_save -%}
+    </div>
+  </div>

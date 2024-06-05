@@ -1,0 +1,91 @@
+
+
+  
+  <section class="main_coll_home second_one">
+<h2 class="section-title collection-title coll-page">{{ section.settings.title }}</h2>
+  <div class="main_coll_home_inner">
+    {%- for block in section.blocks -%}
+      {%- if block.type == "collection" -%}
+        {%- assign collection = collections[block.settings.collection] -%}
+        <div class="main_coll_home_box {% if forloop.index > 10 %}mobile-hide-coll{% endif %}">
+          <div class="main_coll_home_img">
+            <a href="{{ collection.url }}">
+              <img src="{{ collection.featured_image | img_url: '600x600' }}" alt="img">
+            </a>
+          </div>
+          <div class="main_coll_home_content">
+            <h2 class="title_h3"><a href="{{ collection.url }}">{{ collection.title }}</a></h2>
+          </div>
+        </div>
+      {%- elsif block.type == "text_block" -%}
+        {%- assign page = pages[block.settings.page_handle] -%}
+        <div class="main_coll_home_box {% if forloop.index > 10 %}mobile-hide-coll{% endif %}">
+          <div class="main_coll_home_img">
+            <a href="{{ page.url }}">
+              <!-- You may want to replace 'page.featured_image' with the appropriate field for the page image -->
+              <img src="{{ block.settings.page_image | img_url: '600x600' }}" alt="img">
+            </a>
+          </div>
+          <div class="main_coll_home_content">
+            <h2 class="title_h3"><a href="{{ page.url }}">{{ page.title }}</a></h2>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+</section>
+{% schema %}
+  {
+    "name": "Home Collection and pages",
+    "settings": [
+           {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            }
+    ],
+     "blocks": [
+     {
+       "name": "Collections",
+       "type": "collection",
+       "settings": [
+        {
+        "id": "collection",
+        "type": "collection",
+        "label": "Chose a collection"
+      }
+       ]
+     },
+          {
+        "type": "text_block",
+        "name": "Page Management",
+        "settings": [
+		  {
+            "type": "page",
+            "id": "page_handle",
+            "label": "Select a page"
+          },
+		  {
+            "type": "image_picker",
+            "id": "page_image",
+            "label": "Page image"
+          }
+        ]
+          }
+  ],
+    
+    
+     "presets": [
+      {
+        "name": "Home Collection and pages"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

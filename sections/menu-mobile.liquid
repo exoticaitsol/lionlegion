@@ -1,0 +1,341 @@
+<!-- start menu-mobile.liquid (SECTION) -->
+<div id="NavDrawer" class="drawer drawer--left" data-section-type="menu-mobile">
+  <div>
+    <div class="drawer__header">
+        <div class="drawer__title">MENU</div>
+        <div class="drawer__close js-drawer-close">
+          <button type="button" aria-label="id-icon-fallback-text" id="id-icon-fallback-text" class="jq-icon-fallback-text">
+            {%- render 'icon-close' -%}
+          </button>
+        </div>
+      </div>
+
+      <!-- begin mobile-nav -->
+      {%- if section.settings.enable_mobile_search == true -%}
+      {%- render 'search-bar', placeholder: section.settings.menu_mobile_searchbar_placeholder -%}
+      {%- endif -%}
+    </div>
+
+    <ul class="mobile-nav dinamic-menu">
+      {%- for link in linklists[section.settings.menu].links -%}
+        {%- assign index_li =  forloop.index -%}
+        {%- for block in section.blocks -%}
+          {%- if "icon" == block.type -%}
+            {%- if index_li == forloop.index -%}
+              {%- assign url_icon =  block.settings.icon_menu_item -%}
+
+              {%- elsif index_li > forloop.index -%}
+                {%- assign url_icon =  "" -%}
+
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign menu = forloop.index -%}
+        {%- if link.links != blank -%}
+
+          <li class="dinamic-item">
+            <div class="button-menu-item">
+              <a id="mobile-menu-{{ menu }}" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="{%- if section.settings.enable_dropdown_clicking -%}#{%- else -%}{{ link.url }}{%- endif -%}">
+                {%- unless section.settings.enable_icon_menu == false or url_icon == "" or url_icon contains 'no-image'  or url_icon == blank -%}
+                {%- render 'responsive-image',
+                  id_prefix: 'menu-mobile',
+                  image: url_icon,
+                  max_width: 50,
+                  active_lazy: false,
+                  no_wrap: true,
+                  alt_text: link.title
+                -%}
+                {%- endunless -%}
+
+                {{ link.title }}
+              </a>
+              <button type="button" aria-label="id-toggle-open-{{ menu }}" id="id-toggle-open-{{ menu }}" class=" mobile-nav__toggle-open">
+                <span class="icon icon-plus" aria-hidden="true"></span>
+              </button>
+            </div>
+            <ul class="child-number-2 child">
+              {%- for childlink in link.links -%}
+
+            <li class="dinamic-item">
+              {%- assign child1 = forloop.index -%}
+              {%- if childlink.links != blank -%}
+                <div class="button-menu-item">
+                  <a id="mobile-menu-{{ menu }}-{{ child1 }}" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="{%- if section.settings.enable_dropdown_clicking -%}#{%- else -%}{{ childlink.url }}{%- endif -%}">{{ childlink.title }}</a>
+                  <button type="button" id="id-nav__toggle-open-{{ menu }}-{{ child1 }}" class=" mobile-nav__toggle-open">
+                    <span class="icon icon-plus" aria-hidden="true"></span>
+                  </button>
+                </div>
+                <ul class="child-number-3 child">
+                  {%- for child in childlink.links -%}
+                    {%- assign child2 = forloop.index -%}
+                    <li class="dinamic-item"><a id="mobile-menu-{{ menu }}-{{ child1 }}-{{ child2 }}" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="{{ child.url }}">{{ child.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                {%- unless section.settings.enable_icon_menu == false or url_icon == "" or url_icon contains 'no-image' -%}
+                  <span style="background-image:url('{{ url_icon }}')"></span>
+                {%- endunless -%}
+                <a id="mobile-menu-{{ menu }}-{{ child1 }}" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="{{ childlink.url }}">{{ childlink.title }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+
+        </ul>
+        </li>
+        {%- else -%}
+          <li class="dinamic-item">
+            <a id="mobile-menu-{{ menu }}" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="{{ link.url }}">
+              {%- unless section.settings.enable_icon_menu == false or url_icon == "" or url_icon contains 'no-image' or url_icon == blank -%}
+              {%- render 'responsive-image',
+                  id_prefix: 'menu-mobile',
+                  image: url_icon,
+                  max_width: 50,
+                  active_lazy: true,
+                  no_wrap: true,
+                  alt_text: link.title
+                -%}
+              {%- endunless -%}
+
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+      </ul>
+      <ul class="static mobile-nav">
+      {%- if section.settings.text_email -%}
+        <li class="mobile-nav__item dinamic-item">
+          <span class="item-text"><a id="mobile-menu-email" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="mailto:{{ settings.text_email }}?Subject=Hello%20again"  target="_top"> {%- render "icon-envelope" -%}{{ settings.text_email }}</a></span>
+        </li>
+      {%- endif -%}
+      {%- if section.settings.text_tel -%}
+        <li class="mobile-nav__item dinamic-item">
+          <span class="item-text"><a id="mobile-menu-tel" class="item-menu-mobile mobile-nav__link {{ section.settings.header_menu_caps }}" href="tel:{{ settings.text_tel | replace: '+', '' | replace: '(', '' | replace: ')', '' | replace: ' ', '' }}"> {%- render "icon-phone" -%}{{ settings.text_tel }}</a></span>
+        </li>
+      {%- endif -%}
+      {%- if shop.customer_accounts_enabled and section.settings.disable_login == false -%}
+        {%- if customer -%}
+          <li class="mobile-nav__item dinamic-item nav-icon">
+            {%- if customer.first_name != blank -%}
+              {%- capture first_name -%}{{ customer.first_name }}{%- endcapture -%}
+              {%- render 'icon-key' -%} <a id="LoginAccount" class="item-menu-mobile mobile-nav__link" href="/account/logout">{{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}</a>
+            {%- else -%}
+              {%- render 'icon-create-account' -%} <a id="CreateAccount" class="item-menu-mobile mobile-nav__link" href="/account">{{ 'layout.customer.account' | t }}</a>
+            {%- endif -%}
+          </li>
+          <li class="mobile-nav__item dinamic-item nav-icon">
+            {%- render 'icon-logout' -%} {{ 'layout.customer.log_out' | t | customer_logout_link }}
+          </li>
+        {%- else -%}
+          <li class="mobile-nav__item dinamic-item nav-icon">
+            {%- render 'icon-key' -%} {{ 'layout.customer.log_in' | t | customer_login_link }}
+          </li>
+          <li class="mobile-nav__item dinamic-item nav-icon">
+            {%- render 'icon-create-account' -%}{{ 'layout.customer.create_account' | t | customer_register_link }}
+          </li>
+        {%- endif -%}
+      {%- endif -%}
+      {% if settings.enable_klaviyo_id %}
+        {%- if section.settings.enable_mobile_newsletter == true -%}
+          {%- if section.settings.select_newsletter == 'klaviyo' -%}
+          <li class="newsletter-opt">
+            {%- render 'newsletter-form-klaviyo', id_klaviyo: block.settings.id_klaviyo, section_id: section.id -%}
+          {%- endif -%}
+            {%- if  section.settings.select_newsletter == 'newsletter-default' -%}
+      	  <li class="newsletter-opt">
+          {%- render 'newsletter-form', section_id: section.id -%}
+          {%- endif -%}
+          </li>
+
+        {%- endif -%}
+      {% endif %}
+  </ul>
+  <!-- //mobile-nav -->
+ {% comment %}
+  {%- render "newsletter-form-klaviyo" with settings: settings, klaviyo_id: settings.klaviyo_id, section_id: section.id -%}
+ {% endcomment %}
+</div>
+
+
+<style>
+  .klaviyo_field_group, button#klaviyo-button-menu-mobile, .klaviyo_form_actions  {
+    width: 100% !important;
+  }
+  .klaviyo_field_group, .klaviyo_form_actions {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+  }
+  .klaviyo_condensed_styling .klaviyo_submit_button, .klaviyo_styling .klaviyo_submit_button {
+    background-color: #26b522 !important;
+  }
+
+</style>
+{% schema %}
+{
+  "name": "Mobile Menu (Sitewide)",
+  "class": "mobile-menu",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mobile Menu"
+    },
+    {
+      "type": "color",
+      "id": "background_color_mobile",
+      "label": "Background Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "border_color_mobile",
+      "label": "Search Border Color",
+      "default": "#4e4e4e"
+    },
+    {
+      "type": "color",
+      "id": "search_text_color_mobile",
+      "label": "Search Text Color",
+      "default": "#4e4e4e"
+    },
+    {
+      "type": "color",
+      "id": "button_color_menu_mobile",
+      "label": "Search Button Color",
+      "default": "#4e4e4e"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color_menu_mobile",
+      "label": "Search Button Icon Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "font_color_menu_mobile",
+      "label": "Font Color",
+      "default": "#000000"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_search",
+      "label": "Enable Search Bar on Mobile Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_login",
+      "label": "Disable Customer Login",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "menu_mobile_searchbar_placeholder",
+      "label": "Search Bar Placeholder Text",
+      "default": "Search: Placeholder"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_icon_menu",
+      "label": "Enable Mobile Menu Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_tel",
+      "label": "Enable Phone Number",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "text_email",
+      "label": "Enable Email adress",
+      "default": true,
+      "info": "Please, check that email and phone information are drescribed on 'Theme settings > Store Info'."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_newsletter",
+      "label": "Enable Newsletter on Mobile Menu"
+    },
+    {
+      "type": "select",
+      "id": "select_newsletter",
+      "label": "Newsletter Manager",
+      "info": "Klaviyo only will work if enabled, check it on Newsletter",
+      "options": [
+        {
+          "label": "Klaviyo",
+          "value": "klaviyo"
+        },
+        {
+          "label": "Default Shopify Form",
+          "value": "newsletter-default"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dropdown_clicking",
+      "label": "Enable Dropdown By Clicking Menu Item"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Mobile Menu Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_menu_item",
+          "label": "Icon Image",
+          "info": "40x40"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+
+  document.querySelectorAll('.jq-icon-fallback-text').forEach((el,index) => {
+    el.addEventListener('click', (e) => {
+      document.body.classList.toggle('js-drawer-open-left',!index)
+    });
+  });
+
+$(document).on('click', '.DrawerOverlay', function(){
+  $('body').removeClass('js-drawer-open-left cart-open cart-drawer-open');
+});
+
+$(document).on('click', '.mobile-nav__toggle-open,.mobile-nav__link[href^="#"]', function(){
+  var instance = $(this);
+
+  instance.parent().siblings('.child').slideToggle(400);
+
+  if (instance.is('.mobile-nav__link')) {
+    instance = instance.siblings('.mobile-nav__toggle-open');;
+  }
+
+  if( instance.hasClass('anime-plus-ver') ) {
+    instance.removeClass('anime-plus-ver anime-plus-hor');
+  } else {
+    instance.addClass('anime-plus-ver anime-plus-hor');
+  }
+});
+{% endjavascript %}
+
+{% style %}
+:root {
+  --vasta-background-menu-mobile:{{ section.settings.background_color_mobile }};
+  --vasta-border-menu-mobile:{{ section.settings.border_color_mobile }};
+  --vasta-search-text-color-mobile:{{ section.settings.search_text_color_mobile }};
+  --vasta-font-color-menu-mobile:{{ section.settings.font_color_menu_mobile }};
+  --vasta-button-color-menu-mobile:{{ section.settings.button_color_menu_mobile }};
+  --vasta-button-icon-color-menu-mobile:{{ section.settings.button_icon_color_menu_mobile }};
+}
+{% endstyle %}

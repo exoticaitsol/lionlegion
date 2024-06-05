@@ -1,0 +1,93 @@
+<!-- templates/page.landingpage.liquid START -->
+<page-wrapper class="block max-w-screen-xl p-8 mx-auto">
+    <h1 class="mx-auto text-3xl max-w-max">{{ page.title }}</h1>
+    <content-wrapper class="block p-4 mx-auto prose text-gray-900">
+        <p class="leading-5">{{ page.content }}</p>
+    </content-wrapper>
+
+    {%- assign rCollects = page.metafields.landing.collection.value | split: ',' -%}
+    <collections-wrapper class="block w-full mx-auto" x-data="{current: '{{ rCollects[0] }}',colors: {}}" x-init="console.log(current)">
+        <collections-links class="flex flex-row flex-wrap mb-4 mx-auto w-full max-w-[calc(100vw-4rem)] gap-x-2 justify-center">
+            {%- for rCollect in rCollects -%}
+                <button class="px-2 py-2 underline" @click="current='{{ rCollect }}';queueMicrotask(window.StampedFn.reloadUGC)" :class="{'bg-blue-200 shadow-md rounded':current=='{{ rCollect }}'}">{{ rCollect | replace: '-', ' ' | replace: page.title, '' }}</button>
+            {%- endfor -%}
+        </collections-links>
+        {%- for rCollect in rCollects -%}
+          <template x-if="current == '{{ rCollect }}'">
+            <product-grid class="grid grid-cols-2 gap-2 mx-auto lg:grid-cols-3" data-title="{{ rCollect }}">
+              {% for product in collections.[rCollect].products %}
+                {%- liquid
+                    assign firstVariant = product.first_available_variant
+                    assign firstColor = false
+                    if product.options contains 'Colour'
+                        assign hasColor = true
+                        capture obj
+                            echo '{'
+                            for color in product.options_by_name['Colour'].values
+                                unless firstColor
+                                    assign firstColor = color
+                                endunless
+                                echo "'" | append: color | append: "':'"
+                                for variant in product.variants
+                                    if variant.options contains color
+                                        echo variant.image | image_url: width: 360
+                                        break
+                                    endif
+                                endfor
+                                echo "'"
+                                unless forloop.last
+                                    echo ','
+                                endunless
+                            endfor
+                            echo '}'
+                        endcapture
+                    else
+                        assign hasColor = false
+                        assign obj = "'none'"
+                    endif
+                -%}
+                  <product-card  class="block w-full min-h-[max-content]"
+                      {% if hasColor -%}
+                      x-data="colorSwatches({
+                          starting: '{{ firstColor }}',
+                          colors: {{ obj }}})"
+                      {%- endif -%}>
+                      <a href="{{ product.url }}" aria-label="{{ product.title }}" class="w-full mx-auto">
+                          <img class="w-full h-auto" src="{{ firstVariant.image | image_url: width: 360 }}" sizes="(max-width: 768px) 48vw, (min-width: 1280px) 410px, 32vw" srcset="" {%- if hasColor %} x-rias="image||''" {%- endif %} alt="{{ firstVariant.image.alt }}" data-sizes="auto" {% if forloop.index > 3 %}loading="lazy"{%- else -%} loading="eager"{%- endif -%} width="{{ firstVariant.image.width }}" height="{{ firstVariant.image.height }}"/>
+                      </a>
+
+                      <swatch-wrapper class="flex flex-row justify-center w-full gap-1 pt-2 no-js-hidden" aria-hidden="true" x-cloak x-show="Object.keys(colors||{}).length>1">
+                          {%- for color in product.options_by_name['Colour'].values -%}
+                          <button class="w-6 h-6 border-2 border-solid rounded-full shadow-md hover:border-cta-500 disabled:!border-cta-500" data-swatch="{{ color }}" aria-label="{{ color }}" @click.prevent="selected='{{ color }}'" :disabled="selected=='{{ color }}'"></button>
+                          {%- endfor -%}
+                      </swatch-wrapper>
+
+                      <card-info class="flex flex-col items-center w-full gap-1 pt-2">
+                          <a class="text-center text-blue-800" href="{{ product.url }}" tabindex="-1">
+                              {{ product.title }}
+                          </a>
+                          {% if product.metafields.stamped.reviews_count %}
+                              <a href="{{ product.url }}#Reviews">
+                                  <span data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-title="{{ product.title }}" data-product-type="{{ product.producttype }}" class="block mx-auto text-center max-w-max stamped-product-reviews-badge"></span>
+                              </a>
+                          {% else %}
+                              <span class="text-base new-product-no-review">New product, no reviews</span>
+                          {%- endif -%}
+                          <card-price class="block w-full text-center">
+                              <new-price class="text-lg {%- if product.compare_at_price %} text-lg{%- endif -%}">{{ product.price | money }}</new-price>
+                              {%- if product.compare_at_price -%}
+                                  <old-price>{{ product.compare_at_price | money }}</old-price>
+                              {%- endif -%}
+                          </card-price>
+                      </card-info>
+
+                  </product-card>
+              {% endfor %}
+            </product-grid>
+          </template>
+        {%- endfor -%}
+    </collections-wrapper>
+</page-wrapper>
+
+
+<!-- templates/page.landingpage.liquid END -->

@@ -1,0 +1,276 @@
+<!-- start product-tabs.liquid (SECTION) -->
+{%- if section.settings.enabled_tabs -%}
+    <section class="tabs-section" data-section-type="product-tabs">
+        <h2 class="hide">Product Description</h2>
+        <ul class="tabs-nav" data-tabs-scope="a">
+            <li class="tabs {% if section.settings.enable_tabs_border_radius %}radius{% endif %} {% if section.settings.enable_tabs_shadow %}shadow{% endif %} {{ section.settings.product_description_title | handleize }} active" data-target="tab0">
+                <span id="prod-tab-{{ section.settings.product_description_title | handleize }}" class="tabs-link">{{ section.settings.product_description_title }}</span>
+            </li>
+            {%- for block in section.blocks -%}
+                {%- if "tab" == block.type -%}
+                    {%- assign show_tabs = false -%}
+                    {%- if block.settings.enable_tab_by_tag -%}
+                        {%- if product.tags contains block.settings.tag_name -%}
+                            {%- assign show_tabs = true -%}
+                        {%- endif -%}
+                    {%- else -%}
+                        {%- assign show_tabs = true -%}
+                    {%- endif -%}
+                    {%- if show_tabs == true -%}
+                        <li class="tabs {{ block.settings.tab_title | handleize }} {% if section.settings.enable_tabs_border_radius %}radius{% endif %} {% if section.settings.enable_tabs_shadow %}shadow{% endif %}" data-target="tab{{ forloop.index }}">
+                            <span id="prod-tab-{{ block.settings.tab_title | handleize }}" class="tabs-link">{{ block.settings.tab_title }}</span>
+                        </li>
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endfor -%}
+          <li class="tabs {{ section.settings.product_description_title | handleize }} {% if section.settings.enable_tabs_border_radius %}radius{% endif %} {% if section.settings.enable_tabs_shadow %}shadow{% endif %}" data-target="tab25" style="display:none">
+                <span id="prod-tab-{{ section.settings.product_description_title | handleize }}" class="tabs-link">Size Chart</span>
+            </li>
+        </ul>
+        <div class="tabs-content" data-tabs-scope="a">
+            <div class="tab-content active border {% if section.settings.enabled_tabs_max_height %} tabs-max-height {% endif %}" data-identifier="tab0">
+                <h2 class="hide">Description</h2>
+                {{ product.description }}
+            </div>
+            {%- for block in section.blocks -%}
+                {%- if "tab" == block.type -%}
+                    {%- assign show_tabs = false -%}
+                    {%- if block.settings.enable_tab_by_tag -%}
+                        {%- if product.tags contains block.settings.tag_name -%}
+                            {%- assign show_tabs = true -%}
+                        {%- endif -%}
+                    {%- else -%}
+                        {%- assign show_tabs = true -%}
+                    {%- endif -%}
+                    {%- if show_tabs == true -%}
+                        <div class="tab-content border {% if section.settings.enabled_tabs_max_height %} tabs-max-height {% endif %}" data-identifier="tab{{ forloop.index }}">
+                            <h2 class="hide">{{ block.settings.tab_title }}</h2>
+                            {{ block.settings.tab_content }}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endfor -%}
+          <div class="tab-content border {% if section.settings.enabled_tabs_max_height %} tabs-max-height {% endif %}" data-identifier="tab25">
+            {%- liquid
+              case product.type
+                when 'T Shirt'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_tshirt, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+                when 'Hoodie'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_hoodie, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when 'Sweatshirt'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_sweatshirt, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when 'Apparel'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_apparel, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Kids T Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_kids, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Polo Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_polo, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Womens T Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_women, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+              endcase
+            -%}
+
+          </div>
+      </div>
+  </section>
+{%- else -%}
+    <div class="no-product-tabs">
+        {{ product.description }}
+    </div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Product Tabs",
+  "class": "product-tabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_tabs",
+      "label": "Enable Tabs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_bullet_points",
+      "label": "Enable Bullet Points",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_tabs_max_height",
+      "label": "Enable Tabs Content Max Height"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tabs_border_radius",
+      "label": "Enable Tabs Border Radius",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tabs_shadow",
+      "label": "Enable Tabs Shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "tabs_max_height",
+      "label": "Tabs Content Max Height",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "header",
+      "content": "Tab Title"
+    },
+    {
+      "type": "select",
+      "id": "product_tab_text_transform",
+      "label": "Tab Title Text Transform",
+      "options": [
+        {
+          "label": "Capitalize",
+          "value": "capitalize"
+        },
+        {
+          "label": "Uppercase",
+          "value": "uppercase"
+        },
+        {
+          "label": "Lowercase",
+          "value": "lowercase"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "product_description_title",
+      "label": "Tab 1 Title",
+      "default": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_color",
+      "label": "Active Tab",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_bullet_color",
+      "label": "Active Tab's Bullet",
+      "default": "#0c0"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_text_color",
+      "label": "Active Tab's Text",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "inactive_tab_color",
+      "label": "Inactive Tab",
+      "default": "#868686"
+    },
+    {
+      "type": "color",
+      "id": "inactive_tab_bullet_color",
+      "label": "Inactive Tab's Bullet",
+      "default": "#555"
+    },
+    {
+      "type": "color",
+      "id": "inactive_tab_text_color",
+      "label": "Inactive Tab's Text",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_border_color",
+      "label": "Tab's Content Border",
+      "default": "#444"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Custom Product Tab",
+      "type": "tab",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Block Title",
+          "id": "title"
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "tab_title"
+        },
+        {
+          "type": "html",
+          "label": "Content",
+          "id": "tab_content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_tab_by_tag",
+          "label": "Enable Tab By Tag"
+        },
+        {
+          "type": "text",
+          "id": "tag_name",
+          "label": "Product Tab Tag",
+          "info": "Only show tab on product pages with these tags."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+{% javascript %}
+(function($){
+    var $document = $(document);
+    $document.ready(function(){
+        $document.on('click', '.tabs', function(){
+            var tabs = $(this),
+                scope = tabs.parent().attr('data-tabs-scope');
+            tabs.addClass('active').siblings().removeClass('active');
+            $('.tabs-content[data-tabs-scope="' + scope + '"] .tab-content[data-identifier="' + tabs.attr('data-target') + '"]').addClass('active').siblings().removeClass('active');
+            return false;
+        });
+    });
+})(jQuery);
+{% endjavascript %}
+{% style %}
+:root {
+    --product-tab-text-transform: {{ section.settings.product_tab_text_transform }};
+    --active-tab-color: {{ section.settings.active_tab_color }};
+    --active-tab-bullet-color: {{ section.settings.active_tab_bullet_color }};
+    --active-tab-text-color: {{ section.settings.active_tab_text_color }};
+    --active-tab-border-color: {{ section.settings.active_tab_border_color }};
+    --inactive-tab-color: {{ section.settings.inactive_tab_color }};
+    --inactive-tab-bullet-color: {{ section.settings.inactive_tab_bullet_color }};
+    --inactive-tab-text-color: {{ section.settings.inactive_tab_text_color }};
+    --tab-max-height: {{ section.settings.tabs_max_height }}px;
+    --enable-bullet-points: inline-block;
+    {% unless section.settings.enabled_bullet_points %}
+        --enable-bullet-points: none;
+    {% endunless %}
+}
+{% endstyle %}

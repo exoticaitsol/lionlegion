@@ -1,0 +1,141 @@
+<!-- start relatedproducts.liquid (SECTIONS) -->
+{%- comment -%}
+  Number of related items per row,
+  and number of rows.
+{%- endcomment -%}
+
+{%- assign number_of_related_products_per_row = 4 -%}
+{%- assign number_of_rows = 1 -%}
+
+
+{%- assign heading = section.settings.section_title -%}
+
+{%- comment -%}
+  Set either or both to true, if you want
+  to limit yourself to items with same vendor, and/or type.
+{%- endcomment -%}
+
+{%- assign same_vendor = false -%}
+{%- assign same_type = false -%}
+
+{%- comment -%}
+  Collections to ignore.
+  Never pick related items from those.
+{%- endcomment -%}
+
+{%- assign exclusions = 'frontpage,all' | split: ',' -%}
+
+{%- comment -%}
+  Looking for a relevant collection.
+{%- endcomment -%}
+
+{%- if product.metafields.c_f['Related Products'] -%}
+  {%- assign collection = collections[product.metafields.c_f['Related Products']] -%}
+{%- endif -%}
+
+{%- assign found_a_collection = false -%}
+{%- if collection and collection.all_products_count > 1 -%}
+  {%- unless exclusions contains collection.handle -%}
+    {%- assign found_a_collection = true -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- unless found_a_collection -%}
+  {%- for c in product.collections -%}
+    {%- unless exclusions contains c.handle or c.all_products_count < 2 -%}
+      {%- assign found_a_collection = true -%}
+      {%- assign collection = c -%}
+      {%- break -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endunless -%}
+
+{%- comment -%}
+  If we have a relevant collection.
+{%- endcomment -%}
+
+{%- if found_a_collection -%}
+
+  {%- assign counter = 0 -%}
+  {%- assign break_at = number_of_rows | times: number_of_related_products_per_row -%}
+  {%- assign current_product = product -%}
+
+<div class="relate-content">
+  <div class="wrapper">
+      <div class="grid__item">
+        {%- unless heading == blank -%}
+        <header class="section-header">
+          <h2 class="reviewtitle section-title section-header__title" id="related_product">{{ heading }}</h2>
+        </header>
+        {%- endunless -%}
+        <div class="grid-uniform">
+          <div class="grid--uniform grid--view-items grid-products section-related-products pro-cart">
+            {%- for product in collection.products -%}
+              {%- unless product.handle == current_product.handle -%}
+                 {%- unless same_vendor and current_product.vendor != product.vendor -%}
+                   {%- unless same_type and current_product.type != product.type -%}
+                        <div class="grid-products-item" id="{{ products.handle }}">
+                          <a title="{{ product.title | strip_html | escape }}" href="{{ product.url }}" id="related-product-{{ forloop.index }}" class="grid-product-link">
+                            <div class="responsive-image__wrapper">
+                              {%- assign image_alt = product.featured_image.alt | default: product.title | strip_html | escape -%}
+                              {%- assign image_product = product.featured_image.src -%}
+                              {%- assign image_product_default = settings.recently_viewed_product_without_image -%}
+                              {% if image_product != blank %}
+                                  {%- render 'responsive-image',
+                                    id_prefix: 'relatedproducts', 
+                                    image: image_product, 
+                                    active_lazy: true,
+                                    no_wrap: true, 
+                                    alt_text: image_alt,
+                                    max_width: 350
+                                -%}
+                              {% else %}
+                                {%- render 'responsive-image',
+                                  id_prefix: 'relatedproducts', 
+                                  image: image_product_default, 
+                                  active_lazy: true,
+                                  no_wrap: true, 
+                                  alt_text: image_alt,
+                                  max_width: 350
+                                -%}
+                              {% endif %}
+                             
+                            </div>
+                          </a>  
+                          <p class="cust_grid_pro_title">{{ product.title }}</p>
+
+                          {%- if settings.product_enabled_app_reviews -%}
+                          <div class="products-reviews-stars no-mobile cart-review">
+                            {% if product.metafields.stamped.reviews_count %}
+
+                            <a href="{{ product.url }}#stamped-main-widget"><span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-title="{{ product.title }}" data-product-type="{{ product.type }}" style="display: block;"></span></a>
+                            {% else %}
+                            <span  class="new-product-no-review">New product, no reviews</span>
+
+                            {% endif %}
+                          </div>
+                          {%- endif -%}
+                          
+                          {%- if section.settings.show_price -%}
+                            <div class="related-product-price">
+                              {%- if product.compare_at_price > product.price -%}
+                                <span class="compare-price money" data-usd="{{ product.price }}">{{ product.compare_at_price | money }}</span>
+                              {%- endif -%}
+                              <span class="price money" data-usd="{{ product.price }}">{{ product.price | money }}</span>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                     {%- assign counter = counter | plus: 1 -%}
+                     {%- if counter == break_at -%}
+                       {%- break -%}
+                     {%- endif -%}
+                   {%- endunless -%}
+                {%- endunless -%}
+              {%- endunless -%}
+            {%- endfor -%}
+           </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{%- endif -%}

@@ -1,0 +1,48 @@
+<!-- start .registerliquid (TEMPLATE) -->
+<div  class="wrapper" id="CustomerLoginForm" >
+
+
+{%- form 'create_customer' -%}
+<h1>{{ 'customer.register.title' | t }}</h1>
+  {{ form.errors | default_errors }}
+
+  <label for="first name">First Name</label>
+  <input type="text"
+    name="customer[first_name]"
+    id="FirstName"
+    placeholder="{{ 'customer.register.first_name' | t }}"
+    autofocus
+    {% if form.first_name %}value="{{ form.first_name }}"{% endif %}>
+
+  <label for="last name">Last Name</label>
+  <input type="text"
+    name="customer[last_name]"
+    id="LastName"
+    placeholder="{{ 'customer.register.last_name' | t }}"
+    {% if form.last_name %}value="{{ form.last_name }}"{% endif %}>
+
+ <label for="email" class="required">Email</label>
+  <input type="email"
+    name="customer[email]"
+    id="Email"
+    class="required {% if form.errors contains 'email' %}input-error{% endif %}"
+    placeholder="{{ 'customer.register.email' | t }}"
+    value="{% if form.email %}{{ form.email }}{% endif %}"
+    spellcheck="false"
+    autocomplete="off"
+    autocapitalize="off" required>
+
+<label for="password" class="required">Password</label>
+  <input type="password"
+    name="customer[password]"
+    id="CreatePassword"
+    class="required {% if form.errors contains 'password' %}input-error{% endif %}"
+    placeholder="{{ 'customer.register.password' | t }}"  pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{5,}"
+    title="Password must be 5 characters including a-z, 0-9" alt
+     required>
+    <label class="psd-copy">Password must be 5 characters long.<br>May only contain alphanumeric characters(a-Z, 0-9)</label>
+   <input type="submit" name="submit" value="{{ 'customer.register.submit' | t }}" id="id-button" class="button">
+    
+  <a title="Register Cancel" id="id-register-cancel" href="{{ shop.url }}">{{ 'customer.register.cancel' | t }}</a>
+{%- endform -%}
+</div>

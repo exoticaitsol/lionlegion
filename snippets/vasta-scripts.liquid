@@ -1,0 +1,173 @@
+<script src="{{ 'option_selection.js' | shopify_asset_url }}"></script>
+<script src="{{ 'VastaShop.js' | asset_url }}"></script>
+<script src="{{ 'lazysizes.min.js' | asset_url }}"></script>
+
+<!-- VastaScript -->
+<script>
+    var product_without_image = "{{ settings.recently_viewed_product_without_image | image_url }}";
+</script>
+<script>
+
+    window.addEventListener('load', function () {
+        var is_IE =  /*@cc_on!@*/false || !!document.documentMode;
+
+        if (is_IE) {
+            (function ($) {
+                $.getScript('//unpkg.com/css-vars-ponyfill@1/dist/css-vars-ponyfill.min.js', function () {
+                    cssVars({
+                        onlyLegacy: false
+                    });
+
+                    setTimeout(function () {
+                        jQuery('.loaderIE').removeClass('active');
+                    }, 1000);
+                });
+
+                var script = document.createElement('script');
+                script.src = "https://cdnjs.cloudflare.com/ajax/libs/stickyfill/2.1.0/stickyfill.js";
+
+                script.onload = function () {
+                    var elements = $('.template-blog .main-content .blog-sidebar');
+                    var elements_2 = $('.template-article .main-content .blog-sidebar');
+                    Stickyfill.add(elements);
+                    Stickyfill.add(elements_2);
+                    window.addEventListener('mousemove', Stickyfill.refreshAll);
+                };
+
+                document.body.appendChild(script)
+            })(jQuery);
+        } else {
+            jQuery('.loaderIE').removeClass('active');
+        }
+    });
+</script>
+
+<script>
+    window.lazyLoadOptions = {
+        elements_selector: ".lazy",
+        threshold: 0,
+        callback_enter: function (e) { },
+        callback_exit: function (e) { },
+        callback_reveal: function (e) { },
+        callback_loaded: function (e) { },
+        callback_error: function (e) { },
+        callback_finish: function (e) { }
+    };
+
+    window.addEventListener('LazyLoad::Initialized', function (event) {
+        window.lazyLoadInstance = event.detail.instance;
+    }, false);
+
+    // CustomEvent micro-polyfill for Internet Explorer
+    (function () {
+        if (typeof window.CustomEvent === "function") {
+            return false;
+        }
+
+        function CustomEvent(event, params) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+
+        CustomEvent.prototype = window.Event.prototype;
+        window.CustomEvent = CustomEvent;
+    })();
+</script>
+
+<script>
+    VastaShop.config = {};
+    VastaShop.config.enable_freeshipping_msg = {{ settings.enable_freeshipping_msg | default: false }};
+    VastaShop.config.freeshipping_msg = '{{ settings.freeshipping_msg }}';
+</script>
+
+<script>
+  var cart_page = cart_page || {};
+  cart_page = {
+    discount_in_cart_page:"{{ settings.enabled_discount_cart_page | escape }}",
+    text_cart_above_button_sucess:"{{ settings.cart_discount_text | escape }}",
+    cart_discount_quantity: {{ settings.cart_discount_qtd_range }},
+    cart_discount_value: {{ settings.cart_discount_value_range | times: 100 }},
+    cart_enable_discount_shipping_bar: {{ settings.enable_discount_shipping_bar }},
+  }
+</script>
+<script>
+    Shopify.money_format = '{{ shop.money_format }}';
+    VastaShop.Cart.current = {{ cart | json }};
+    VastaShop.Cart.total_price = {{ cart.total_price }};
+    VastaShop.Cart.total_quantity = {{ cart.item_count }};
+</script>
+
+<script>
+    jQuery(document).ready(function () {
+        if (shipping_bar && shipping_bar.enable_discount || shipping_bar.style_shipping == "dicount_style") {
+            update_shipping_bar({{ cart.total_price }}, {{ cart.item_count }});
+           }
+    update_discount_cart({{ cart.total_price }}, {{ cart.item_count }});
+         });
+</script>
+
+
+{% if template contains 'product' %}
+<script>
+    VastaShop.Product.current = {{ product | json }};
+    VastaShop.Product.current.url = "{{ product.url }}";
+    VastaShop.Product.totalPrice = {{ product.price }};
+    VastaShop.Product.options = {{ product.selected_or_first_available_variant.options | json }};
+
+    VastaShop.Product.structureVariants();
+</script>
+
+<script src="{{ 'custom-swatch.js' | asset_url }}" defer></script>
+
+{% render 'custom-product-js' %}
+{% elsif template contains 'collection'  %}
+{% render 'collection-js' %}
+{% elsif template contains 'cart'  %}
+{% render 'cart-js' %}
+
+
+{% elsif template contains 'login' %}
+{% render 'customer-login-js' %}
+{% elsif template contains 'customers' %}
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}"></script>
+
+{% endif %}
+
+{% if settings.enable_klaviyo_id %}
+<script>
+    window.addEventListener("load", function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+
+            script.src = "//www.klaviyo.com/media/js/public/klaviyo_subscribe.js";
+            script.async = true;
+            script.onload = function () {
+                KlaviyoSubscribe.attachToForms('.klaviyo_condensed_styling', {
+                    hide_form_on_success: true,
+                    custom_success_message: true,
+                    success: function () {
+                        $('.klaviyo_inputs_wrapper').hide();
+                        $('.success_message').show();
+                    }
+                });
+            };
+
+        document.body.appendChild(script);
+    });
+</script>
+{% endif %}
+<script>
+    (function($){
+        $(document).ready(function(){
+            $('a[href^="#"]:not(.item-menu-mobile)').click(function( e ){
+                e.preventDefault();
+            });
+        });
+    })(jQuery);
+</script>
+
+{%- if settings.enable_custom_scripts -%}
+{%- render 'custom_scripts' -%}
+{%- endif -%}

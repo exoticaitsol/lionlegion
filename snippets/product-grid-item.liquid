@@ -1,0 +1,126 @@
+<!-- start product-grid-item.liquid (SNIPPET) -->
+{% comment %}
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
+{% endcomment %}
+
+{% comment %}
+  Set the default grid_item_width if no variable is set
+{% endcomment %}
+{%- unless grid_item_width -%}
+  {%- assign grid_item_width = 'grid__item large--one-quarter medium--one-half' -%}
+{%- endunless -%}
+
+{% comment %}
+  Check if the product is on sale and set a variable to be used below.
+{% endcomment %}
+{%- assign on_sale = false -%}
+{%- if product.compare_at_price > product.price -%}
+  {%- assign on_sale = true -%}
+{%- endif -%}
+
+{% comment %}
+  Check if the product is sold out and set a variable to be used below.
+{% endcomment %}
+
+{%- if product.available -%}
+  
+{%- endif -%}
+
+<div class="grid__item {{ grid_item_width }} product_item text-center">
+
+  {% comment %}
+    Link to your product with the 'within: collection' filter for the link to be aware of the collection.
+    This allows you to create collection-based navigation on the product page.
+
+    Results of using 'within: collection':
+    - Instead of a URL with /products/product-handle
+      you would get /collections/collection-handle/products/product-handle
+
+    For more info on navigation within a collection
+      - http://docs.shopify.com/support/your-store/collections/how-to-navigate-within-a-collection
+
+  {% endcomment %}
+
+  
+  	<div class="productgrid">
+        <a title="{{ product.title | strip_html | escape }}" href="{{ product.url | within: collection }}" id="ItemImage" aria-label="Item Image" class="item-image grid__image">
+          <div style="background:url({{ product.featured_image.src | image_url: width: 420 }}) no-repeat center / 100% auto; padding-top: 100%;" alt="{{ product.featured_image.alt | strip_html | escape }}"></div>
+        </a>
+        {% comment %}
+          {%- if settings.collection_show_quickshop and product.available -%}
+              <span data-fancybox-href="#product-{{ product.id }}" class="quick_shop action_button button--quick-shop" data-gallery="product-{{ product.id }}-gallery">
+                quick shop
+              </span>
+          {%- endif -%}
+      	{% endcomment %} 
+
+
+    </div>
+
+    <h3 class="product-title">
+      <a title="{{ product.title | strip_html | escape }}" id="item-title-{{ product.selected_or_first_available_variant.id }}" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    </h3>
+
+<!-- Stamped - Begin badge -->
+<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}" data-product-type="{{ product.type }}" style="display: block;"></span>
+<!-- Stamped - End badge -->
+
+ 
+    <p class="product-price">
+      {% comment %}
+        You can show a leading 'from' or 'up to' by checking 'product.price_varies'
+        if your variants have different prices.
+      {% endcomment %}
+      {%- if on_sale -%}
+        <span class="compare-price money" >{{ product.compare_at_price | money }}</span>
+      {%- endif -%}
+
+      {%- if on_sale -%}
+        {%- if product.price_varies -%}
+          
+          <span class="price money"> {{ product.price | money }}</span>
+        {%- else -%}
+          <span class="price money"> {{ product.price | money }}</span>
+        {%- endif -%}
+      {%- else -%}
+        {%- if product.price_varies -%}
+          {%- assign price = product.price | money -%}
+            <span class="price money" > {{ price }}</span>
+        {%- else -%}
+          <span class="price money" >{{ product.price | money }}</span>
+        {%- endif -%}
+      {%- endif -%}
+      <br>
+      {%- if settings.enable_product_stock -%}
+        <span>
+          {%- if product.variants.first.inventory_management == "shopify" -%}
+            {%- if product.variants.first.inventory_quantity > 0 -%}
+            {%- else -%}
+                <span class="price-out-of-stock">{{ settings.out_of_stock_label | default: '(out of stock)' }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+  </p>
+  {%- if settings.enable_add_cart_button -%}
+    <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm" class="form-vertical">
+      <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+      <button type="submit" name="add" id="AddToCart" class="btn AddToCart">Add To Basket</button>
+    </form>
+  {%- endif -%}
+{% comment %}
+  {%- if settings.collection_show_quickshop and product.available -%}
+    {%- include 'quick_shop', product: product -%}
+  {%- endif -%}
+{% endcomment %}
+</div>

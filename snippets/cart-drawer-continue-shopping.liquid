@@ -1,0 +1,32 @@
+<!-- start cart-drawer-continue-shopping.liquid (SNIPPET) -->
+<div class="continue-shopping-div {{ position }}">
+
+{% if template contains 'product' %}
+  {% if collection.url.size > 0 %}
+     <a title="Continue Shopping" href="{{ collection.url }}" id="{{ id }}" aria-label="{{ id }}" class="{% if section_settings.action_link_continue_shopping != 'link' %}fallback-text{% endif %} continue-shopping {% if section_settings.continue_shopping_button_style %}cont-button-style{% endif %}">
+        {{ section_settings.text_continue_shopping }}
+    </a>
+  {% else %}
+       <a title="Continue Shopping" href="/" id="{{ id }}" aria-label="{{ id }}" class="{% if section_settings.action_link_continue_shopping != 'link' %}fallback-text{% endif %} continue-shopping {% if section_settings.continue_shopping_button_style %}cont-button-style{% endif %}">
+        {{ section_settings.text_continue_shopping }}
+    </a>
+  {% endif %}
+{% elsif template contains 'collection' %}
+<a title="Continue Shopping" id="{{ id }}" aria-label="{{ id }}" class="drawer-close-cs {% if section_settings.action_link_continue_shopping != 'link' %}fallback-text{% endif %} continue-shopping {% if section_settings.continue_shopping_button_style %}cont-button-style{% endif %}">
+        {{ section_settings.text_continue_shopping }}
+    </a>
+{% elsif template contains 'index' %}
+<a title="Continue Shopping" id="{{ id }}" aria-label="{{ id }}" class="drawer-close-cs {% if section_settings.action_link_continue_shopping != 'link' %}fallback-text{% endif %} continue-shopping {% if section_settings.continue_shopping_button_style %}cont-button-style{% endif %}">
+        {{ section_settings.text_continue_shopping }}
+    </a>
+{% else %} 
+    <a title="Continue Shopping" href="{% if section_settings.action_link_continue_shopping == 'link' %}{{ section_settings.href_continue_shopping }}{% else%}#{% endif %}" id="{{ id }}" aria-label="{{ id }}" class="{% if section_settings.action_link_continue_shopping != 'link' %}fallback-text{% endif %} continue-shopping {% if section_settings.continue_shopping_button_style %}cont-button-style{% endif %}">
+        {{ section_settings.text_continue_shopping }}
+    </a>
+{% endif %}
+
+
+
+
+</div>
+

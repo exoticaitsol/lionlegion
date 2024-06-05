@@ -1,0 +1,140 @@
+<!-- custom-addon-app.liquid start-->
+{%- assign currentId = product.id -%}
+{%- assign randomIndex = currentId | modulo: 3 -%}
+{%- if product.tags contains settings.customOrderBumpDisplayTag -%}
+    {%- assign addonCollection = collections[settings.customOrderBumpCollection] -%}
+    {%- if addonCollection -%}
+            <div class="customAddon-Wrapper wrapper-hide-notFirst">
+
+                {%- for addonProd in addonCollection.products -%}
+                    {%- if forLoop.first -%}
+                        {%- assign currentIndex = 0 -%}
+                    {%- endif -%}
+                    {%- if addonProd.id != currentId -%}
+                        {%- assign ItemFirst = false -%}
+                        {%- if currentIndex == randomIndex -%}
+                            {%- assign ItemFirst = true -%}
+                        {%- endif -%}
+                        {%- assign currentIndex = currentIndex | plus: 1 -%}
+                        {%- assign currentId = addonProd.selected_or_first_available_variant.id -%}
+                        {%- assign itemInCart = false -%}
+                        {%- for item in cart.items -%}
+                            {%- if item.id == currentId -%}
+                                {%- assign itemInCart = true -%}
+                                {% break %}
+                            {%- endif -%}
+                        {%- endfor -%}
+
+                        <div class="customAddon-ItemWrapper {%- if ItemFirst %} ItemWrapper-first{%- else %} ItemWrapper-notFirst{%- endif -%}">
+                            <div class="customAddon-image">
+                              {% render 'responsive-image', image: addonProd.featured_image, size_desk: 15, size_mobile: 40, size_large: 300, custom_class: true, image_class: "customAddon-Img" %}
+                            </div>
+                            <div class="customAddon-information">
+                              <div class="addon-title" >{{ addonProd.title }}</div>
+                              <div class="addont-price">{{ addonProd.price | money }}</div>
+                              <div class="addon-add-product">
+                                <label id="label-{{ currentId }}" for="customAddonCheck-{{currentId}}">{%- if itemInCart %}Item in Basket{%- else -%}Add Sticker to Basket?{%- endif -%}</label>
+                                <input type="checkbox" id="customAddonCheck-{{ currentId }}" onclick="customAddonClicked({{currentId}})" {%- if itemInCart %} checked{%- endif -%}/>
+                              </div>
+                            </div>
+                        </div>
+                    {%- endif -%}
+                {%- endfor -%}
+                <button class="customAddon-showmore" onclick="$('.customAddon-Wrapper').removeClass('wrapper-hide-notFirst');">Show More</button>
+            </div>
+
+
+                <script>
+                    function customAddonClicked(id){
+                        var checkityCheck = document.getElementById("customAddonCheck-"+id);
+                        var checkboxLabel = document.getElementById("label-"+id);
+                        var removeData = "updates["+id+"]=0";
+                        var customAddonProductID = id;
+                        var addonData = {
+                            quantity: 1,
+                            id: customAddonProductID,
+                             properties: {
+                              'Special':'Add-On'
+                            }
+                        };
+
+
+
+                        if (checkityCheck.checked == true){
+                                console.log("Adding item to Cart: {{ addonProd.title }}");
+                                checkboxLabel.classList.add('added');
+                                checkboxLabel.classList.remove('removed');
+                                checkboxLabel.innerText = 'Added to Basket';
+
+                                VastaShop.Cart.addItem(addonData).then(function (prod, status) {
+                                    if ('success' == status) {
+                                        console.log(prod.quantity--);
+                                        removeData = "updates["+prod.id+"]="+prod.quantity--;
+
+
+                                        VastaShop.Cart.getAllItems().then(function(cart, status){
+                                          if ('success' === status) {
+                                            VastaShop.Cart.current = cart;
+                                            render_cart_drawer(VastaShop.Cart.current, jQuery('.list-products'), 0,'');
+                                            update_shipping_bar(cart.total_price,cart.item_count);
+                                            inventoryControl(prod.id);
+                                            console.log("Item Added to Cart");
+                                          }
+                                        });
+                                    };
+                                });
+
+                        } else {
+                            console.log("Removing item from Cart: {{ addonProd.title }}");
+                            checkboxLabel.classList.add('removed');
+                            checkboxLabel.classList.remove('added');
+                            checkboxLabel.innerText = 'Removed from Basket';
+
+                            VastaShop.Cart.update(removeData).then(function (prod, status) {
+                                    if ('success' == status) {
+                                        VastaShop.Cart.getAllItems().then(function(cart, status){
+                                          if ('success' === status) {
+                                            VastaShop.Cart.current = cart;
+                                            render_cart_drawer(VastaShop.Cart.current, jQuery('.list-products'), 0,'');
+                                            update_shipping_bar(cart.total_price,cart.item_count);
+                                            inventoryControl(prod.id);
+                                            console.log("Item Removed from Cart");
+
+                                            if (cart.item_count < 1) {
+                                                jQuery('.drawer-title').html(empty_cart());
+                                                jQuery('.list-products').html(continue_shopping());
+                                                jQuery('.cart-container').addClass('empty');
+                                                jQuery('.cart-products-wrapper').removeClass('product-content');
+                                                jQuery('.cupom-text').hide();
+                                                jQuery('.count').html(total_items(cart));
+
+                                            } else if (cart.item_count == 1) {
+                                                jQuery('.jq_qtd_bt_proceed').html(total_items(cart) + ' Item');
+                                                jQuery('.count').html(total_items(cart));
+                                                jQuery('.cupom-text').show();
+                                            } else if (cart.item_count > 1) {
+                                                jQuery('.cupom-text').show();
+                                                jQuery('.jq_qtd_bt_proceed').html(total_items(cart) + ' Items');
+                                                jQuery('.count').html(total_items(cart));
+
+
+                                            };
+
+                                          }
+                                        });
+                                    };
+                                });
+
+
+                        };
+                    };
+                </script>
+    {%- endif -%}
+{%- endif -%}
+
+
+
+<!-- custom-addon-app.liquid end -->
+
+<style>
+</style>

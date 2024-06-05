@@ -1,0 +1,241 @@
+<!-- start swatch.liquid (SNIPPET) -->
+<div class="swatch swatch-standard 111 " data-section-type="swatch">
+<div class="mineSwatchData">
+ {%- if product.variants.size > 1 -%}
+  {%- for product_option in product.options_with_values -%}
+
+    {%- assign swatch_index = forloop.index -%}
+
+    {%- assign option_name = product_option.name | downcase -%}
+
+    {%- if swatch_index == 1 -%}
+      {%- assign display_name = "Colour" -%}
+    {%- elsif swatch_index == 2 -%}
+      {%- assign display_name = "Size" -%}
+    {%- endif -%}
+
+    <div class="swatch-type swatch-{{ option_name }}" data-type="{{ option_name }}" data-index="{{ forloop.index }}">
+      <div class="size_labels_cstm"> 
+        <label class="product-form-label">
+          {% if section.settings.font_bold_enabled %}<strong>{% endif %}{{ option_name | capitalize }}
+          {% if option_name == 'Colour' %} 
+            <div id="colorName">:</div>
+          {% endif %}
+          {% if option_name == 'Size' %}
+            <div id="sizecalue" >: </div>
+          {% endif %}
+          {% if section.settings.font_bold_enabled %}</strong>{% endif %}
+    <div class="cstm_{{ option_name }}_chart"></div>
+        </label> 
+       
+        <div class="cstm_s_chart">
+           {%- if option_name contains 'size' -%}
+            <img class="size_ch" src="https://cdn.shopify.com/s/files/1/0268/4089/1438/t/73/assets/size_1.png?v=1704869148" alt="img_size"> {%- render 'size-chart-link' -%}
+         {% endif %}
+        </div>
+      </div>
+
+      <div class="swatch-elements-options ">     
+        
+        <div class="swatch-elements-wrapper {% if settings.product_disabled_swatch %}dropdown-option{% endif %}">
+      
+    {%- unless settings.product_disabled_swatch -%}
+            {%- if option_name contains 'colour' -%}
+          
+                     {%- render 'swatch-color-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index -%}
+        
+          {%- elsif  option_name contains 'color' -%}
+              {%- render 'swatch-color', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "color" -%}
+            {%- elsif option_name contains 'style' -%}
+              {%- render 'swatch-style', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "style" -%}
+            {%- else -%}
+             
+                  {%- render 'swatch-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index, swatchType: display_name -%} 
+          {%- endif -%}
+                 
+          {%- else -%}
+            {%- render 'select-swatch', values: product_option.values, swatch_index: swatch_index, title_standard: display_name -%}
+          {%- endunless -%}
+   
+
+        </div>
+      </div>
+    </div>
+
+  {%- endfor -%}
+{%- endif -%}
+
+</div>
+{% comment %}
+
+{%- if product.variants.size > 1 -%}
+  {%- for product_option in product.options_with_values -%}
+
+    {%- assign swatch_index = forloop.index -%}
+
+    {%- assign option_name = product_option.name | downcase -%}
+{% if option_name == 'colour' %}
+    <div class="swatch-type swatch-{{ option_name }}" data-type="{{ option_name }}" data-index="{{ forloop.index }}">
+      <div class="size_labels_cstm"> 
+        <label class="product-form-label">
+          {% if section.settings.font_bold_enabled %}<strong>{% endif %}{{ option_name | capitalize }}
+          {% if option_name == 'colour' %} 
+            <div id="colorName">:</div>
+          {% endif %}
+          {% if option_name == 'size' %}
+            <div id="sizecalue" >: </div>
+          {% endif %}
+          {% if section.settings.font_bold_enabled %}</strong>{% endif %}
+        </label>
+        <div class="cstm_size_chart">
+          {% if option_name == 'size' %} 
+            <img class="size_icon" src="https://cdn.shopify.com/s/files/1/0268/4089/1438/t/73/assets/size_1.png?v=1704869148" alt="img_size"> {%- render 'size-chart-link' -%}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="swatch-elements-options ">     
+        
+        <div class="swatch-elements-wrapper {% if settings.product_disabled_swatch %}dropdown-option{% endif %}">
+      
+    {%- unless settings.product_disabled_swatch -%}
+            {%- if option_name contains 'colour' -%}
+          
+                     {%- render 'swatch-color-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index -%}
+        
+          {%- elsif  option_name contains 'color' -%}
+              {%- render 'swatch-color', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "color" -%}
+            {%- elsif option_name contains 'style' -%}
+              {%- render 'swatch-style', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "style" -%}
+            {%- else -%}
+             
+                  {%- render 'swatch-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index, swatchType: display_name -%} 
+          {%- endif -%}
+                 
+          {%- else -%}
+            {%- render 'select-swatch', values: product_option.values, swatch_index: swatch_index, title_standard: display_name -%}
+          {%- endunless -%}
+   
+
+        </div>
+      </div>
+    </div>
+{% endif %}
+  {%- endfor -%}
+{%- endif -%}
+
+
+  {%- if product.variants.size > 1 -%}
+  {%- for product_option in product.options_with_values -%}
+
+    {%- assign swatch_index = forloop.index -%}
+
+    {%- assign option_name = product_option.name | downcase -%}
+{% if option_name == 'size' %}
+    <div class="swatch-type swatch-{{ option_name }}" data-type="{{ option_name }}" data-index="{{ forloop.index }}">
+      <div class="size_labels_cstm"> 
+        <label class="product-form-label">
+          {% if section.settings.font_bold_enabled %}<strong>{% endif %}{{ option_name | capitalize }}
+          {% if option_name == 'colour' %} 
+            <div id="colorName">:</div>
+          {% endif %}
+          {% if option_name == 'size' %}
+            <div id="sizecalue" >: </div>
+          {% endif %}
+          {% if section.settings.font_bold_enabled %}</strong>{% endif %}
+        </label>
+        <div class="cstm_size_chart">
+          {% if option_name == 'size' %} 
+            <img class="size_icon" src="https://cdn.shopify.com/s/files/1/0268/4089/1438/t/73/assets/size_1.png?v=1704869148" alt="img_size"> {%- render 'size-chart-link' -%}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="swatch-elements-options ">     
+        
+        <div class="swatch-elements-wrapper {% if settings.product_disabled_swatch %}dropdown-option{% endif %}">
+      
+    {%- unless settings.product_disabled_swatch -%}
+            {%- if option_name contains 'colour' -%}
+          
+                     {%- render 'swatch-color-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index -%}
+        
+          {%- elsif  option_name contains 'color' -%}
+              {%- render 'swatch-color', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "color" -%}
+            {%- elsif option_name contains 'style' -%}
+              {%- render 'swatch-style', values: product_option.values, title_standard: 'Swatch Color', swatch_index: swatch_index, type: "style" -%}
+            {%- else -%}
+             
+                  {%- render 'swatch-standard', values: product_option.values, title_standard: 'Swatch Standard', swatch_index: swatch_index, swatchType: display_name -%} 
+          {%- endif -%}
+                 
+          {%- else -%}
+            {%- render 'select-swatch', values: product_option.values, swatch_index: swatch_index, title_standard: display_name -%}
+          {%- endunless -%}
+   
+
+        </div>
+      </div>
+    </div>
+{% endif %}
+  {%- endfor -%}
+{%- endif -%}
+
+
+
+  {% endcomment %}
+
+ {% comment %} {%- render 'size-chart-link' -%} {% endcomment %}
+
+  <select id="all-product-variants" name="id" class="product-variant all-variant hide" data-productid="{{ product.id }}">
+    {%- for variant in product.variants -%}
+      {% if variant.available or settings.enable_out_off_stock_button == true %}
+        <option {% if variant.selected %} selected {% endif %}
+            value="{{ variant.id }}"
+            data-available="{{ variant.available }}"
+            data-options="{{ variant.options | join: ',' | escape }}"
+            data-sku="{{ variant.sku }}"
+            data-price="{{ variant.price }}"
+            data-variant-inventory = "{{ variant.inventory_management }}"
+            data-inventory_policy = "{{ variant.inventory_policy }} "
+            data-inventory="{% if variant.inventory_policy == 'continue' or variant.inventory_management == blank %} -1 {% else %}  {{ variant.inventory_quantity }} {% endif %}"
+            data-compare-at-price="{{ variant.compare_at_price }}"
+            data-image="{{ variant.image.src | split: '?' | first }}">
+                {{ variant.title | escape }} / {{ variant.price | money }}
+        </option>
+      {% endif %}
+    {%- endfor -%}
+  </select>
+</div>
+
+{% style %}
+  :root{
+      --swatch_checked-color: {{ settings.swatch_checked-color }};
+  }
+  .mineSwatchData {
+    display: flex;
+    flex-direction: column;
+}
+  .swatch-type.swatch-size {
+    order: 2;
+}
+  /* button.btn.size-btn {
+    pointer-events: none;
+}
+  button.btn.color-btn {
+    pointer-events: none;
+} */
+{% endstyle %}
+<script>
+  function showColorName(color) {
+    document.getElementById('colorName').innerText = ": " + color;
+    
+  }
+  function showvalue(size) {
+    document.getElementById('sizecalue').innerText = ": " + size;
+  }
+
+  
+  </script>
+
+

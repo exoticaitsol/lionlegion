@@ -1,0 +1,10 @@
+<!-- start select-swatch.liquid (SNIPPET) -->
+<select class="product-variant jq-product-variant uppercase {% if swatch_index > 1 %} swatch-disabled {% endif %}" data-swatch data-swatch-index="{{ swatch_index }}" {% if swatch_index > 1 %} disabled {% endif %} required>
+        <option value="" selected>Select a variant: </option>
+        {%- for value in product_option.values -%}
+            <option value="{{ value }}" data-swatch="{{ value }}" {% if swatch_index > 1 %} disabled {% endif %}>{{ value }}</option> 
+        {%- endfor -%}
+    </select>
+    
+    
+    

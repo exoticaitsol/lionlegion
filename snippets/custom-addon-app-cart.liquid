@@ -1,0 +1,119 @@
+<!-- custom-addon-app-cart.liquid start-->
+{%- assign addonCollection = collections[settings.customOrderBumpCollection] -%}
+{%- if addonCollection -%}
+    <div class="w-full bg-truegray-700 text-truegray-200">
+        <div class="block mx-auto text-xl max-w-max text-truegray-100">Check out our <span class="font-semibold tracking-wider">NEW Stickers</span></div>
+        <div class="block mx-auto text-center max-w-max">
+            82mm x 65mm Die Cut - Smooth matte finish<br>Top quality, fade-resistant Zaps
+        </div>
+    </div>
+    {%- assign seed = "now" | date: "%s" -%}
+    {%- assign randomIndex = seed | modulo: 2 -%}
+    <!-- {{ currentId }} - modulo: 5 = {{ randomIndex }} -->
+    <div class="min-h-[max-content] flex flex-col transition-all duration-300 ease-out z-0 wrapper-hide-notFirst border-truegray-700 border-solid border-2 divide-y divide-solid divide-x-0 divide-truegray-200" id="customAddon-Wrapper">
+
+        {%- for addonProd in addonCollection.products -%}
+          {%- liquid
+            case forloop.index
+              when 1
+                assign orderClass = 'addon-first'
+              when 2
+                assign orderClass = 'addon-second'
+              when 3
+                assign orderClass = 'addon-third'
+              when 4
+                assign orderClass = 'addon-fourth'
+              when 5
+                assign orderClass = 'addon-fifth'
+              when 6
+                break
+            endcase
+          -%}
+
+          <div class="flex p-2 flex-row flex-nowrap justify-between {{ orderClass }}">
+              <div class="flex-shrink w-1/3 p-2 customAddon-image">
+                  {% render 'responsive-image', image: addonProd.featured_image, size_desk: 15, size_mobile: 40, size_large: 300, custom_class: true, image_class: "customAddon-Img pointer-events-none" %}
+              </div>
+              <div class="flex-grow customAddon-information">
+                  <div class="addon-title">{{ addonProd.title | remove: 'High Quality' }}</div>
+                  <div class="mx-auto">
+                      <div class="w-full py-2 mx-auto">
+                          <select class="w-full" name="variant-ID" id="{{ addonProd.id }}-variant" onclick="ga('send', 'event', 'customBump', 'selectOption', '{{ orderClass }}');">
+                              {%- for variant in addonProd.variants -%}
+                              <option value="{{ variant.id }}" {%- if forloop.index == 2 %} selected{%- endif -%}>{{ variant.title }} / {{ variant.price | money }}</option>
+                              {%- endfor -%}
+                          </select>
+                      </div>
+                      <button class="bg-[#26b522] text-white w-full py-2 px-2 text-center disabled:opacity-50 disabled:bg-truegray-600" id="customAddonButton-{{ addonProd.id }}" onclick="customAddonClicked({{addonProd.id}},'{{ orderClass }}')">Add to Basket</button>
+                  </div>
+              </div>
+          </div>
+        {%- endfor -%}
+    </div>
+    <button class="block max-w-max px-4 mx-auto text-center bg-gray-600 rounded-b-xl text-gray-200 shadow{%- if addonCollection.all_product_count <= 2 %} hidden {%- endif %} lg:hidden customAddon-showmore hover:bg-truegray-500 hover:text-gray-200 transition-colors" onclick="$('#customAddon-Wrapper').removeClass('wrapper-hide-notFirst');this.classList.add('hidden');ga('send', 'event', 'customBump', 'showOptions');">Show More Sticker Options</button>
+    <div class="z-50 flex mx-auto overflow-hidden transition-all duration-700 ease-in-out bg-white rounded-lg shadow-md md:transform md:-translate-x-1/2 toast min-w-max -bottom-16 inset-x-8 sm:inset-x-24 md:inset-x-1/2" id="atc-toast">
+        <div class="flex items-center justify-center w-12 bg-[#26b522]">
+            <svg class="w-6 h-6 text-white fill-current" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"/>
+            </svg>
+        </div>
+        <div class="px-4 py-2 -mx-3">
+            <div class="mx-3">
+                <span class="font-semibold text-[#26b522]">Success</span>
+                <p class="text-sm text-gray-600">Sticker was added to Basket</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+                    function customAddonClicked(id,position){
+                        customAddonButton = document.getElementById(`customAddonButton-${id}`);
+                        customAddonSelector = document.getElementById(`${id}-variant`);
+                        removeData = "updates["+id+"]=0";
+                        customAddonProductID = id;
+                        addonData = {
+                            quantity: 1,
+                            id: customAddonSelector.value,
+                             properties: {
+                              'Special':'Add-On'
+                            }
+                        };
+                        ga('send', 'event', 'customBump', 'ATC', position);
+                        customAddonButton.innerText = 'Adding to Basket';
+                        customAddonButton.disabled = true;
+                                console.log("Adding item to Cart: {{ addonProd.title }}");
+
+                                VastaShop.Cart.addItem(addonData).then(function (prod, status) {
+                                    if ('success' == status) {
+                                        customAddonButton.innerText = 'Added to Basket';
+                                        document.getElementById('atc-toast').classList.add('bottom-20');
+                                        document.getElementById('atc-toast').classList.remove('-bottom-16');
+                                        customAddonButton.disabled = false;
+                                        setTimeout(function(){
+                                            document.getElementById('atc-toast').classList.add('-bottom-16');
+                                        document.getElementById('atc-toast').classList.remove('bottom-20');
+                                        },4000);
+                                        console.log(prod.quantity--);
+                                        removeData = "updates["+prod.id+"]="+prod.quantity--;
+
+
+                                        VastaShop.Cart.getAllItems().then(function(cart, status){
+                                          if ('success' === status) {
+                                            VastaShop.Cart.current = cart;
+                                            render_cart_drawer(VastaShop.Cart.current, jQuery('.list-products'), 0,'');
+                                            update_shipping_bar(cart.total_price,cart.item_count);
+                                            inventoryControl(prod.id);
+                                            console.log("Item Added to Cart");
+                                          }
+                                        });
+                                    };
+                                });
+                    };
+                </script>
+{%- endif -%}
+
+
+<!-- custom-addon-app.liquid end -->
+
+<style></style>

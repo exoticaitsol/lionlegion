@@ -1,0 +1,10 @@
+<!-- start instagram.liquid (SNIPPET) -->
+<div class="grid {{ custom_class }}">
+  <h2 class='section-title'>Instagram Feed</h2>
+
+  {%- if access_token == blank -%}
+    <p>You have enabled Instagram section, but you have not indicated any access token.<br>Make sure that you properly fill the required settings in the Theme Settings by <a href="http://www.maestrooo.com/instagram" class="link--primary">clicking here</a>.</p>
+  {%- else -%}
+    <div id="instafeed" class="instafeed clearfix  {% if section.settings.disable_click %}no-clickable{% endif %}"></div>
+  {%- endif -%}
+</div>

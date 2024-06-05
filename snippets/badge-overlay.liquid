@@ -1,0 +1,43 @@
+{%- liquid
+  comment
+    - product: product
+  endcomment
+
+  for tag in product.tags
+    if tag == settings.large_badge_1_tag
+      assign img = settings.large_badge_1_img
+      break
+    endif
+    if tag == settings.large_badge_2_tag
+      assign img = settings.large_badge_2_img
+      break
+    endif
+    if tag == settings.large_badge_3_tag
+      assign img = settings.large_badge_3_img
+      break
+    endif
+  endfor
+
+  assign horizontal_classes = 'left: !left-2 ;center: !mx-auto !left-[initial] ;right: !right-2 !left-[initial] ' | split: ' ;'
+  for keyval in horizontal_classes
+    assign key = keyval | split: ': ' | first
+    if settings.large_badge_pos_x == key
+      assign x_class = keyval | split: ': ' | last
+      break
+    endif
+  endfor
+
+  assign vertical_classes = 'top: !top-2 ;center: !my-auto top-[initial] ;bottom: !bottom-2 !top-[initial] ' | split: ' ;'
+  for keyval in vertical_classes
+   assign key = keyval | split: ': ' | first
+    if settings.large_badge_pos_y == key
+      assign y_class = keyval | split: ': ' | last
+      break
+    endif
+  endfor
+-%}
+
+
+{%- if img and settings.large_badges_enabled -%}
+  <img class="absolute {{ x_class }} {{ y_class }} !max-w-[40%] !transform-none shadow shadow-neutral-800/70 rounded-sm" src="{{ img | image_url: width: 360 }}" srcset="{%- render 'responsive-srcset', image: img -%}" sizes="40vw" alt="{{ product.title }}" />
+{%- endif -%}

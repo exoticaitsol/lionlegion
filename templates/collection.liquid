@@ -1,0 +1,27 @@
+{% if settings.desc_collection-position == "top" %}
+    <div class="prose mx-2 md:mx-auto">
+        {% render 'collection-description-top' %}
+    </div>
+{% endif %}
+
+<div class="w-full">
+  {%- if settings.useSparqFilters -%}
+    {%- section 'collection-sparq' -%}
+  {%- else -%}
+    {%- section 'collection-classic' -%}
+  {%- endif -%}
+</div>
+
+{% if settings.desc_collection-position == "bottom" %}
+    <div class="prose mx-2 md:mx-auto">
+      {% render 'collection-description-top' %}
+    </div>
+{% endif %}
+
+
+<div class="prose mx-2 md:mx-auto">
+  {% comment %}
+  {% render 'collection-description-bottom' %}
+  {% endcomment %}
+  
+</div>

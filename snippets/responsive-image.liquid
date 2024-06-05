@@ -1,0 +1,60 @@
+<!-- start responsive-image.liquid (SNIPPET) -->
+{%- comment -%}
+      It creates a style tag and it restricts an image from growing larger than its max resolution.
+
+      Dependencies:
+      - Lazysizes plugin (https://github.com/aFarkas/lazysizes) which enable responsive image with faster load time and better performance.
+      - Lazysizes Responsive Images as a Service (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/rias) To load the correct image size with our CDN
+      - Lazysizes Bgset (https://github.com/aFarkas/lazysizes/tree/gh-pages/plugins/bgset) To use responsive images on background-image (CSS)
+
+      Accepts:
+      - max_width: {Number} Max width of the image container
+      - max_height: {Number} Max height of the image container
+      - image: {Object} Image object
+      - image_class: {String} class name of the <img />
+      - image_attributes: {String}  additional HTML attributes of the <img />
+      - wrapper_class: {String} class name of the <div> wrapper
+      - wrapper_attributes: {String} additional HTML attributes of the <div> wrapper
+      - size_desk: {Number} Displayed size as vw
+      - size_mobile: {Number} Displayed size as vw
+      - size_large: {Number} Displayed size as px
+      - custom_class: {true/false} True if you want responsive wrapper styling disabled
+
+      Usage:
+      In your liquid template file, copy the following line
+      - {% render 'responsive-image', image: featured_image, image_class: "css-class", wrapper_class: "wrapper-css-class", max_width: 700, max_height: 800 %}
+{%- endcomment -%}
+{%- liquid
+  assign min = 65
+  assign max = 80
+  assign diff = max | minus: min
+  assign randomNumber = "now" | date: "%N" | modulo: diff | plus: min
+
+  if image.alt != blank
+    assign image_alt = image.alt | strip_html | escape
+  elsif alt_text != blank
+    assign image_alt = alt_text | strip_html | escape
+  else
+    capture image_alt
+      echo 'Img-'
+      echo image.id
+    endcapture
+  endif
+-%}
+
+<img id="{{ id_prefix | escape | handleize | default: 'img' }}-{{ image.id }}-{{ randomNumber }}"
+  class="{{ image_class }} w-full h-auto"
+  {% if custom_style %} style="{{ custom_style }}" {% endif %}
+  {% if active_lazy == false %}
+    loading="eager"
+  {% else %}
+  loading="lazy"
+  {% endif %}
+  src="{{ image | image_url: width: 300 }}" 
+  srcset="{%- render 'responsive-srcset', image: image, min: 180, max: 2160 %}"
+  sizes="(min-width: 1200px) {{ size_large }}px, (max-width: 767px) {{ size_mobile }}vw, (min-width: 768px) {{ size_desk }}vw"
+  width="{{ image.width }}"
+  height="{{ image.height }}"
+  alt="{{ image_alt }}"
+  {{ image_attributes }}
+>

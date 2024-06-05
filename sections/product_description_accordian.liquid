@@ -1,0 +1,182 @@
+<section class="overview_sec">
+          <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="overview_sec_inner"> 
+                <div class="overview_sec_box">  
+            <button class="custom-accordion" id="viewdetails"><strong>{{ section.settings.title }}Description </strong></button>
+             <div class="panel">
+                <div class="overview_sec">
+                      {{ product.description }}
+                  </div>
+                </div>
+                  </div>
+                <div class="overview_sec_box">
+             <button class="custom-accordion"><strong>Delivery & Returns </strong></button>
+                <div class="panel">
+                {%- for block in section.blocks -%}
+                {%- if "tab" == block.type -%}
+                  <div class="tab-content border" data-identifier="tab{{ forloop.index }}">
+                            <h2 class="hide">{{ block.settings.tab_title }}</h2>
+                           <p>{{ block.settings.tab_content }} </p> 
+                  </div>    
+                  {% endif %}
+                  {% endfor %}
+              </div>
+                </div>
+                  <div class="overview_sec_box">
+             <button class="custom-accordion"><strong>Size Chart</strong></button>
+                    
+                <div class="panel">
+                  {%- liquid
+              case product.type
+                when 'T Shirt'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_tshirt, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+                when 'Hoodie'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_hoodie, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when 'Sweatshirt'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_sweatshirt, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when 'Apparel'
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_apparel, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Kids T Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_kids, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Polo Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_polo, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+
+                when "Womens T Shirt"
+                  render 'responsive-image', id_prefix: 'size-chart', image: settings.size_chart_image_women, active_lazy: true, image_class: 'w-full h-full object-contain', max_width: 700, no_wrap: true
+              endcase
+            -%}
+                </div>
+                  
+                </div>
+            </div>
+          </div>
+          </div>
+            </div>
+</section>
+<style>
+
+  </style>
+<!-- <script>
+  /* Home accordian code start 03-01-2024  */
+var acc = document.getElementsByClassName("custom-accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+
+/* Home accordian code Ends 03-01-2024  */
+</script> -->
+<script>
+  /* Home accordion code start 03-01-2024  */
+var acc = document.getElementsByClassName("custom-accordion");
+var i;
+
+document.getElementById('viewdetails').addEventListener("click", function() {
+  // Close all accordions first
+  for (i = 0; i < acc.length; i++) {
+    acc[i].classList.remove("active");
+    var panel = acc[i].nextElementSibling;
+    panel.style.display = "none";
+  }
+
+  // Open the second accordion
+  acc[1].classList.add("active");
+  var panel = acc[1].nextElementSibling;
+  panel.style.display = "block";
+});
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+/* Home accordion code Ends 03-01-2024  */
+
+</script>
+
+
+
+{% schema %}
+  {
+    "name": "Product Description",
+    "settings": [
+            {
+        "type":"text" ,
+        "id":"title",
+        "label":"Title"
+      },
+     {
+        "type":"richtext" ,
+        "id":"description",
+        "label":"Description"
+      }
+    ],
+      "blocks": [
+    {
+      "name": "Custom Product Tab",
+      "type": "tab",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Block Title",
+          "id": "title"
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "tab_title"
+        },
+        {
+          "type": "html",
+          "label": "Content",
+          "id": "tab_content"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_tab_by_tag",
+          "label": "Enable Tab By Tag"
+        },
+        {
+          "type": "text",
+          "id": "tag_name",
+          "label": "Product Tab Tag",
+          "info": "Only show tab on product pages with these tags."
+        }
+      ]
+    }
+  ],
+         "presets": [
+    {
+      "name": "Product Description"
+    }
+
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

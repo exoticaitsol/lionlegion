@@ -1,0 +1,124 @@
+
+<!-- start swatch-standard.liquid (SNIPPET) -->
+
+{%- for val in values -%}
+    {%- assign value = val | replace: '"', '&quot;' | replace: "'", '&apos;' -%}
+ 
+    <label class="swatch-element swatch-element-standard {% if swatch_index > 0 and settings.enable_out_off_stock_button == false %} swatch-disabled {% endif %} {% if settings.swatch_round_size_product_page %} round-standard {% endif %}" data-swatch="{{ value }}">
+        <input type="radio"
+               id="id-swatch-variant-value-{{ forloop.index }}-{{ swatch_index }}"
+               class="swatch-variant-value jq-swatch-element"
+               value="{{ value }}"
+               data-swatch-index="{{ swatch_index }}"
+               name="swatch_element_standard_option_{{ swatch_index }}"
+               {% if swatch_index > 0 and settings.enable_out_off_stock_button == false %} disabled {% endif %}
+   {% comment %}
+            {% if forloop.index == 1 %}checked{% endif %} 
+         {% endcomment %}        
+               required/>
+
+        <!-- <span class="swatch-value" >{{ value }}</span> -->
+      
+   <span class="swatch-value"   onclick="showvalue('{{ value }}')"> 
+  {% if value == 'X-Small' %}XS {% elsif  value == 'Small' %} S {% elsif  value == 'Medium' %} M {% elsif  value == 'Medium' %} M{% elsif  value == 'Large' %} L{% elsif  value == 'X-Large' %} XL {% elsif  value == '2X-Large' %} 2XL {% elsif  value == '3X-Large' %} 3XL {% elsif  value == '4X-Large' %}4XL {% elsif  value == '5X-Large' %}5XL
+    
+    {% else %} {{ value }} {% endif %}
+  </span>
+    
+
+
+        <span class="{% if settings.swatch_round_size_product_page %}swatch-value-circle-checked{% else %}swatch-value-checked{% endif %}">{% render 'icon-check' %}</span>
+
+      {% if swatchType == 'Size' %}
+
+        {%- liquid
+          if product.type == "T Shirt"
+            assign toolOptions = 'Small,S,34/36,28";Medium,M,38/40,29";Large,L,42/44,30";X-Large,XL,46/48,31";2X-Large,2XL,50/52,32";3X-Large,3XL,54/56,33";4X-Large,4XL,58/60,34";5X-Large,5XL,62/64,35"' | split: ';'
+          endif
+          if product.type == "Hoodie"
+            assign toolOptions = 'Small,S,40",26",23";Medium,M,44",28",24";Large,L,48",29",25";X-Large,XL,51",29",25";2X-Large,2XL,54",31",26";3X-Large,3XL,58",32",26";4X-Large,4XL,61",34",27";5X-Large,5XL,65",35",28"' | split: ';'
+          endif
+          if product.type == "Sweatshirt"
+            assign toolOptions = 'Small,S,41",27",26";Medium,M,44",28",26";Large,L,47",29",27";X-Large,XL,50",30",28";2X-Large,2XL,53",31",28";3X-Large,3XL,57",33",29"' | split: ';'
+          endif
+
+          for option in toolOptions
+            assign measurement = option | split: ','
+            assign measurement_name = measurement[0]
+            if measurement_name == value
+              assign size = measurement[1]
+              assign chest = measurement[2]
+              assign length = measurement[3]
+              assign sleeve = measurement[4]
+              break
+            endif
+          endfor
+        -%}
+        
+        {%- if size and chest and length -%}
+        <div class="tooltip-standard split--test">
+          <table>
+            <tr>
+              <td>Size</td>
+              <td>{{ size }}</td>
+            </tr>
+            <tr>
+              <td>Chest</td>
+              <td>{{ chest }}</td>
+            </tr>
+            <tr>
+              <td>Length</td>
+              <td>{{ length }}</td>
+            </tr>
+            {%- if sleeve -%}
+            <tr>
+              <td>Sleeve</td>
+              <td>{{ sleeve }}</td>
+            </tr>
+            {%- endif -%}
+          </table>
+        </div>
+        {%- endif -%}
+      {% endif %}
+    </label>
+{%- endfor -%}
+
+
+
+<style>
+  
+  .tooltip-standard.split--test {
+    width: auto !important;
+    padding: 5px !important;
+    background: white !important;
+    border-color: unset !important;
+    box-shadow: 0 0 15px 4px rgb(50 50 50 / 8%)!important;
+  }
+  .tooltip-standard.split--test table {
+    border-spacing: 2px;
+  }
+  .tooltip-standard.split--test tr td:nth-child(even) {
+    background: #eeeeee9e;
+  }
+  .tooltip-standard.split--test tr td {
+    background: #eeeeee;
+    padding: 5px;
+    color: #424242;
+  }
+  .tooltip-standard.split--test:before {
+    border-top: 8px solid #ffffff !important;
+  }
+
+  @media screen and (max-width: 767px) {
+    .tooltip-standard.split--test {
+      left: 40% !important;
+    }
+    .tooltip-standard.split--test table {
+      border-spacing: 2px;
+    }
+    .tooltip-standard.split--test tr td {
+      font-size: 1rem;
+    }
+  }
+</style>
+

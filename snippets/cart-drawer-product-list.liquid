@@ -1,0 +1,68 @@
+<!-- start cart-drawer-product-list.liquid (SNIPPET) -->
+<ul class="list-products">
+    {%- assign cart_reverse =  cart.items | reverse -%}
+    {%- for item in cart_reverse -%}
+        <li class="cart-product" id="jq-cart-item-{{ item.variant_id }}">
+            <div class="cart-product-image-wrapper">
+                <a title="{{ item.product.title | strip_html | escape }}" href="{{ item.url }}" id="ImgCartDrawer-{{ forloop.index }}">
+                    {%- if item.image.alt != blank -%}
+                      {%- assign image_alt = item.image.alt | strip_html | escape -%}
+                    {%- elsif item.product.title != blank -%}
+                      {%- assign image_alt = item.product.title | strip_html | escape -%}
+                    {%- else -%}
+                      {%- assign image_alt = "Image without description." -%}
+                    {%- endif -%}
+                    {%- assign image_id_prefix = 'cart-drawer-product-list' | append: forloop.index -%}
+                    {%- render 'responsive-image',
+                        id_prefix: image_id_prefix, 
+                        image: item.image,
+                        image_class: 'img-cart-drawer lazyload',
+                        active_lazy: true,
+                        no_wrap: true, 
+                        alt_text: image_alt,
+                        max_width: 100
+                    -%}
+                </a>
+            </div>
+
+            <div class="cart-product-wrapper">
+                <div class="product-info">
+                    <a title="{{ item.product.title | strip_html | escape }}" href="{{ item.url }}" id="TitleItemCart-{{ forloop.index }}" class="title-item-cart">{{ item.product.title }} </a><br>
+
+                    {%- if item.variant.title != 'Default Title' -%}
+                        <small class="product-variant">{{ item.variant.title }}</small>
+
+                        {%- for property in item.properties -%}
+                            <small class="product-variant">{{ property.first }}: {{ property.last }}</small>
+                        {%- endfor -%}
+                    {%- endif -%}
+
+                    <div class="cart-product-btn-wrapper">
+                        <form action="/cart" class="jq-qtd-item-cart">
+                            {%- if item.variant.inventory_policy == 'continue' or item.variant.inventory_management == blank -%}  {%- assign maxQTD = -1 -%} {%- else -%}{%- assign maxQTD = item.variant.inventory_quantity -%}{%- endif -%}
+                            <input type="hidden" name="id" value="{{ item.key }}"/>
+                            <button aria-label="IconMinus-{{ forloop.index }}"  data-line="{{ forloop.index | minus: 1 }}" id="IconMinus-{{ forloop.index }}" class="btn-minus-{{ item.variant_id }} btn icon-minus btn-minus jq-minus-cart-item" name="{{ item.variant_id }}" {% if item.quantity == 1 %}disabled="disabled"{% endif %}></button>
+                            <input aria-label="InputQtd-{{ forloop.index }}" data-line="{{ forloop.index | minus: 1 }}" id="InputQtd-{{ forloop.index }}" class=" jq-input-qtd-{{ item.variant_id }} input-qtd" name="quantity" min="1" data-max="{{ maxQTD }}" data-variant-id="{{ item.variant_id }}" value="{{ item.quantity }}" type="number">
+                            <button aria-label="IconPlus-{{ forloop.index }}"  data-line="{{ forloop.index | minus: 1 }}" id="IconPlus-{{ forloop.index }}" class="btn-plus-{{ item.variant_id }} btn icon-plus btn-plus jq-plus-cart-item"  name="{{ item.variant_id }}"
+                            
+                            {%- if maxQTD == item.quantity -%}
+                                disabled="disabled"
+                            {%- endif -%}
+                            > <span  class="hide max-msg">Maximum Quantity Available In Stock</span></button>
+                           
+                        </form>
+                    </div>
+                </div>
+
+                <div class="product-price">
+                    <strong class="price money" id="jq-cart-item-price-{{ item.variant_id }}-{{ forloop.index | minus: 1 }}">{{ item.price | times: item.quantity | money }}</strong>
+
+                    <form action="/cart" class="jq-remove-cart-item">
+                        <input type="hidden" name="updates[{{ item.variant_id }}]" value="0" id="id-cart-item-{{ forloop.index }}" class="jq-cart-item"/>
+                        <button id="RemoveCart-{{ forloop.index }}" class="bt-remove-cart" name="{{ item.variant_id }}">Remove</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    {%- endfor -%}
+</ul>

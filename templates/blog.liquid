@@ -1,0 +1,86 @@
+<!-- start blog.liquid (TEMPLATE) -->
+<div class="wrapper">
+    {% paginate blog.articles by settings.blog_num_posts %}
+    <div>
+      {% render 'breadcrumb' %}
+    </div>
+    <div class="grid blog-grid">
+      <div class="grid__item large--three-quarters article-section">
+        <section>
+          {% if settings.blog_enabled_blog_title %}
+              <h1>{{ blog.title }}</h1>
+          {% endif %}
+          {% for article in blog.articles %}
+          <article class="article">
+            {% if settings.show_featured_image %}
+            <div class="article_img">
+              {% assign article_image =  article.image | image_url: width: 300, height: 300 %}
+  
+              {% if article_image contains 'no-image' %}
+  
+                {% if settings.blog_rewrite_image == 'placeholder' %}
+                  <a title="{{ article.title | strip_html | escape }}" id="article-featured-image-{{ forloop.index }}" class="article__featured-image" href="{{ article.url }}">
+                    {% render 'responsive-image',
+                      id_prefix: 'blog', 
+                      image: settings.blog_article_placeholder, 
+                      active_lazy: true,
+                      max_width: 300,
+                      no_wrap: true, 
+                      alt_text: 'No Image'
+                    %}
+                  </a>
+                {% endif %}
+              {% else %}
+                <a title="{{ article.title | strip_html | escape }}" id="article-featured-image-{{ forloop.index }}" class="article__featured-image" href="{{ article.url }}">
+                  {% if forloop.index == 1 %}
+                    {% render 'responsive-image',
+                      id_prefix: article.title, 
+                      image: article.image, 
+                      active_lazy: false,
+                      max_width: 300,
+                      no_wrap: true, 
+                      alt_text: article.title
+                    %}
+                  {% else %}
+                    {% render 'responsive-image',
+                    id_prefix: article.title, 
+                    image: article.image, 
+                    active_lazy: true,
+                    max_width: 300,
+                    no_wrap: true, 
+                    alt_text: article.title
+                    %}
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+            {% endif %}
+            <div id="article-info-{{ forloop.index }}" class="article_info">
+                <a  href="{{ article.url }}" >
+                  <h2 class="entry-title">
+                    {{ article.title }}
+                  </h2>
+                </a>
+              <div>
+                {{ article.content | strip_html | split: '<!--split-->' | last | truncatewords: 50 }}
+              </div>
+              <a title="{{ article.title | strip_html | escape }}" href="{{ article.url }}" rel="bookmark" id="blog-button-{{ forloop.index }}" class="btn button blogbutton {{ settings.blog_buttons_text_transform }}">{{ 'blogs.article.read_more' | t }}</a>
+            </div>
+          </article>
+          {% unless forloop.last %}
+          {% endunless %}
+          {% endfor %}
+        </section>
+  
+        {% if paginate.pages > 1 %}
+        <div class="paginate">{{ paginate | default_pagination: next: '→', previous: '←' }}</div>
+        <!-- {{ paginate | json }} -->
+        {% endif %}
+  
+        {% endpaginate %}
+      </div>
+      <aside class="grid__item large--one-quarter sidebar">
+        {% section 'blog-sidebar' %}
+      </aside>
+    </div>
+  </div>

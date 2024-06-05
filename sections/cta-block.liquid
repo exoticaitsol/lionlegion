@@ -1,0 +1,218 @@
+<!-- section/cta-block.liquid -->
+{%- if section.settings.enabled_cta_block -%}
+    <section class="call-to-action {{ section.settings.custom_class }}" data-section-type="cta-section">
+      <h2 class="hide">{{ section.settings.buy_now_text_button }}</h2>
+
+      <div class="buy-now">
+        <div class="buy-now-bg buy-now-bg-{{ section.id }}"></div>
+
+        <div class="buy-now-wrapper buy-now-wrapper-{{ section.id }}" >
+            {%- assign product = all_products[section.settings.id_product_block] -%}
+
+            <input type="hidden" name="id" value="{{ product_temp.selected_or_first_available_variant.id }}" id="id-jq-cart-item" class="jq-cart-item"/>
+            <input type="hidden" name="quantity" id="id-quantity" value="1"/>
+
+            {%- assign product_link = product.selected_or_first_available_variant.url -%}
+            {%- if section.settings.use_external_link -%}
+            {%- assign product_link = section.settings.url_product -%}
+            {%- endif -%}
+
+            <a title="{{ section.settings.buy_now_text_button | strip_html | escape }}" href="{{ product_link }}" id="BuyNowBtn-{{ section.id }}" class="buy-now-btn buy-now-btn-{{ section.id }} {{ section.settings.text_transform_button }}" >{{ section.settings.buy_now_text_button}}</a>
+
+            {%- render 'responsive-image',
+              id_prefix: 'cta-block', 
+            	image: section.settings.url_call_to_action, 
+            	active_lazy: true,
+            	max_width: 400,
+            	no_wrap: true,
+            -%}
+        </div>
+      </div>
+    </section>
+
+  {% style %}
+    .call-to-action .buy-now .buy-now-bg-{{ section.id }} {
+      background-color:{{ section.settings.buy_now_background_color }};
+      top: {{ section.settings.buy_now_background_top_position }}%;
+      height: {{ section.settings.buy_nowbackgroung_height }}%;
+    }
+
+    .call-to-action .buy-now .buy-now-wrapper-{{ section.id }} {
+      flex-direction:{{ section.settings.buy_now_line_direction }};
+    }
+
+    .call-to-action .buy-now .buy-now-wrapper .buy-now-btn-{{ section.id }}{
+      color:{{ section.settings.button_text_color }} ;
+      background-color:{{ section.settings.button_background_color }};
+      font-size:{{ section.settings.buy_now_size_button }}px;
+      border-color: {{ section.settings.button_text_color }};
+      text-transform: {{ section.settings.text_transform_button }};
+    }
+
+    .call-to-action .buy-now .buy-now-wrapper .buy-now-btn-{{ section.id }}:hover{
+      color: {{ section.settings.button_hover_text_color }};
+      background: {{ section.settings.button_hover_background_color }};
+      border-color: {{ section.settings.button_hover_text_color }};
+    }
+  {% endstyle %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "CTA Section",
+  "class": "cta-block",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_cta_block",
+      "label": "Enable Block Section",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "buy_now_background_color",
+      "label": "Section Background Color",
+      "default": "#9c2135"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button Background Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background_color",
+      "label": "Button Hover Background Color",
+      "default": "#9c2135"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#9c2135"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button Hover Text Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Product & Image"
+    },
+    {
+      "type": "product",
+      "id": "id_product_block",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_external_link",
+      "label": "Link"
+    },
+    {
+      "type": "url",
+      "id": "url_product",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "url_call_to_action",
+      "label": "Image",
+      "info": "800x800"
+    },
+    {
+      "type": "range",
+      "id": "buy_nowbackgroung_height",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Background Height",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "buy_now_background_top_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Background Position",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "buy_now_text_button",
+      "label": "Text",
+      "default": "buy now"
+    },
+    {
+      "type": "range",
+      "id": "buy_now_size_button",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 46
+    },
+    {
+      "type": "select",
+      "id": "text_transform_button",
+      "label": "Text Transform",
+      "options": [
+        {
+          "label": "Capitalize",
+          "value": "capitalize"
+        },
+        {
+          "label": "Lowercase",
+          "value": "lowercase"
+        },
+        {
+          "label": "Uppercase",
+          "value": "uppercase"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "buy_now_line_direction",
+      "label": "Button and Image position",
+      "options": [
+        {
+          "value": "row",
+          "label": "Button - Image"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Image - Button"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Call To Action",
+      "category": "Call To Action"
+    }
+  ]
+}
+{% endschema %}

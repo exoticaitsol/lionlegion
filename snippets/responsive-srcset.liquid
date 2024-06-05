@@ -1,0 +1,44 @@
+{%- comment -%}
+
+Parameters:
+    - image: image object to generate srcset from
+    - max: int for maximum allowed size
+    - min: int for minimum allowed size
+
+Usage:
+    <img src="{{ product.featured_image.src }}" srcset="{%- render 'responsive-srcset', image: product.featured_image -%}" alt="">
+
+{%- endcomment -%}
+ 
+{%- liquid
+    assign sizes = '180,360,540,720,900,1080,1296,1512,1728,1944,2160,2376,2592,2808,3024' | split: ','
+    assign is_first = true
+    for size in sizes
+      assign sizeINT = size | plus: 0
+      if sizeINT < min
+        continue
+      endif
+
+      if is_first
+        assign is_first = false
+      else
+        echo ', '
+      endif
+      if sizeINT > max
+        assign sizeINT = max
+      endif
+      if asset
+        assign sizeX = size | append: 'x'
+        echo image | asset_img_url: sizeX | append: ' ' | append: size | append: 'w'
+      else
+        echo image | image_url: width: size
+        echo ' ' | append: size | append: 'w'
+        if image.width < sizeINT
+          break
+        endif
+      endif
+      if sizeINT == max
+        break
+      endif
+    endfor
+-%}

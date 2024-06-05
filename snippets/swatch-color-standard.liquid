@@ -1,0 +1,77 @@
+
+{%- for val in values -%}
+{%- assign value = val | replace: '"', '&quot;' | replace: "'", '&apos;' -%}
+    {%- assign img_swatch = product.featured_image.src | image_url: width: 420 -%}
+    
+    {%- assign id_variant = product.id -%}
+    {%- for variant in product.variants -%}
+    
+        {%- if variant.options contains value and variant.featured_image != blank -%}
+            {%- assign img_swatch = variant.featured_image | image_url: width: 420 -%}
+            
+            {%- assign id_variant = variant.id -%}
+            
+        {%- endif -%}
+    {%- endfor -%}
+
+    
+   
+
+    {%- unless max_width -%}
+{%- assign max_width = 3024 -%}
+{%- endunless -%}
+    
+       <label class="swatch-element swatch-colour swatch-element-standard {% if swatch_index > 0 and settings.enable_out_off_stock_button == false %} swatch-disabled {% endif %} {% if settings.swatch_round_size_product_page %} round-standard {% endif %}" data-swatch="{{ value }}"  var_id="{{ id_variant }}" data-swatchv="{{ img_swatch }}">
+      
+         <input type="radio"
+               id="id-swatch-variant-value-{{ forloop.index }}-{{ swatch_index }}"
+               class="swatch-variant-value jq-swatch-element"
+               value="{{ value }}"
+               data-swatch-index="{{ swatch_index }}"
+               name="swatch_element_standard_option_{{ swatch_index }}"
+               {% if swatch_index > 0 and settings.enable_out_off_stock_button == false %} disabled {% endif %}
+  {% comment %}
+    {% if forloop.index == 1 %}checked{% endif %} 
+  {% endcomment %}
+           
+             />
+        <!-- <span class="swatch-value" >{{ value }}</span> -->
+
+
+         <span class="swatch-value" id="colorName" data-color="{{ value | downcase }}" style="background-color: {{ value }};" onclick="showColorName('{{ value }}')"
+></span>
+
+        <span class="{% if settings.swatch_round_size_product_page %}swatch-value-circle-checked{% else %}swatch-value-checked{% endif %}">{% render 'icon-check' %}</span>
+    </label>
+   
+{%- endfor -%}
+  
+  <!-- <script>
+    $(document).ready(function() {
+      $('.swatch-value').click(function() {
+        // Reset the text content for all elements with the ID "colorName"
+        $('[id="colorName"]').text('');
+
+        // Get the color name from the clicked element's data attribute
+        var colorName = $(this).data('color');
+
+        // Set the text content of the specific element clicked
+        $(this).text('');
+      });
+    });
+  </script> -->
+  <script>
+    $(document).ready(function() {
+      // Add a click event listener to elements with the class "swatch-value" under the specific div
+      $('.swatch-type.swatch-colour .swatch-value').click(function() {
+        // Reset the text content for all elements with the ID "colorName"
+        $('.swatch-type.swatch-colour [id="colorName"]').text('');
+
+        // Get the color name from the clicked element's data attribute
+        var colorName = $(this).data('color');
+
+        // Set the text content of the specific element clicked
+        $(this).text('' );
+      });
+    });
+  </script>

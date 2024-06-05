@@ -1,0 +1,272 @@
+<!-- start theme.liquid (LAYOUT) -->
+<!doctype html>
+<html lang="{{ shop.locale }}">
+<head>
+{% if request.path == '/collections/reme' 
+or request.path == '/collections/paras'
+or request.path == '/collections/royal-signals'
+or request.path == '/collections/humour/falklands'
+or request.path == '/collections/drinkware/sport'
+or request.path == '/collections/humour/england'
+or request.path == '/collections/combat-services'
+or request.path == '/collections/royal-engineers'
+or request.path == '/collections/drinking/wrns'
+or request.path == '/collections/2023-bestsellers/rugby'
+or request.path == '/collections/latest-designs/wafu'
+or request.path == '/collections/dpm/twilight-years'
+or request.path == '/collections/combat-support-arms'
+or request.path == '/collections/cavalry/british-army'
+or request.path == '/collections/hoodies/royal-artillery'
+or request.path == '/collections/2023-bestsellers/stickers'
+or request.path == '/collections/royal-armoured-corps'
+or request.path == '/collections/paras/royal-artillery'
+or request.path == '/collections/humour/raf-regiment'
+or request.path == '/collections/armed-forces/grumpy'
+or request.path == '/collections/british-army/reme'
+or request.path == '/collections/queens-platinum-jubilee/patriotic'
+or request.path == '/collections/latest-designs/royal-marines'
+or request.path == '/collections/special-sales/twilight-years'
+or request.path == '/collections/snowflake-tolerance/retirement-gift'
+or request.path == '/collections/home-page-bestsellers/housewares'
+or request.path == '/collections/home-page-bestsellers/50s'
+or request.path == '/collections/home-page-bestsellers/king-charles-iii'
+or request.path == '/collections/all-products'
+or request.path == '/collections/t-shirts/apparel'
+or request.path == '/collections/home-page-bestsellers/christmas-jumpers-funny'
+or request.path == '/collections/mod-emblems-badges/mod-licensed-product'
+or request.path == '/collections/sweatshirts/apparel'
+or request.path == '/collections/veterans-tri-service/anti-snowflake'
+or request.path == '/collections/Armed-Forces/apparel'
+or request.path == '/collections /gifts-for-her/valentines-day'
+or request.path == '/collections/ british-army-mod-emblems-badges'
+or request.path == '/collections/veteran-gift/gift-for-her'
+or request.path == '/collections/home-page-bestsellers/housewares’
+or request.path == '/collections/veterans-tri-service/union-jack'
+or request.path == '/collections/veteran-gift/tri-service’
+
+  
+  %} 
+
+<meta name="robots" content="noindex">
+{% endif %}
+ <!-- Added by TAPITA SEO SCHEMA-->
+{% if content_for_header contains 'tapita-seo-script-tags' %}
+  {% include 'tapita-seo-schema' %}
+{% endif %}
+<!-- /Added by TAPITA SEO SCHEMA --> 
+
+
+	{% render 'pandectes-rules' %}
+  <meta name="facebook-domain-verification"  content="5uaypdnhilni273uw23wbuzhofd7n1" />
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WZRHT5W');</script>
+<!-- End Google Tag Manager -->  
+  <meta name="p:domain_verify" content="93a7a8613c0826e272bc8fa2b7b8721d"/>
+  {% render 'product-datalayer.liquid' %}
+  <!-- Jquery -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous"></script>
+  <meta name="google-site-verification" content="gOrw7EGDtULvFxntqgd2q41T7jTUamuCMt0X3pSJx8U" />
+  {%- if template contains 'noindex' -%}
+    <meta name="robots" content="noindex">
+  {%- endif -%}
+
+  <meta name="theme-name" content="Super Theme BV"/> 
+  <meta name="theme-version" content="0.9.9.0"/>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="{{ settings.color_accent }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2, user-scalable=yes" />
+
+  {%- if template contains 'product' -%}
+  <meta name="description" content="{{ page_description | json | strip_html | escape }}" />
+  {%- else -%}
+  {%- assign meta_description = page_description | default: shop.description | default: shop.name -%}
+  <meta name="description" content="{{ meta_description | strip_html | escape }}">
+  {%- endif -%}
+
+  <!-- Meta Tags -->
+  {%- render 'meta-tags' -%}
+  <link rel="preconnect dns-prefetch" href="{{ 'fontfaceobserver.js' | asset_url }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- if settings.product_enabled_recharge -%}
+  <link rel="preconnect dns-prefetch" href="//rechargeassets-bootstrapheroes-rechargeapps.netdna-ssl.com">
+  {%- endif -%}
+  <link rel="preconnect dns-prefetch" href="https://x9z4i4i6.stackpathcdn.com">
+  <link rel="preconnect dns-prefetch" href="//shopify.vastaweb.com">
+  <link rel="preconnect dns-prefetch" href="//cdn.shopify.com">
+  <link rel="preconnect dns-prefetch" href="//ajax.googleapis.com">
+  {% if settings.enable_klaviyo_id %}
+  <link rel="preconnect dns-prefetch" href="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js">
+  {% endif %}
+  {{ 'option_selection.js' | shopify_asset_url | preload_tag: as: 'script', type: 'text/javascript' }}
+  <link rel="preconnect dns-prefetch" href="{{ 'VastaShop.js' | asset_url }}">
+  <link rel="preconnect dns-prefetch" href="{{ 'lazysizes.min.js' | asset_url | split: 'assets' | first | append: 'compiled_assets/scripts.js' }}">
+  {%- if request.page_type == 'collection' -%}
+    <link rel="preconnect dns-prefetch" href="https://7hsb45sprvitftfe3eg1648d-fast.searchtap.net/">
+  {%- endif -%}
+  {{ 'alpine.min.js' | asset_url | preload_tag: as: 'script', type: 'text/javascript' }}
+  <script src="{{ 'alpine.min.js' | asset_url }}?enable_js_minification=1" defer></script>
+
+
+  {%- if settings.favicon != blank -%}
+ 
+  <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+  {%- endif -%}
+
+  {%- capture seo_title -%}
+  {{ page_title }}
+  {%- if current_tags -%}
+  {%- assign meta_tags = current_tags | join: ', ' -%} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+  {%- endif -%}
+  {%- if current_page != 1 -%}
+  | {{ 'general.meta.page' | t: page: current_page }}
+  {%- endif -%}
+  {%- assign escaped_page_title = page_title | escape -%}
+  {%- unless escaped_page_title contains shop.name -%}
+  {%- endunless -%}
+  {%- endcapture -%}
+
+  <!-- <title>{{ seo_title }} | {{ shop.name }}</title> -->
+  <title>{{ seo_title }}</title>
+  <!-- Styles -->
+  {%- render 'style-tags', layout: 'theme' -%}
+
+  {%- if settings.enable_custom_style -%}
+  {%- render 'custom_style' -%}
+  {%- endif -%}
+
+<!-- content_for_header.start-->
+
+{{ content_for_header }}
+
+
+
+
+
+<!-- custom script load loader-->
+
+
+
+  <!--script src="https://cdn1.stamped.io/files/widget.min.js?shop=lion-legion.myshopify.com" async type="text/javascript"></script-->
+
+<!-- Stamped - Begin script -->
+<script async type="text/javascript" id="stamped-script-widget" data-api-key="pubkey-z95x8U5F7j1yFpy8acr16Y2Y8C2g87" src="https://cdn1.stamped.io/files/widget.min.js"></script>
+<!-- Stamped - End script -->
+
+
+<!-- content_for_header.end -->
+
+<!-- settings.enable_html_head.start-->
+  {{ settings.enable_html_head }}
+<!-- settings.enable_html_head.end-->
+
+  {%- style -%}
+  {{ settings.custom_css }}
+    
+  {%- endstyle -%}
+  {{ 'main.css' | asset_url | stylesheet_tag }}
+
+  <!-- REAMAZE INTEGRATION START - DO NOT REMOVE -->
+
+{% render 'reamaze-config' %}
+{% render 'reamaze-sso' %}
+<!-- REAMAZE INTEGRATION END - DO NOT REMOVE -->
+
+  <meta name="google-site-verification" content="1izQVGCOINzvJud7_WmiZaYPgXKlY-Dts2cRCDT-XrA" />
+  <meta name="google-site-verification" content="gOrw7EGDtULvFxntqgd2q41T7jTUamuCMt0X3pSJx8U" />
+  <meta name=“p:domain_verify” content=“e1026355e1a78e6105d3f9b7e1cbfbbf”/>
+
+
+{% render 'gsf-conversion-pixels' %}
+<!-- lucky orange -->
+<script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=ea1aa671"></script>
+</head>
+
+<body id="{{ page_title | handle }}s" class="template-{{ template.name | handle }}">
+  
+  <div class="DrawerOverlay"></div>
+
+  {%- section 'shipping_bar' -%}
+  {%- section 'header' -%}
+
+  {%- unless settings.disable_cartDrawer -%}
+  {%- unless template.name == 'cart' -%}
+  {%- section 'cart-Drawer' -%}
+  {%- endunless -%}
+  {%- endunless -%}
+
+  {%- unless settings.only_shipping_bar == false and template contains 'cart' -%}
+  {%- section 'menu-mobile' -%}
+  {%- endunless -%}
+
+  <main id="MainContent" class="main-content{% if  template contains 'collection' %} single_coll_page {% endif %}" >
+
+    {{ content_for_layout }}
+
+  </main>
+
+{% render 'scroll-btn' %}
+  {%- section 'footer' -%}
+
+  {%- if settings.enable_button_to_the_top -%}
+    {%- render 'scrollbutton' -%}
+  {%- endif -%}
+
+  {%- comment -%}
+  All scripts should be includeds on 'snippets/vasta-scripts.liquid'.
+  {%- endcomment -%}
+  {%- render 'vasta-scripts' -%}
+
+
+{% if template contains 'collection' or template contains 'index' %}
+<script>
+$(document).ready(function(){
+  $(".drawer-close-cs").click(function(){
+    $(".drawer-close").click();
+  });
+});
+</script>
+{% endif %}
+
+
+
+
+ 
+{{ settings.enable_html_body }}
+
+{% if settings.product_enabled_recharge %}
+  {% render 'subscription-theme-footer' %}
+{% endif %}
+
+{% render 'stamped-rewards-init' %}
+<style>
+  span.stamped-badge[data-rating="0.0"]:before {
+    display: none !important;
+}
+  span.stamped-badge[data-rating="0.0"]>span.stamped-starrating.stamped-badge-starrating {
+    display: none !important;
+}
+  span.stamped-badge-caption[data-rating="0.0"]{
+    display: contents !important;
+  }
+  .stamped-badge-caption[data-rating="0.0"][data-reviews][data-label][data-version="2"]:after {
+    content: "New Product, No Reviews"!important;
+    color: #012169 !important;
+}
+  .stamped-badge-caption[data-rating="0.0"][data-reviews][data-label][data-version="2"]:before {
+
+    white-space: unset !important;
+}
+  </style>
+
+
+</body>
+</html>

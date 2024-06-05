@@ -1,0 +1,248 @@
+{% liquid
+    capture dataObject
+        echo '{'
+            echo 'cartContents: ['
+                for item in cart.items
+                    echo item.product_id
+                    unless forloop.last
+                        echo ','
+                    endunless
+                endfor
+            echo '],'
+            echo 'hidecolours: [`'
+                echo settings.coloursToHide | remove: '"' | split: ',' | join: '`,`'
+            echo '`],'
+            echo 'hidecollections: [`'
+                echo settings.collectionsToHide | remove: '"' | split: ',' | join: '`,`'
+            echo '`],'
+            echo 'hidesizes: [`'
+                echo settings.sizesToHide | remove: '"' | split: ',' | join: '`,`'
+            echo '`],'
+            echo 'hideproducttype: [`'
+                echo settings.productTypeToHide | split: ',' | join: '`,`'
+            echo '`],'
+            echo 'hidesubjects: [`'
+                echo settings.tagsToHide | remove: '"' | split: ',' | join: '`,`'
+            echo '`],'
+            echo 'collectionTitle: `'
+                echo collection.title
+            echo '`,'
+            echo 'sort: [`'
+                if collection.handle == 'latest-designs'
+                    echo '-publishedTimestamp'
+                else
+                    echo 'bestSellingScore'
+                endif
+            echo '`]'
+        echo '}'
+    endcapture
+%}
+
+<!-- data object: {{ dataObject }} -->
+
+{%- style -%}
+
+{%- assign sizeClasses = settings.hoistSizes | split: ',' -%}{%- for size in sizeClasses -%}
+    [data-filter="sizes-{{size}}"] {
+        order: {{ forloop.index0 }};
+    }
+{%- endfor -%}
+{%- assign collectionOrder = settings.hoistCollections | split: ',' -%}
+{%- assign startOrder = -10 -%}
+{%- for thing in collectionOrder -%}
+    [data-filter="collections-{{ thing }}"] {
+        order: {{ forloop.index0 | plus: startOrder }};
+        display: block !important;
+        opacity: 1 !important;
+    }
+{%- endfor -%}
+{%- assign subjectOrder = settings.hoistSubjects | split: ',' -%}
+{%- assign startOrder = -10 -%}
+{%- for thing in subjectOrder -%}
+    [data-filter="subjects-{{ thing }}"] {
+        order: {{ forloop.index0 | plus: startOrder }};
+        display: block !important;
+        opacity: 1 !important;
+    }
+{%- endfor -%}
+{%- assign colourOrder = settings.hoistColours | split: ',' -%}
+{%- assign startOrder = -10 -%}
+{%- for thing in colourOrder -%}
+    [data-filter="colours-{{ thing }}"] {
+        order: {{ forloop.index0 | plus: startOrder }};
+        display: block !important;
+        opacity: 1 !important;
+    }
+{%- endfor -%}
+{%- assign ProductTypeOrder = settings.hoistProductTypes | split: ',' -%}
+{%- assign startOrder = -10 -%}
+{%- for thing in ProductTypeOrder -%}
+    [data-filter="types-{{ thing }}"] {
+        order: {{ forloop.index0 | plus: startOrder }};
+        display: block !important;
+        opacity: 1 !important;
+    }
+{%- endfor -%}
+
+{%- endstyle -%}
+
+<sparq-wrapper class="block w-full h-full px-2 pb-2" x-data="sparqFilters({{ dataObject }})">
+
+    <sparq-columns class="flex flex-row justify-around justify-items-stretch flex-nowrap">
+        <filter-drawer :class="{'!translate-x-0': filterDrawer}" class="fixed z-20 flex-none block w-full max-h-screen min-h-screen pt-16 pl-8 pr-4 overflow-y-auto transition-all duration-700 ease-out transform -translate-x-full bg-white md:overflow-auto md:py-4 md:max-h-full md:transform-none md:flex md:flex-col md:static md:w-1/4 md:z-auto" x-cloak x-effect="scrollLock(filterDrawer)">
+            <h3 class="w-full pb-4 pl-4">Filters</h3>
+            <button @click.prevent="filterDrawer=false" class="absolute left-auto p-2 text-gray-900 lowercase bg-transparent rounded-md pointer-events-auto top-12 right-4 md:hidden" data-uw-styling-context="true">
+                <svg class="inline-block w-4 h-4 align-middle fill-current"><use xlink:href="#icon-cancel-circle"></use></svg> Close
+            </button>
+            {%- assign filterOptions = 'subjects,system_tags;collections,system_collections;colours,option_auto_colour;product type,system_producttype' | split: ';' -%}
+            {%- for filterOption in filterOptions -%}
+                {%- assign filter = filterOption | split: ',' -%}
+                {%- if filter.first == 'colours' -%}
+                    <colour-filters class="block w-full pb-4" x-show="removeOptions(response?.textFacets?.{{ filter | last }},hide{{ filter | first | remove: ' ' }}).length > 1" x-cloak>
+                        <div class="block capitalize">{{ filter | first }}:</div>
+                        <ul :class="{'filtersTruncate': truncate.{{ filter | first | remove: ' ' }} && removeOptions(response?.textFacets?.{{ filter | last }},hide{{filter | first | remove: ' '}})?.length >=8}" class="flex flex-col w-full pl-2 divide-y divide-gray-100">
+                            <template :key="option.label" x-for="(option, index, options) in removeOptions(response?.textFacets?.{{ filter | last }},hide{{ filter | first | remove: ' ' }})||[]">
+                                <li :data-remove-filter="`{{ filter | first }}-${option.label}`" @click="changeFilter(option?.label,'{{ filter | last }}')" class="flex-none block w-full cursor-pointer group">
+                                    <button :class="query?.textFacetFilters?.{{ filter | last }}.includes(option?.label) ? '!border-cta-500 group-hover:!border-red-500' : 'border-white group-hover:!border-cta-500'" :data-colour="option?.label" :id="`{{ filter | first }}-${option.label}`" class="pointer-events-none" :data-swatch="option?.label"></button>
+                                    <span class="capitalize pointer-events-none" x-text="`${option.label} (${option.value})`"></span>
+                                </li>
+                            </template>
+                        </ul>
+                        <span @click.prevent="truncate.{{ filter | first | remove: ' ' }} = false" class="flex-none block w-full pl-2 underline capitalize cursor-pointer" x-cloak x-show="truncate.{{filter | first | remove: ' '}} && removeOptions(response?.textFacets?.{{ filter | last }},hide{{filter | first | remove: ' '}})?.length >=8">Show More</span>
+                    </colour-filters>
+                {%- else -%}
+                    <filter-options class="block w-full pb-4" x-show="removeOptions(response?.textFacets?.{{ filter | last }},hide{{ filter | first | remove: ' ' }}).length > 1" x-cloak>
+                        <filter-title class="block capitalize">{{ filter | first }}:</filter-title>
+                        <ul :class="{'filtersTruncate': truncate.{{ filter | first | remove: ' ' }} && removeOptions(response?.textFacets?.{{ filter | last }},hide{{filter | first | remove: ' '}})?.length >=8}" class="flex flex-col w-full pl-2 divide-y divide-gray-100">
+                            <template :key="option.label" x-for="(option, index, options) in removeOptions(response?.textFacets?.{{ filter | last }},hide{{ filter | first | remove: ' ' }}) || []">
+                                <li :data-filter="`{{ filter | first }}-${option.label}`" @click="changeFilter(option?.label,'{{ filter | last }}')" class="flex-none block w-full cursor-pointer">
+                                    <input :checked="query?.textFacetFilters?.{{ filter | last }}.includes(option?.label)" :id="`{{ filter | first }}-${option.label}`" class="pointer-events-none" type="checkbox">
+                                    <label :for="`{{ filter | first }}-${option.label}`" class="capitalize pointer-events-none" x-text="`${option.label} (${option.value})`"></label>
+                                </li>
+                            </template>
+                        </ul>
+                        <show-more @click.prevent="truncate.{{ filter | first | remove: ' ' }} = false" class="flex-none block w-full pl-2 underline capitalize cursor-pointer" x-cloak x-show="truncate.{{filter | first | remove: ' '}} && removeOptions(response?.textFacets?.{{ filter | last }},hide{{filter | first | remove: ' '}})?.length >=8">Show More</show-more>
+                    </filter-options>
+                {%- endif -%}
+            {%- endfor -%}
+
+            <filter-drawer-footer class="sticky inset-x-0 bottom-0 block w-full pt-2 pb-20 pointer-events-none md:hidden bg-gradient-to-t from-white via-white to-transparent">
+                <white-gradient class="block h-6 bg-gradient-to-t from-white to-transparent"> </white-gradient>
+                <filter-drawer-buttons class="flex flex-row justify-around gap-2 bg-white flex-nowrap">
+                    <button @click.prevent="filterDrawer=false" class="flex-auto p-2 text-gray-800 uppercase rounded-md shadow pointer-events-auto bg-gradient-to-t from-gray-300 to-gray-200">
+                        Close
+                    </button>
+                    <button @click.prevent="filterDrawer=false" class="flex-auto p-2 text-white uppercase rounded-md shadow pointer-events-auto bg-gradient-to-t from-cta-600 to-cta-500">
+                        Apply
+                    </button>
+                </filter-drawer-buttons>
+            </filter-drawer-footer>
+        </filter-drawer>
+        <filter-main class="flex-auto block py-4 border-0 border-gray-100 border-solid md:border-l-2">
+            <h1 class="w-full pb-4 pl-4 capitalize" x-text="collection.title">{{collection.title}}</h1>
+            <p class="pl-4" x-show="collection.title=='{{collection.title}}'">{{ collection.description | split: '<!-- split -->' | first }}</p>
+            <p class="pt-2 pl-4" style="display:none;" x-cloak x-show="response?.results?.length!=0" x-text="`Showing ${response?.results?.length} of ${response?.totalHits}`"></p>
+            <applied-filters class="flex flex-row flex-wrap gap-2 px-2 py-3">
+                <template x-for="(filter, i, filters) in Object.values(query.textFacetFilters).flat() || []">
+                    <button @click.prevent="changeFilter(filter)" class="flex-none px-2 py-1 text-gray-800 bg-blue-200 rounded-full" x-show="filter!=collection.title" :aria-label="`Remove ${filter}`">
+                        <span class="pl-1" x-text="filter"></span>
+                        <svg class="inline-block w-4 h-4 align-middle fill-current">
+                            <use xlink:href="#icon-cancel-circle"></use>
+                        </svg>
+                    </button>
+                </template>
+            </applied-filters>
+            <top-buttons class="flex flex-row items-start justify-around pb-4 flex-nowrap gap-x-2 md:px-2">
+                <button @click.prevent="sortExpanded=false;filterDrawer=true" class="flex-auto p-2 text-gray-800 capitalize bg-opacity-100 border border-gray-400 rounded-md pointer-events-auto bg-gradient-to-t from-blue-300 to-blue-200 md:hidden">
+                    <svg class="inline-block w-5 h-5 align-middle fill-current">
+                        <use xlink:href="#icon-menu"></use>
+                    </svg>
+                    Filters</button>
+                <sort-by class="block flex-auto max-h-[max-content] relative md:max-w-sm md:w-1/2 md:mr-auto md:flex-none">
+                    <button @click.prevent="sortExpanded=!sortExpanded" class="w-full p-2 text-gray-800 capitalize bg-opacity-100 border border-gray-400 rounded-md pointer-events-auto bg-gradient-to-t from-blue-300 to-blue-200" x-text="`Sort by: ${sortByLabel}`" :aria-label="`Sort by: ${sortByLabel}`">Sort by:</button>
+                    <sort-dropdown class="absolute z-10 flex flex-col list-none transition-all duration-300 ease-out bg-blue-200 divide-y divide-blue-400 shadow-md appearance-none inset-x-2 rounded-b-md" x-cloak x-show="sortExpanded" x-transition:enter-end="opacity-100 scale-100" x-transition:enter-start="-translate-y-1 opacity-0 scale-90" x-transition:enter="transform origin-top" x-transition:leave-end="-translate-y-1 opacity-0 scale-90" x-transition:leave-start="opacity-100 scale-100" x-transition:leave="transform origin-top">
+                        <template x-for="(sortOption, sorti, sorts) in Object.values(sortOptions)||[]">
+                            <button :class="{'tracking-wider bg-blue-50':sortOption==query.sort}" :value="sortOption" @click.prevent="setSort(sortOption,sorti)" class="w-full p-2 text-center capitalize border-l-0 border-r-0 border-solid appearance-none cursor-pointer last:rounded-b-md hover:bg-gray-100" x-text="Object.keys(sortOptions)[sorti]" :aria-label="`Sort By ${Object.keys(sortOptions)[sorti]}`"></button>
+                        </template>
+                    </sort-dropdown>
+                </sort-by>
+            </top-buttons>
+            <button @click.prevent="lastPage()" class="block w-full max-w-md p-2 mx-auto my-2 tracking-widest text-white capitalize rounded-md bg-gradient-to-t from-cta-600 to-cta-500" x-cloak x-show="page.last>=1">
+                <svg class="w-5 h-5 align-middle fill-current insline-block">
+                    <use xlink:href="#icon-double-up"></use>
+                </svg>
+                <span>load last page</span>
+            </button>
+            <product-grid class="relative grid flex-auto w-full min-h-screen grid-flow-row grid-cols-2 gap-2 lg:grid-cols-3" x-effect="updateColors(response?.results)">
+                <loading-overlay class="absolute inset-0 block bg-white bg-opacity-40 backdrop-filter backdrop-blur-sm" x-show="searching" x-transition:leave-end="opacity-0" x-transition:leave-start="opacity-100" x-transition:leave="transition-all duration-300 ease-out">
+                    <div class="sticky w-3/4 max-w-sm p-4 mx-auto mt-8 text-gray-900 rounded-md shadow-lg bg-gradient-to-tr from-gray-100 to-gray-200 top-80">
+                        <svg class="block w-12 h-12 p-2 mx-auto align-middle fill-current animate-spin">
+                            <use xlink:href="#icon-searching"></use>
+                        </svg>
+                        <span class="block mx-auto max-w-max">Loading...</span>
+                    </div>
+                </loading-overlay>
+                <template :key="product.id" x-for="(product, productIndex) in response?.results ||[]">
+                    <product-card class="block p-2 border-0 border-b border-solid rounded border-gray-50">
+                        <a :href="productLink(productIndex)" :aria-label="product.title">
+                            <img x-rias="product.image.src" class="w-full" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw">
+                        </a>
+                        <colour-swatches class="block pt-2 mx-auto max-w-max" aria-hidden="true">
+                                <template x-for="(colour, index, colours) in product?.option_auto_colour?.length > 1 ? product?.option_auto_colour : []" :key="colour">
+                                    <button :data-swatch="colour" :data-colour="colour" :disabled="product.selected==colour" @click.prevent="changeImage(product,colour,productIndex)" class="hover:border-cta-500 disabled:!border-cta-500" tabindex="-1"></button>
+                                </template>
+                        </colour-swatches>
+                        <a :href="productLink(productIndex)">
+                            <product-title class="block mx-auto text-center" x-text="product.title"></product-title>
+                        </a>
+                        <template x-if="product.rating_count >= 1">
+                            <a class="mx-auto" :href="`${productLink(productIndex)}#stamped-main-widget`" :data-handle="product.handle">
+                                <span :data-id="product.id" :data-product-sku="product.handle" :data-product-title="product.title" :data-product-type="product.producttype" class="block mx-auto text-center max-w-max stamped-product-reviews-badge"></span>
+                            </a>
+                        </template>
+                        <template x-if="product.rating_count == 0">
+                            <no-reviews class="block mx-auto text-sm text-center text-gray-700">new product, no reviews</no-reviews>
+                        </template>
+                        <product-price class="block mx-auto text-center" x-text="`£${product.price}`"></product-price>
+                        <in-cart :data-id="product.id" class="flex flex-row justify-center mx-auto" x-show="cartContents.includes(product.id)">
+                            <svg class="inline-block w-5 h-5 align-middle fill-current text-cta-600">
+                                <use xlink:href="#icon-check-circle"></use>
+                            </svg>
+                            <span>Item in Cart</span>
+                        </in-cart>
+                    </product-card>
+                </template>
+            </product-grid>
+            <button @click.prevent="nextPage()" class="flex-none block w-full max-w-md p-2 mx-auto my-2 tracking-widest text-white capitalize rounded-md bg-gradient-to-t from-cta-600 to-cta-500" x-cloak x-show="showNext">
+                <span>load next page</span>
+                <svg class="inline-block w-5 h-5 align-middle fill-current">
+                    <use xlink:href="#icon-double-down"></use>
+                </svg>
+            </button>
+        </filter-main>
+    </sparq-columns>
+</sparq-wrapper>
+
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol fill="none" id="icon-menu" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="icon-cancel-circle" viewbox="0 0 20 20">
+            <path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"/>
+        </symbol>
+        <symbol fill="none" id="icon-searching" viewbox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4" stroke="currentColor"></circle>
+            <path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+        </symbol>
+        <symbol fill="currentColor" id="icon-double-down" viewbox="0 0 20 20">
+            <path clip-rule="evenodd" d="M15.707 4.293a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L10 8.586l4.293-4.293a1 1 0 011.414 0zm0 6a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L10 14.586l4.293-4.293a1 1 0 011.414 0z" fill-rule="evenodd"/>
+        </symbol>
+        <symbol fill="currentColor" id="icon-double-up" viewbox="0 0 20 20">
+            <path clip-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z" fill-rule="evenodd"/>
+        </symbol>
+        <symbol fill="currentColor" id="icon-check-circle" viewbox="0 0 20 20">
+            <path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"/>
+        </symbol>
+    </defs>
+</svg>

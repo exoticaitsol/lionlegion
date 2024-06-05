@@ -1,0 +1,35 @@
+<!-- start breadcrumb.liquid (SNIPPET) -->
+{%- unless template == 'index' or template == 'cart' -%}
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <h3 class="hide">Breadcrumb</h3>
+  <a id="id-breadcrumb-a" class="breadcrumb-a" href="/" title="Home">Home</a>
+  {%- if template contains 'collection' and collection.handle -%}
+    <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+    {%- if current_tags -%}
+      {%- capture url -%}/collections/{{ collection.handle }}{%- endcapture -%}
+      <a id="id-breadcrumb-a-2" class="breadcrumb-a" href="{{ url }}" title="{{ collection.title | strip_html | escape }}">{{ collection.title }}</a>
+      <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+      <span class="breadcrumb-span">{{ current_tags | join: " + " }}</span>
+    {%- else -%}
+      <span class="breadcrumb-span">{{ collection.title }}</span>
+    {%- endif -%}
+  {%- elsif template == 'blog' -%}
+    <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+    {%- if current_tags -%}
+      <a id="id-breadcrumb-a-3" class="breadcrumb-a" href="{{ blog.url }}" title="{{ blog.title | strip_html | escape }}">{{ blog.title }}</a>
+      <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+      <span class="breadcrumb-span">{{ current_tags | join: " + " }}</span>
+    {%- else -%}
+    <span class="breadcrumb-span">{{ blog.title }}</span>
+    {%- endif -%}
+  {%- elsif template == 'article' -%}
+    <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+    <a id="id-breadcrumb-a-4" class="breadcrumb-a" href="{{ blog.url }}" title="{{ blog.title | strip_html | escape }}">{{ blog.title }}</a>
+    <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+    <span class="breadcrumb-span">{{ article.title }}</span>
+  {%- else -%}
+   <span class="breadcrumb-span" aria-hidden="true">&rsaquo;</span>
+   <span class="breadcrumb-span">{{ page_title }}</span>
+  {%- endif -%}
+</nav>
+{%- endunless -%}

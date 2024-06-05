@@ -1,0 +1,71 @@
+<!-- start customer-login.liquid (SNIPPET) -->
+<script>
+  // Customer Pages
+  var $recoverPasswordLink = $('#RecoverPassword'),
+      $hideRecoverPasswordLink = $('#HideRecoverPasswordLink'),
+      $recoverPasswordForm = $('#RecoverPasswordForm'),
+      $customerLoginForm = $('#CustomerLoginForm'),
+      $passwordResetSuccess = $('#ResetSuccess'),
+      $submitResetSuccess = $('#id-recover-password');
+
+  loginForms = function () {
+    function showRecoverPasswordForm() {
+      $recoverPasswordForm.show();
+      $customerLoginForm.hide();
+    }
+
+    function hideRecoverPasswordForm() {
+      $recoverPasswordForm.hide();
+      $customerLoginForm.show();
+    }
+
+    $recoverPasswordLink.on('click', function (evt) {
+      evt.preventDefault();
+      showRecoverPasswordForm();
+    });
+
+    $hideRecoverPasswordLink.on('click', function (evt) {
+      evt.preventDefault();
+      hideRecoverPasswordForm();
+    });
+
+    resetPasswordSuccess = function () {
+      $passwordResetSuccess.show();
+    };
+    if (window.location.href.indexOf('#recover') != -1) {
+      showRecoverPasswordForm();
+    }
+
+  }
+
+  $(document).ready(function () {
+    loginForms();
+    $('#RecoverPasswordForm form').submit(function (e) {
+      $('#ResetSuccess').hide();
+      var form = $(this);
+      var url = form.attr('action');
+
+      $.ajax({
+        type: "POST",
+        url: url + '.js',
+        data: form.serialize(), // serializes the form's elements.
+        success: function (data, b, c) {
+          let html_temp = $.parseHTML(data);
+
+          if (typeof $(html_temp).find('.errors').html() == 'undefined') {
+            $('#ResetSuccess_recover').show().html("We've sent you an email with a link to update your password.").removeClass('error');
+            $('#RecoverEmail').val('');
+          } else {
+            $('#ResetSuccess_recover').show().html($(html_temp).find('.errors').html()).addClass('error');
+          }
+        }, error: function (err) {
+          $('#ResetSuccess').hide();
+          let res = JSON.parse(err.responseText).message + '. ' + JSON.parse(err.responseText).description;
+          $('#ResetSuccess_recover').show().html(res).addClass('error');
+        }
+      });
+
+      e.preventDefault();
+    });
+  });
+</script>

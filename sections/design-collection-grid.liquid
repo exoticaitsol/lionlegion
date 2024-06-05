@@ -1,0 +1,65 @@
+<div class="flex flex-col md:flex-row gap-2 px-4 mt-8 max-w-6xl w-11/12 mx-auto">
+  <h2 class="text-lg">{{ collection.title }}</h2>
+  <div class="min-w-max">Displaying {{ section.blocks.size }} Design
+    {%- unless section.blocks.size == 1 -%}
+    s
+    {%- endunless -%}</div>
+</div>
+
+<div class="mt-4 max-w-6xl w-11/12 mx-auto px-4">
+  {{ collection.description }}
+</div>
+
+
+<div class="max-w-6xl w-11/12 grid grid-cols-2 md:grid-cols-3 gap-4 mx-auto mt-8">
+  {%- for block in section.blocks -%}
+  {%- assign prod = block.settings.product -%}
+  <div class="relative flex flex-col items-center gap-2">
+    <div class="relative">
+      <img src="{{ block.settings.image | image_url: width: 300 }}" srcset="{%- render 'responsive-srcset', image: block.settings.image -%}" alt="{{ prod.title }}" class="w-full h-auto object-cover" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
+      {%- render 'badge-overlay', product: product -%}
+    </div>
+    <h3 class="w-max max-w-full text-center">{{ block.settings.label }}</h3>
+    <!-- Stamped - Begin badge -->
+    <span class="stamped-product-reviews-badge stamped-main-badge text-center" data-id="{{ prod.id }}" data-product-title="{{ prod.title | escape }}" data-product-type="{{ prod.type }}">{{ prod.metafields.stamped.badge }}</span>
+    <!-- Stamped - End badge -->
+    {% if product_temp.compare_at_price > product_temp.price %}
+    <span class="compare-price">{{ product_temp.compare_at_price | money }}</span>
+    {% endif %}
+    <a class="absolute inset-0" href="{{ prod.url }}"></a>
+  </div>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Design Collection Grid",
+  "class": "w-full",
+  "settings": [
+
+  ],
+  "blocks": [
+    {
+      "type": "Card",
+      "name": "Design Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Design Images"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Design Title"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Initial Product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

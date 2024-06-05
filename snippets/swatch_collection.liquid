@@ -1,0 +1,21 @@
+<!-- start swatch_collection.liquid (SNIPPET) -->
+<div class="swatch swatch-standard">
+     <div class="swatch-type">
+          <div class="swatch-elements-wrapper">
+           
+               {%- for product_option in prod.options_with_values -%}
+                
+                    {%- assign swatch_index = forloop.index -%}
+                    {%- if type == 'color' -%}
+                    {%- render 'swatch_color_collection', custom_colors: settings.enable_custom_colors, swatch_index: swatch_index, prod: prod, product_option: product_option -%}
+                    {%- elsif type == 'size' -%}
+                         {%- render 'swatch_standard_collection', swatch_index: swatch_index, prod: prod, product_option: product_option -%}
+                    {%- endif -%}
+               {%- endfor -%}
+           
+    
+               
+            
+          </div>
+     </div>
+</div>

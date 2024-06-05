@@ -1,0 +1,65 @@
+    <style>
+        #scrollUpBtn {
+            display: none;
+            position: fixed;
+            bottom: 40%;
+            right: 0px;
+            transform: translateY(50%);
+            z-index: 99;
+            border: none;
+            outline: none;
+            cursor: pointer;
+         
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+
+
+
+    <button id="scrollUpBtn" onclick="scrollToTop()" title="Scroll Back to Top">
+        <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/image_2.png?v=1705309899" alt="Back to Top">
+        <div class="clear"></div>
+    </button>
+
+    <!-- <script>
+        // Get the button
+        var scrollUpBtn = document.getElementById("scrollUpBtn");
+
+        // Show the button when the user scrolls down and hide when near the top
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollUpBtn.style.display = "block";
+            } else {
+                scrollUpBtn.style.display = "none";
+            }
+        }
+
+        // Scroll to the top of the page smoothly when the button is clicked
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'  // This will make the scroll behavior smooth
+            });
+        }
+    </script> -->
+
+    <script>
+    // Get the button
+    var scrollUpBtn = document.getElementById("scrollUpBtn");
+
+    // Set the initial state to display the button
+    scrollUpBtn.style.display = "block";
+
+    // Scroll to the top of the page smoothly when the button is clicked
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'  // This will make the scroll behavior smooth
+        });
+    }
+</script>

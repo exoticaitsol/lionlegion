@@ -1,0 +1,80 @@
+<!-- Reamaze Config file - DO NOT REMOVE -->
+<script type="text/javascript">
+  var _support = _support || { 'ui': {}, 'user': {} };
+  _support.account = "lion-legion";
+</script>
+
+<!-- reamaze_embeddable_19601_s -->
+<!-- Embeddable - Lion Legion Chat / Contact Form Shoutbox -->
+<script type="text/javascript">
+  var _support = _support || { 'ui': {}, 'user': {} };
+  _support['account'] = 'lion-legion';
+  _support['ui']['contactMode'] = 'anonymous';
+  _support['ui']['enableKb'] = 'true';
+  _support['ui']['styles'] = {
+    widgetColor: 'rgba(16, 162, 197, 1)',
+    gradient: true,
+  };
+  _support['ui']['shoutboxFacesMode'] = "default";
+  _support['ui']['shoutboxHeaderLogo'] = true;
+  _support['ui']['widget'] = {
+    icon: 'chat',
+    displayOn: 'desktop',
+    allowBotProcessing: true,
+    label: false,
+    position: 'bottom-right',
+    size: 58
+  };
+  _support['apps'] = {
+    recentConversations: {},
+    faq: {"enabled":true},
+    orders: {"enabled":true,"enable_notes":true}
+  };
+</script>
+<!-- reamaze_embeddable_19601_e -->
+
+
+
+
+
+
+<!-- reamaze_cue_18570_s -->
+<!-- Cue - Christmas shopping helper -->
+<script type="text/javascript">
+  var _support = _support || { 'ui': {}, 'user': {} };
+  _support.outbounds = _support.outbounds || [];
+  _support.outbounds.push({
+    id: "18570",
+    name: "Christmas shopping helper",
+    message: "Need help buying for someone?",
+    sound: true,
+    transient: false,
+    botsEnabled: true,
+    disableCueClick: false,
+    enableCustomFields: false,
+    start: "",
+    end: "",
+    user: {
+      type: "brand"
+    },
+    buttons: [
+      {
+        text: "No thanks! Just browsing",
+        dismiss: true
+      },
+      {
+        text: "Yes please!",
+        response: true
+      },
+    ],
+    rules: [
+      {
+        type: "url",
+        op: "contains",
+        value: "https://lionlegion.co.uk/pages/christmas-2021",
+      },
+    ],
+  });
+</script>
+<!-- reamaze_cue_18570_e -->
+

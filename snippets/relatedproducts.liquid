@@ -1,0 +1,49 @@
+<!-- start relatedproducts.liquid (SNIPPET) -->
+<div class="relate-content">
+    <div class="wrapper">
+        {% if collection.products_count > 0 %}
+            <h2 class="reviewtitle section-title">{{ settings.title_other_fine_products_section }}</h2>
+        {% endif %}
+        <ul class="grid-products">
+            {% assign current_product = product %}
+            {% for prod in collection.products limit: 5 %}
+                {% unless prod.handle == current_product.handle %}
+                    {% unless same_vendor and current_product.vendor != product.vendor %}
+                        {% unless same_type and current_product.type != product.type %}
+                        <li class="grid-products-item" data-handle="">
+                                {% for tagBadge in prod.tags %}
+                                    {% if tagBadge == settings.product_badge_tag and settings.product_badge_text_tag != blank %} 
+                                        <label class="product_tag_badge ribbon {{ settings.position_product_tag_badge }}">
+                                            <span>{{ settings.product_badge_text_tag }}</span>
+                                        </label>
+                                    {% endif %}
+                                {% endfor %}
+                                <a title="{{ prod.title | strip_html | escape }}" href="{{ prod.url | within: collection }}" id="related-product-{{ forloop.index }}" class="grid-product-link">
+                                    <div class="responsive-image__wrapper ">
+                                        <img class="lazyload responsive-image-image" src="{{ 'basic.png' | asset_img_url: '10x' }}"  data-src="{{ prod.featured_image.src | image_url: width: 265 }}" alt="{{ prod.featured_image.alt | default: prod.title | strip_html | escape }}">
+                                    </div>
+                                </a>
+
+                                <div class="product-title">
+                                    <h3 class="grid-product-title">{{ prod.title }}</h3>
+                                </div>
+
+                                <div class="related-product-price">
+                                    {% if prod.compare_at_price > prod.price %}
+                                        <span class="compare-price">{{ prod.compare_at_price | money }}</span>
+                                    {% endif %}
+
+                                    <span class="price money">{{ prod.price | money }}</span>
+
+                                    {% if prod.available == false %}
+                                        <div class="soldout">{{ settings.out_of_stock_label | default: '(out of stock)' }}</div>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endunless %}
+                    {% endunless %}
+                {% endunless %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>

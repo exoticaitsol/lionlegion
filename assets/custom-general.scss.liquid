@@ -1,0 +1,482 @@
+.reviews-content #slider-reviews{
+  margin-top:80px
+}
+
+/* ======
+Logo flickering fix
+====== */
+.logo-image svg{max-width:110px}
+/* ======
+Logo flickering fix
+====== */
+
+/* ======
+Line Spacing between
+bullet list in product description DESKTOP
+====== */
+.product-page .tabs-content .tab-content ul li+li{
+  margin-top:2px
+}
+/* ======
+Line Spacing between
+bullet list in product description DESKTOP
+====== */
+
+/* ======
+Reducing H2 font
+in product description
+====== */
+.product-page .tabs-content .tab-content h2,
+.product-page .prod_description h2,
+.product-page .product-tabs h2{
+  font-size:22px
+}
+/* ======
+Reducing H2 font
+in product description
+====== */
+
+/* ======
+Bullet points alignment in product description
+====== */
+.template-collection .description-text ul {
+  padding-left: 16px;
+}
+/* ======
+Bullet points alignment in product description
+====== */
+
+/* ======
+Disable HyperLink in Footer Address
+====== */
+.site-footer .wrapper .info p svg{
+  width: 12px;
+  margin: 0 16px 0 0;
+  fill: #fff;
+  height: 12px;
+  fill: var(--font-color, #fff);
+}
+/* ======
+Disable HyperLink in Footer Address
+====== */
+
+/* ======
+Fixed Header
+====== */
+.main-content{
+  margin-top: 212px!important;
+  @media screen and (min-width: 768px) and (max-width: 1023px)  {
+    margin-top: 250px!important;
+  }
+}
+#shopify-section-header.fixed{background:#fff}
+/* ======
+Fixed Header
+====== */
+
+/* ======
+Vasta Mod: 2020-08-10
+Don't hide swatch option
+====== */
+.swatch .swatch-type .swatch-elements-wrapper .swatch-element.swatch-disabled {
+  display: block;
+}
+
+.swatch .swatch-type .swatch-elements-wrapper .swatch-element.swatch-option-disabled {
+  display: none;
+}
+
+body .btn-add-tocart[disabled] {
+    background: #595959 !important;
+    color: #ffffff !important;
+}
+/* ======
+Don't hide swatch option
+====== */
+
+/* ======
+Vasta Mod: 2020-08-12
+Block atc and quantity inputs
+====== */
+body .btn-add-tocart.disabled-button {
+  background: #595959 !important;
+  color: #ffffff !important;
+  pointer-events: none;
+
+  svg,
+  path {
+    fill: #ffffff !important;
+  }
+}
+
+.product-page .product-quantity-wrapper.disabled-button {
+  pointer-events: none;
+
+  button,
+  input {
+    background-color: #eee;
+    color: #bbb;
+  }
+
+  svg,
+  fill {
+    fill: #bbb;
+  }
+}
+
+.template-collection .description-collection .description-content,
+.template-collection .paginate {
+	margin-bottom: 0;
+}
+/* ======
+Block atc and quantity inputs
+====== */
+
+@media (max-width:767px){
+  .reviews-content #slider-reviews{
+    margin-top:42px
+  }
+  /* ======
+  Images in About lion legion page
+  distorting - Correction - MOBILE
+  ====== */
+  .template-page .about-lion-legion-only .rte img{
+    width:auto
+  }
+  /* ======
+  Images in About lion legion page
+  distorting - Correction - MOBILE
+  ====== */
+
+  /* ======
+  Line Spacing between
+  bullet list in product description - MOBILE
+  ====== */
+  .product-page .tabs-content .tab-content ul li+li{
+    margin-top:0;
+  }
+  /* ======
+  Line Spacing between
+  bullet list in product description - MOBILE
+  ====== */
+
+  /* ======
+    Pagination spacing for mobile - MOBILE
+    ====== */
+  .paginate{
+    padding-top:20px;
+    padding-bottom:20px
+  }
+  /* ======
+    Pagination spacing for mobile - MOBILE
+    ====== */
+
+  /* ======
+  Fixed Header
+  ====== */
+  .main-content{margin-top:202px!important}
+  /* ======
+  Fixed Header
+  ====== */
+}
+
+
+@media (max-width:369px){
+
+  /* ======
+  Add to Cart button
+  breaking up on smaller screens - MOBILE
+  ====== */
+  .product-page .btn-add-tocart,
+  .product-page .btn-choose-variant{
+    font-size:14px
+  }
+  /* ======
+  Add to Cart button
+  breaking up on smaller screens - MOBILE
+  ====== */
+
+  /* ======
+  FREE SHIPPING Top bar
+  Message breaking and causing
+  price fall on logo correction - MOBILE
+  ====== */
+  /*   #shipping-bar .shipping-bar-text.free-shipping-bar{
+    font-size:12px;
+  } */
+  /* ======
+  FREE SHIPPING Top bar
+  Message breaking and causing
+  price fall on logo correction - MOBILE
+  ====== */
+}
+a.back-to-top {
+    display: none !important;
+}
+
+button.btn.size-btn.hide{
+    display: none !important;
+}
+.featured-collection{
+.swatch-type {
+    justify-content: center;
+}
+ .swatch-collection.swatch.swatch-standard {
+        margin: 10px 0 0 0;
+    }
+
+    .swatch-standard .swatch-value-checked {
+        display: none;
+        pointer-events: none;
+        text-align: center;
+    }
+    .swatch-element-standard:hover .swatch-value-checked {
+        display: inline-block;
+    }
+
+    .swatch-standard .swatch-element-standard {
+        position: relative;
+        margin: 2px;
+    }
+
+    .swatch-disabled {
+        display: none;
+    }
+
+   .swatch-disabled {
+        display: none;
+    }
+
+    .swatch .swatch-type  .swatch-elements-wrapper {
+        justify-content: center;
+        margin: 10px 0 0px 0;
+    }
+
+   .swatch .swatch-type .swatch-elements-wrapper .swatch-element {
+        margin: 5px;
+        height: 20px;
+    }
+
+     span.swatch-value.color {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        min-width: unset;
+        min-height: unset;
+    }
+    .swatch-standard input:checked+.swatch-value+.swatch-value-checked {
+        background-color: green;
+
+    }
+     .swatch .swatch-type .swatch-elements-wrapper .swatch-element.round {
+        height: 30px;
+        width: 30px;
+        border: 1px solid #e4e4e4;
+        border-radius: 100%;
+    }
+
+    span.swatch-value-checked {
+        display: flex;
+        color: #ffffff;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(50%, -50%);
+        background: #26b522;
+        width: 1.25em;
+        height: 1.25em;
+        border-radius: 100%;
+        z-index: 1;
+        svg{
+            fill: #fff;
+
+        }
+    }
+    .round a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height:100%;
+    }
+
+    .round span.swatch-value.color {
+        border-radius: 100%;
+        // top: 4px;
+    }
+}
+
+form#create_customer label
+{
+  width: 100%;
+}
+form label.required:after
+{
+    color: red;
+    content: " *";
+}
+.psd-copy
+{
+      display: inline-block;
+    text-align: left;
+    font-size: 15px;
+    line-height: 17px;
+    color: #747171;
+    margin-bottom: 10px;
+}
+#CartDrawer .total-price {
+    text-align: right !important;
+}
+#CartDrawer .cart_bar {
+  text-align: center;
+  p {
+    @media screen and (max-width: 360px) {
+      font-size: 0.8rem;
+    }
+  }
+}
+#CartDrawer span.estsuk {
+    font-size: 19px;
+    font-family: Helvetica,"Lato",Arial,sans-serif;
+    position: relative;
+    right: 25px;
+  @media screen and (max-width: 360px) {
+    font-size: 15px;
+  }
+}
+#CartDrawer span.estsukpr {
+  color: #26b522;
+  font-size: 20px;
+  font-family: Helvetica,"Lato",Arial,sans-serif;
+  font-weight: bold;
+  @media screen and (max-width: 360px) {
+    font-size: 17px;
+  }
+}
+#CartDrawer span.jq-total-price.price.money {
+    color: #26b522;
+}
+#CartDrawer span.subtot {
+    position: relative;
+    right: 16px;
+   @media screen and (max-width: 360px) {
+    font-size: 15px;
+  }
+}
+#CartDrawer span.ukhidden {
+    visibility: hidden;
+}
+div#load_more_previous {
+    padding: 10px 20px;
+    letter-spacing: 1px;
+    border: 1.5pt solid #e5e5e5;
+    background: #fff;
+    color: #000;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 18px;
+    text-transform: uppercase;
+    width: 250px;
+}
+div#load_more_previous:hover {
+    cursor: pointer;
+    background: #000;
+    color: #fff;
+}
+
+{% comment %}Adjust Stamped Review Badge to "5.0 ***** (11 Reviews)"{% endcomment %}
+
+
+span.stamped-badge:before {
+  content:''attr(data-rating)' ';
+  font-size:16px;
+}
+
+.stamped-badge-caption[data-reviews][data-label][data-version="2"]:after {
+  content: ''!important;
+}
+
+.stamped-badge-caption[data-reviews][data-label][data-version="2"]:before {
+  content: "\a";
+  white-space: pre;
+}
+
+.products-reviews-stars {
+  text-align: center;
+  text-align: -webkit-center;
+}
+
+.new-product-no-review {
+  color: #595959;
+  font-size: .75rem;
+}
+
+
+/*** PRODUCT BADGE ***/
+.product-badge-new,.product-badge-sale,.product-badge-best {
+  max-width: 20vw;
+  transform: rotate(25deg);
+  @media screen and(max-width: 768px) {
+    max-width: 8vw;
+  }
+  @media screen and(max-width: 767px) {
+    max-width: 14vw;
+  }
+}
+.product-badge-new {
+  fill: #536a50;
+}
+.product-badge-sale {
+  fill: #a00408;
+  text {
+    font-size: 1.7rem;
+  }
+}
+.product-badge-best {
+  fill: #1b0a76;
+  margin-top: 25%;
+  margin-right: 8%;
+}
+.product-badges {
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 8;
+}
+
+.product-badges::before,
+.product-badges::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+/*   border: 5px solid $tagBadgeBackgroundColor; */
+}
+
+
+/* top right*/
+.product-badges-top-right {
+  top: -2%;
+  right: 15%;
+  @media screen and(max-width: 1024px) {
+    top: -3%;
+    right: 10%;
+  }
+  @media screen and(max-width: 768px) {
+    top: -2%;
+    right: 4%;
+  }
+   @media screen and(max-width: 767px) {
+    top: -2%;
+    right: -10%;
+  }
+}
+.item-single.third:hover {
+  .product-badge-new,.product-badge-sale,.product-badge-best {
+/*     display: none; */
+  }
+}
+.prod_message svg {
+    position: relative;
+    top: 6px;
+}

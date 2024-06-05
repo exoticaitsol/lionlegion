@@ -1,0 +1,58 @@
+<style>
+    .readless_desc {
+      display: none;
+      line-height: 25px!important;
+    }
+  </style>
+   {% if product.metafields.custom.short_desrciption != blank %}
+ <div class="hide_show_on_click">
+  <div class="readmore_desc">{{ product.metafields.custom.short_desrciption | truncatewords: 12 }}</div>
+  <div class="readless_desc">{{ product.metafields.custom.short_desrciption }}</div>
+  <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/Mask_group_19.png?v=1704977055" class="fixed-image single_product">
+</div>
+ {% else %}
+ <p class="pro-short-desc">{{ section.settings.title }}</p>
+{% endif %}
+
+<script>
+  $(document).ready(function() {
+    $('.fixed-image').click(function() {
+      $('.readmore_desc, .readless_desc').toggle();
+    });
+  });
+</script>
+
+ <!-- <div class="main_short_desc">
+   {% if product.metafields.custom.short_desrciption != blank %}
+  <div class="pro-short-desc">{{ product.metafields.custom.short_desrciption }}</div>
+   {% else %}
+ <p class="pro-short-desc">{{ section.settings.title }}</p>
+{% endif %}
+</div> -->
+
+
+{% schema %}
+  {
+    "name": "Short Description ",
+    "settings": [
+       {
+        "type": "textarea",
+        "id": "title",
+        "label":"Short Description"
+      }
+    ],
+   
+    
+     "presets": [
+        {
+       "name": "Short Discription"
+       }
+     ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

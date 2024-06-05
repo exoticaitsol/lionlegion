@@ -1,0 +1,95 @@
+<!-- start scrollbutton.liquid (SNIPPET) -->
+{% comment %} 
+  Reduce below value if you need the back to the top button to appear higher up on the page. 
+  That value is in pixels.
+{% endcomment %}
+{%- assign vertical_offset_for_trigger = 300 -%}
+{% comment %} 
+  Vertical offset from bottom of browser for the position of the button.
+{% endcomment %}
+{%- assign position_from_bottom = '4em' -%}
+<a href="#" title="Back to the top" class="back-to-top" >
+    {%- render 'icon-arrow-up' -%} <span>{{ settings.text_to_the_top }}</span> 
+</a>
+{{ '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css' | stylesheet_tag }}
+{% style %}
+.back-to-top {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    bottom: {{ position_from_bottom }};
+    right: 0px;
+    text-decoration: none;
+    color:{{ settings.color_button_to_the_top }};
+    background-color:{{ settings.background_color_button_to_the_top }};
+    transition: ease-in-out .2s all;
+    opacity: 0;
+    visibility: hidden;
+    padding: 0.3em;
+    display: flex;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    z-index: 100;
+}
+
+.back-to-top.displayed {
+	opacity: 1;
+  visibility: visible;
+  z-index:100;
+}
+
+.back-to-top svg {
+    width: 25px;
+    height: 25px;
+    fill: {{ settings.color_button_to_the_top_svg }};
+}
+
+.back-to-top i {
+  vertical-align: middle;
+}
+
+.back-to-top i + span {
+  padding-left: 0;
+}
+.back-to-top:hover {
+  text-decoration: none;
+  color:{{ settings.color_button_to_the_top_hover }};
+  fill:{{ settings.color_button_to_the_top_hover }};
+  background-color:{{ settings.background_color_button_to_the_top_hover }};
+}
+.fa-2x {
+    font-size: 40px;
+}
+
+[class*=" fa-"]:before, [class*=" stamped-fa-"]:before, [class*=" stamped-icon-"]:before, [class^=fa-]:before, [class^=stamped-fa-]:before, [class^=stamped-icon-]:before {
+    margin-right: 0px;
+}
+{% endstyle %}
+
+<script>
+  window.addEventListener('load', function(){
+    jQuery(function($) {
+      var offset = {{ vertical_offset_for_trigger }};
+      var duration = 200;
+      
+      $(window).scroll(function() {
+        if ($(this).scrollTop() > offset) {
+          $('.back-to-top').addClass('displayed');
+        } else {
+          $('.back-to-top').removeClass('displayed');
+        }
+      });
+
+      $('.back-to-top').unbind('click.smoothscroll').bind('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate( { scrollTop: 0 }, duration);
+        return false;
+      });
+    });
+  });
+</script>

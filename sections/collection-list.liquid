@@ -1,0 +1,407 @@
+<!-- start collection-list.liquid (SECTION) -->
+{%- assign default_label = 'homepage.onboarding.collection_title' | t -%}
+
+    {%- if section.settings.title != blank -%}
+        <h2 class="w-3/4 mx-auto mb-2 text-xl font-bold tracking-wider text-center md:w-1/2 md:text-2xl">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+
+    {%- assign enable_lazy = true -%}
+
+    <div class="max-w-5xl mx-auto grid-products
+      {%- if section.settings.alt_mobile %} tw-hidden md:flex
+      {%- else %} flex
+      {%- endif -%}
+      ">
+        {%- for block in section.blocks -%}
+            {%- assign index = "collection-list-" | append: forloop.index -%}
+            {%- if block.type == "collection" -%}
+                {%- assign collection_temp = collections[block.settings.collection] -%}
+                <div class="grid-products-item featured collection-{{ forloop.index }}" {{ block.shopify_attributes }}>
+                    <a title="{{ collection_temp.title | default: default_label | strip_html | escape }}" aria-label="FeatColl-{{ forloop.index }}" id="FeatColl-{{ forloop.index }}" href="{{ collection_temp.url | default: '#' }}" class="grid-product-link">
+                      {%- liquid
+                        if collection_temp.image != blank or collection_temp.products.first != blank
+                            assign image_object = collection_temp.products.first.featured_image
+                          if block.settings.collection_image != blank
+                              render 'responsive-image', image: block.settings.collection_image, max_width: 760, active_lazy: enable_lazy, id_prefix: index, size_large: 760, size_mobile: 40, size_desk: 32
+                           elsif collection_temp.image != blank
+                              render 'responsive-image', image: collection_temp.image, max_width: 760, active_lazy: enable_lazy, id_prefix: index, size_large: 760, size_mobile: 40, size_desk: 32
+                           else
+                              render 'responsive-image', image: image_object, max_width: 760, active_lazy: enable_lazy, id_prefix: index, size_large: 760, size_mobile: 40, size_desk: 22
+                          endif
+                        endif
+                      -%}
+                  </a>
+                  {%- if block.settings.collection_title != blank -%}
+                      <a title="{{ block.settings.collection_title | strip_html | escape }}" href="{{ collection_temp.url | default: '#' }}" class="box-bottom-text">
+                          <h3 class="grid-product-title">{{ block.settings.collection_title }}</h3>
+                      </a>
+                  {%- else -%}
+                      <a title="{{ collection_temp.title | default: default_label | strip_html | escape }}" href="{{ collection_temp.url | default: '#' }}" class="box-bottom-text">
+                          <h3 class="grid-product-title">{{ collection_temp.title | default: default_label }}</h3>
+                      </a>
+                  {%- endif -%}
+                  {%- liquid
+                    if collection_temp == empty
+                        capture current
+                            cycle 1, 2, 3, 4, 5, 6
+                        endcapture
+                        echo 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small'
+                    endif
+                  -%}
+              </div>
+          {%- endif -%}
+
+          {%- if block.type == "product" -%}
+              {%- assign product_temp = all_products[block.settings.id_product] -%}
+              <div class="grid-products-item featured collection-{{ forloop.index }}" {{ block.shopify_attributes }}>
+                  <a title="{{ product_temp.title | default: default_label | strip_html | escape }}" aria-label="FeatColl-{{ forloop.index }}" id="FeatColl-{{ forloop.index }}" href="{{ product_temp.url | default: '#' }}" class="grid-product-link">
+                      {%- assign image_object = product_temp.featured_image -%}
+                      {%- if block.settings.product_image != blank -%}
+                          {%- render 'responsive-image', image: block.settings.product_image, active_lazy: enable_lazy, id_prefix: index, size_large: 380, size_mobile: 40, size_desk: 22 -%}
+                      {%-  else -%}
+                          {%- render 'responsive-image', image: image_object, active_lazy: enable_lazy, id_prefix: index, size_large: 380, size_mobile: 40, size_desk: 22 -%}
+                      {%- endif -%}
+                  </a>
+                  {%- if block.settings.product_title != blank -%}
+                      <a title="{{ block.settings.product_title | strip_html | escape }}" href="{{ product_temp.url | default: '#' }}" class="box-bottom-text">
+                          <h3 class="grid-product-title">{{ block.settings.product_title }}</h3>
+                      </a>
+                  {%- else -%}
+                      <a title="{{ product_temp.title | default: default_label | strip_html | escape }}" href="{{ product_temp.url | default: '#' }}" class="box-bottom-text">
+                          <h3 class="grid-product-title">{{ product_temp.title | default: default_label }}</h3>
+                      </a>
+
+                  {%- elsif product_temp == empty -%}
+                      {%- capture current %}
+                          {% cycle 1, 2, 3, 4, 5, 6 %}
+                      {% endcapture -%}
+                      {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+                  {%- endif -%}
+              </div>
+          {%- endif -%}
+      {%- endfor -%}
+      {%- if section.blocks.size == 0 -%}
+          {%- render 'no-blocks' -%}
+      {%- endif -%}
+  </div>
+
+
+  {% if section.settings.alt_mobile %}
+    <!-- tailwind Featured Collections start from here -->
+    <div class="block md:hidden">
+        <div class="relative grid w-full max-w-2xl grid-flow-row grid-cols-1 gap-6 p-0 mx-auto sm:grid-cols-2">
+            {%- for block in section.blocks -%}
+                {%- if block.type == "collection" -%}
+                    {%- assign collection = collections[block.settings.collection] -%}
+                    <a href="{{ collection.url }}" class="relative grid-stack w-full {{ section.settings.mobile_button_size }} text-gray-900 bg-gray-300 shadow-md center rounded-xl overflow-hidden">
+                      <img
+                        class="object-cover w-full h-full {{ block.settings.image_opacity }}
+                        {%- if section.settings.overlay_flag %} mix-blend-luminosity {%- endif -%}"
+                        src="{{ collection.image | image_url: width: 360 }}"
+                        srcset="{% render 'responsive-srcset', image: collection.image %}"
+                        width="{{ collection.image.width }}"
+                        height="{{ collection.image.height }}"
+                        sizes="(max-width: 640px) 100vw, 640px"
+                        alt="{{ collection.title | escape }}"
+                        loading="lazy"/>
+                        <span class="z-10 text-2xl font-semibold tracking-wide transition-all duration-500">
+                            {{ collection.title }}
+                        </span>
+                    </a>
+                {%- endif -%}
+            {%- endfor -%}
+            {% if section.settings.overlay_flag %}
+              {%- assign flag_image = images['UK_flag.png'] -%}
+              <img class="block object-cover opacity-80 w-full h-full inset-0 absolute transform object-x1/3 md:object-center pointer-events-none mix-blend-soft-light"
+                src="{{ flag_image | image_url: width: 360 }}"
+                srcset="{% render 'responsive-srcset', image: flag_image %}"
+                width="{{ flag_image.width }}"
+                height="{{ flag_image.height }}"
+                sizes="100vw"
+                alt="{{ flag_image.alt | escape }}"
+                loading="lazy"
+              >
+            {% endif %}
+        </div>
+    </div>
+  {% endif %}
+
+
+
+{% style %}
+#shopify-section-{{ section.id }} .featured .box-bottom-text h3 {
+color:{{ section.settings.text_color_collection_list }};
+text-transform: {{ section.settings.collection_product_title_text_transform }}
+}
+
+#shopify-section-{{ section.id }} .grid-products .grid-products-item.featured {
+border: 2px solid {{ section.settings.border_color_collection_list }};
+
+}
+#shopify-section-{{ section.id }} .featured .box-bottom-text{
+background-color: {{ section.settings.text_bg_color_collection_list }};
+}
+#shopify-section-{{ section.id }} .section-title {
+text-transform: {{ section.settings.text_transform_title }};
+}
+
+#shopify-section-{{ section.id }} .grid-products {
+justify-content: center;
+}
+
+#shopify-section-{{ section.id }} .grid-products .grid-products-item {
+flex-grow: 1;
+max-width: 23.5%;
+}
+
+.shopify-section.banner + #shopify-section-{{ section.id }} {
+position: relative;
+top: -{{ section.settings.top_margin_featured | divided_by: 15 }}rem;
+margin-bottom: -{{ section.settings.top_margin_featured | divided_by: 15 }}rem;
+}
+
+{% if section.settings.top_margin_featured %}
+.shopify-section.banner+  #shopify-section-{{ section.id }} > .wrapper {
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  padding: 10px 10px 0;
+}
+{% endif %}
+
+@media only screen and (max-width: 767px ){
+
+.shopify-section.banner+  #shopify-section-{{ section.id }} {
+  top: 0;
+  margin-bottom: 0;
+}
+
+#shopify-section-{{ section.id }} .grid-products .grid-products-item {
+  max-width: 49%;
+}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "max_blocks": 4,
+  "class": "section-collection-list bg-white px-6 py-2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Featured Collections"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "color",
+      "id": "border_color_collection_list",
+      "label": "Collections Border Color",
+      "default": "#444"
+    },
+    {
+      "type": "color",
+      "id": "text_bg_color_collection_list",
+      "label": "Collections Background Text Color",
+      "default": "#444"
+    },
+    {
+      "type": "color",
+      "id": "text_color_collection_list",
+      "label": "Collections Text Color",
+      "default": "#fff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Headline Text",
+      "default": "Featured Collections"
+    },
+    {
+      "type": "range",
+      "id": "top_margin_featured",
+      "info": "Only works if section above is the banner",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Position On/Off Banner",
+      "default": 125
+    },
+    {
+      "type": "select",
+      "id": "text_transform_title",
+      "label": "Headline Text Transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "Same as Input"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "collection_product_title_text_transform",
+      "label": "Collection/Product Title Text Transform ",
+      "default": "uppercase",
+      "options": [
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Mobile View"
+    },
+    {
+      "type": "checkbox",
+      "id": "alt_mobile",
+      "label": "Alternate Mobile View",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "mobile_button_size",
+      "label": "Mobile Button Size",
+      "default": "h-24",
+      "options": [
+        {
+          "value": "h-24",
+          "label": "Small"
+        },
+        {
+          "value": "h-32",
+          "label": "Medium"
+        },
+        {
+          "value": "h-48",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_flag",
+      "label": "Overlay Flag",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "limit": 4,
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "label": "Collection Image",
+          "id": "collection_image",
+          "type": "image_picker",
+          "info": "Size: Big as hell"
+        },
+        {
+          "label": "Text Title",
+          "id": "collection_title",
+          "type": "text"
+        },
+        {
+          "type": "select",
+          "id": "image_opacity",
+          "label": "Image Opacity",
+          "default": "opacity-80",
+          "options": [
+            {
+              "value": "opacity-20",
+              "label": "20%"
+            },
+            {
+              "value": "opacity-40",
+              "label": "40%"
+            },
+            {
+              "value": "opacity-60",
+              "label": "60%"
+            },
+            {
+              "value": "opacity-80",
+              "label": "80%"
+            },
+            {
+              "value": "",
+              "label": "100%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "label": "Product",
+          "id": "id_product",
+          "type": "product"
+        },
+        {
+          "label": "Product Image",
+          "id": "product_image",
+          "type": "image_picker",
+          "info": "Size: 400x400"
+        },
+        {
+          "label": "Text Title",
+          "id": "product_title",
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+<!-- end collection-list.liquid -->

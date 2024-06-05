@@ -1,0 +1,73 @@
+<!-- start collection-description.liquid (SNIPPET) -->
+
+{% assign show_description = true %}
+
+{% if settings.custom_description contains collection.handle and settings.enable_description %}
+    {% assign show_description = false %}
+{% endif %}
+{% if  request.path == '/collections/all' %} 
+    <div class="description-collection text-{{ settings.announcement_description_position }}">
+        <div class="description-content {% if settings.enable_see_more %}see-more{% endif %} closed">
+          <h1>{{ collection.title }}</h1>
+        </div>
+    </div>
+{% endif %}
+
+{% if collection.description != blank and settings.announcement_show_description and show_description %}
+    <div class="description-collection text-{{ settings.announcement_description_position }}">
+        <div class="description-content {% if settings.enable_see_more %}see-more{% endif %} closed">
+          <h1>{{ collection.title }}</h1>
+            <div class="description-text">
+               <h2> {{ collection.description | split: '<!-- split -->' | first }} </h2>
+            </div>
+
+            {% if settings.enable_see_more %}
+                <span id="btn-see-more" class="btn-see-more">{{ 'collections.general.see_more' | t }}</span>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endif %}
+
+
+
+<style>
+    .readless_desc {
+      display: none;
+    }
+  </style>
+  {% if  request.path != '/collections/all' %} 
+ <div class="hide_show_on_click">
+  <div class="readmore_desc">   {{ collection.description | split: '<!-- split -->' | last | truncatewords: 30 }}</div>
+  <div class="readless_desc">  {{ collection.description | split: '<!-- split -->' | last }}</div>
+  <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/Mask_group_19.png?v=1704977055" class="fixed-image single_product">
+</div>
+{% endif %}
+
+<script>
+  $(document).ready(function() {
+    $('.fixed-image').click(function() {
+      $('.readmore_desc, .readless_desc').toggle();
+    });
+  });
+</script>
+
+{% comment %}
+ {%- section 'collection-dropdpwn' -%} 
+{% endcomment %}
+<!-- <div class="read-more-container">  
+  <img src="https://cdn.shopify.com/s/files/1/0268/4089/1438/files/Mask_group_19.png?v=1704977055">
+ <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus
+   
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus
+      error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
+      inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+    </p>
+  
+</div> -->
+ <style>
+    .read-more-content {
+      display: none;
+    }
+ </style>

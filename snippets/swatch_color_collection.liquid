@@ -1,0 +1,78 @@
+<!-- start swatch_color_collection.liquid (SNIPPET) -->
+{%- assign product_temp = prod -%}
+
+{%- for value in product_option.values -%}
+    {%- assign img_swatch = product_temp.featured_image.src | image_url: width: 420 -%}
+    {%- assign url_variant = product_temp.url -%}
+    {%- assign id_variant = product_temp.id -%}
+    {%- for variant in product_temp.variants -%}
+    
+        {%- if variant.options contains value and variant.featured_image != blank -%}
+            {%- assign img_swatch = variant.featured_image | image_url: width: 420 -%}
+            {%- assign url_variant = variant.url -%}
+            {%- assign id_variant = variant.id -%}
+            {%- assign image = variant.featured_image -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    {%- assign name_swatch = 'Color' -%}
+    {%- if settings.label_swatch_color_collection != blank -%}
+        {%- assign name_swatch = settings.label_swatch_color_collection -%}
+    {%- endif -%}
+
+
+    {%- unless max_width -%}
+{%- assign max_width = 3024 -%}
+{%- endunless -%}
+
+{%- comment -%} Generate srcset{%- endcomment -%}
+{%- assign image_widths = '50,100,150,200,300,360,540,720,900,1080,1296,1512,1728,1944,2160,2376,2592,2808,3024' | split: ',' -%}
+{%- capture swatch_srcset -%}
+  {%- for width in image_widths -%}
+  {%- assign width_num = width | plus: 0 | round -%}
+    {%- if width_num < max_width -%}
+    {%- if image.width >= width_num -%}
+      {% assign widthx = width | append: 'x' %}
+      https:{{ image | img_url: widthx }} {{ width | append: 'w' }},
+    {%- endif -%}
+    {%- else -%}
+      {%- break -%}
+    {%- endif -%} 
+  {%- endfor -%}
+  {%- if image.width < max_width -%}
+    {%- assign widthx = image.width | append: 'x' -%}
+    https:{{ image | img_url: widthx }} {{ image.width | append: 'w' }}
+  {%- else -%}
+    {%- assign widthx = max_width | append: 'x' -%}
+    https:{{ image | img_url: widthx }} {{ max_width | append: 'w' }}
+  {%- endif -%}
+{%- endcapture -%}
+
+    {%- if product_option.name contains name_swatch -%}
+    <label class="swatch-element swatch-element-color {% if settings.swatch_round %} round{% endif %}" data-swatch="{{ value | handle }}" var_id="{{ id_variant }}" swatchv-img="{{ img_swatch }}" swatchv-srcset="{{ swatch_srcset }}">
+        <input type="radio"
+            id="swatch-input-color-variant-{{ forloop.index }}-{{ id_variant }}"
+            class="swatch-variant-value jq-swatch-element"
+            value="{{ value | handle }}"
+            data-swatch-index="{{ swatch_index }}"
+            name="swatch_element_color"
+            {% if forloop.index == 1 %} checked {% endif %}
+            {% if swatch_index > 1 %} disabled {% endif %}
+            required/>
+
+        {%- assign css_value = value | handle -%}
+        {%- comment -%}Fix color names that don't match CSS standards {%- endcomment -%}
+        {%- if css_value == 'charcoal' -%}
+          {%- assign css_value = 'dimgray' -%}
+        {%- endif -%}
+        {%- if css_value == 'military-green' -%}
+          {%- assign css_value = '#5E7461' -%}
+        {%- endif -%}
+
+        
+        <a title="{{ value | strip_html | escape }}" id="swatch-color-variant-{{ forloop.index | times: forloop.index }}-{{ id_variant }}" aria-label="Swatch Color Variant" hreff="{{ url_variant }}"  ><span class="{% if settings.enable_custom_colors %}{{ value | handle }}-custom-color{% endif %} swatch-value swatch-value-color color swatch-background-{{ css_value }}" data-img="{{ img_swatch }}" style="background-color: {{ css_value }};"></span></a>
+        <span style="display:none;" class="swatch-value-checked">{% render 'icon-check' %}</span>
+    </label>
+    {%- endif -%}
+{%- endfor -%}
+

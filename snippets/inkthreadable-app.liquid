@@ -1,0 +1,101 @@
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+    <script src="https://www.inkthreadable.co.uk/svg-editor/embedded.js?shop={{ shop.permanent_domain }}&product={{ product.id }}&variant={{ product.selected_or_first_available_variant.id }}"></script>
+    <script>
+        (function(app){
+            if (!app) {
+                return;
+            }
+
+            app();
+
+            function updateEditor(variant) {
+                document
+                    .getElementById('inkthreadable-iframe')
+                    .contentWindow
+                    .postMessage({
+                        variant: +variant,
+                        action: 'update',
+                    }, "https://www.inkthreadable.co.uk");
+            }
+
+            document.body.addEventListener('variantChange', function(e) {
+                updateEditor(e.detail.variant.id);
+            });
+
+            document.addEventListener('DOMContentLoaded', function(){
+                const form = document.querySelector('form[action="/cart/add"]');
+                form.addEventListener('change', function(e) {
+                    if (e.dataset) {
+                        updateEditor(e.dataset.variant.id);
+                    } else {
+                        window.setTimeout(function(){
+                            let variant = form.querySelector('[name="id"]');
+                            if (variant) {
+                                updateEditor(variant.value);
+                            }
+                        });
+                    }
+                });
+
+                const button = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+                const btnClone = button.cloneNode(true);
+                button.parentNode.replaceChild(btnClone, button); // remove all event listeners
+                btnClone.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document
+                        .getElementById('inkthreadable-iframe')
+                        .contentWindow
+                        .postMessage({
+                            action: 'submit',
+                        }, "https://www.inkthreadable.co.uk");
+                });
+            });
+        })(window.inkthreadableApp);
+
+        window.addEventListener("message", function(event) {
+            if (event.origin !== "https://www.inkthreadable.co.uk") {
+                return;
+            }
+            var message = event.data;
+            if (message.action == 'submit') {
+                var mockups = message.mockups;
+                if (!mockups.length) {
+                    return alert("Please upload a design to continue.");
+                }
+                var form = document.querySelector('form[action="/cart/add"]');
+                var formData = new FormData(form);
+                var images = [];
+                for (var i = 0; i < mockups.length; i++) {
+                    (function(design, index) {
+                        images.push(fetch(design.mockup).then(function(response) {
+                            return response.blob();
+                        }).then(function(blob) {
+                            var file = new File([blob], design.title + ".png");
+                            formData.append("properties[" + design.title + "]", file);
+                        }));
+                    })(mockups[i], i);
+                }
+                Promise.all(images).then(function(){
+                    var oReq = new XMLHttpRequest();
+                    formData.append("properties[Reference]", message.reference);
+                    oReq.open("POST", form.action, true);
+                    oReq.onreadystatechange = function() {
+                        if(this.readyState == this.HEADERS_RECEIVED) {
+                            var cart = oReq.getResponseHeader("Location");
+                            cart && location.assign(cart);
+                        }
+                    };
+                    oReq.onload = function(oEvent) {
+                        if (oReq.status == 200) {
+                            location.assign("/cart");
+                        } else {
+                            alert("Error " + oReq.status);
+                        }
+                    };
+
+                    oReq.send(formData);
+                });
+            }
+        }, false);
+    </script>

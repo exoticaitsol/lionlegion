@@ -1,0 +1,183 @@
+<!-- start product.liquid (TEMPLATE) -->
+<div class="product-page">
+    <div class="wrapper product-mobile-wrapper {% if settings.product_info_mobile_position == "below" %}product-info-below-slider{% endif %}">
+      {%- if settings.product_info_mobile_position == "above" -%}
+        {%- render 'product-info-mobile', product -%}
+      {%- endif -%}
+
+      <div class="products-info">
+
+        <div class="product-half half-img {% if settings.prodct_slider_vertical %} flex flex-align-start flex-space-between {% endif %} {{ settings.product_slider_direction }} {% if settings.enable_sticky_product_slider and settings.product_tab_full_width == false %} product-slider-sticky{% endif %}">
+          {%- render 'product-sliders' -%}
+        </div>
+
+        {%- if settings.product_info_mobile_position == "below" -%}
+          {%- render 'product-info-mobile', product -%}
+        {%- endif -%}
+
+        <div class="product-half">
+          <h1 class="product-title no-mobile">{{ product.title }}</h1>
+
+          <div class="no-mobile">
+            {%- if settings.product_enabled_app_reviews -%}
+            <div class="no-mobile">
+              {%- render 'custom_reviews_stars' -%}
+            </div>
+            {%- endif -%}
+          </div>
+
+          <div class="product-price no-mobile">
+
+            {%- if product.compare_at_price_max > product.price -%}
+              <span class="compare-price money">{{ product.compare_at_price | money }}</span>
+            {%- endif -%}
+
+            <span class="current-price price money" id="product-price" data-product-price="{{ product.price }}" style="display:block;">{{ product.price | money }}</span>
+            {%- render 'you-save', enable_you_save: settings.enable_you_save -%}
+          </div>
+
+          {%- render 'product-form-giftcard' -%}
+
+
+          {%- if settings.enabled_social_share and settings.social_share_position == "above" -%}
+            {%- render 'social-sharing' -%}
+          {%- endif -%}
+
+          {%- section 'custom-product-video' -%}
+
+          {%- unless settings.product_tab_full_width -%}
+            {%- section 'product-tabs' -%}
+
+            {%- if settings.enabled_social_share and settings.social_share_position == "below" -%}
+              {%- render 'social-sharing' -%}
+            {%- endif -%}
+          {%- endunless -%}
+
+        </div>
+
+        {%- if settings.product_tab_full_width -%}
+          {%- section 'product-tabs' -%}
+
+          {%- if settings.enabled_social_share and  settings.social_share_position == "below" -%}
+            {%- render 'social-sharing' -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if settings.app_review != 'none' and settings.product_enabled_app_reviews_slider -%}
+  <div class="wrapper">
+    <!-- Start App Reviews -->
+    {%- render 'custom_reviews_all' -%}
+  </div>
+  {%- endif -%}
+
+  {%- section 'reviews' -%}
+
+  {%- unless settings.product_disabled_other_fine_products_section -%}
+    {%- section 'relatedproducts' -%}
+  {%- endunless -%}
+
+  <!-- SWATCH STYLE -->
+  {% style %}
+    {% for product_option in product.options_with_values %}
+      {% for value in product_option.values %}
+        {% assign css_value = value | handle %}
+        {% assign img_value = css_value | join: '.png' %}
+        body .swatch-element .swatch-background-{{ css_value }} {
+          background-image: url('{{ img_value | asset_url }}');
+        }
+      {% endfor %}
+    {% endfor %}
+  {% endstyle %}
+
+  {% for tag in product.tags %}
+  {% if tag contains 'Apparel' %}
+  <style>
+     li.tabs.radius.shadow[data-target="tab25"] {
+      display: block !important;
+  }
+  </style>
+  {% endif %}
+
+   {% endfor %}
+
+
+<script>
+(function(){
+
+  let inputs = document.querySelector('[data-type=Type]').querySelectorAll('input');
+  let giftText = document.querySelector('giftcard-message')
+
+  function addGreetingMessage({ target }){
+    return giftText.classList.toggle('!hidden',!target.nextElementSibling.innerText.toLowerCase().includes('card'))
+  }
+  inputs.forEach(i=>{
+    i.addEventListener('change',addGreetingMessage)
+  })
+
+  function debounce(func, wait) {
+    var timeout
+    return function() {
+      var context = this, args = arguments
+      var later = function () {
+        timeout = null
+        func.apply(context, args)
+      }
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+    };
+  };
+
+  giftText.querySelector('textarea').addEventListener('keyup',debounce((e)=>{
+    fetch('/cart/update.js',{
+      method: 'POST',
+      headers:{
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({note:e.target.value})
+    })
+  },500))
+})()
+</script>
+
+{%- comment -%}Klaviyo Browse Tracking{%- endcomment -%}
+
+<script type="text/javascript">
+  var _learnq = _learnq || [];
+
+  var item = {
+    Name: {{ product.title | json }},
+    ProductID: {{ product.id | json }},
+    Categories: {{ product.collections | map: 'title' | json }},
+    ImageURL: "https:{{ product.featured_image.src | image_url: width: 600, height: 600 }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor | json }},
+    Price: {{ product.price | money | json }},
+    CompareAtPrice: {{ product.compare_at_price_max | money | json }}
+  };
+
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+
+<style>
+  a:target {
+  margin-top: -270px;
+  padding-top: 270px;
+  }</style>
+
+
+{% section 'inkthreadable-app' %}

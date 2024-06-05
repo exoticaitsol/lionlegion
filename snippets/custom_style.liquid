@@ -1,0 +1,16 @@
+{% comment %}
+{{ 'custom-general.scss.css' | asset_url | stylesheet_tag }}
+{% endcomment %}
+
+<style>
+    *:focus-visible {
+        outline: black solid 4px !important;
+    }
+</style>
+
+{{ 'custom-general.css' | asset_url | stylesheet_tag }}
+
+{% if template contains 'product' %}
+{% endif %}
+{% if template contains 'collection' %}
+{% endif %}

@@ -1,0 +1,215 @@
+<!-- start instafeed.liquid (SECTION) -->
+
+{%- assign access_token = section.settings.access_token -%}
+{%- assign rows = section.settings.rows -%}
+{%- assign image_per_row = section.settings.image_per_row -%}
+{%- assign custom_class = section.settings.custom_class -%}
+
+
+<div data-section-type="instafeed" data-access-token="{{ access_token }}" data-rows="{{ rows }}" data-image-per-row="{{ image_per_row }}">
+    {%- if section.settings.full_width -%}
+        {%- render 'instagram', access_token: access_token, rows: rows, image_per_row: image_per_row, custom_class: custom_class, disable_click: disable_click -%}
+    {%- else -%}
+        <div class="wrapper">
+            {%- render 'instagram', access_token: access_token, rows: rows, image_per_row: image_per_row, custom_class: custom_class, disable_click: disable_click -%}
+        </div>
+{%- endif -%}
+</div>
+<script src="{{ 'instafeed.min.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Instafeed",
+  "class": "instafeed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width"
+    },
+    {
+      "type": "text",
+      "id": "access_token",
+      "label": "Access Token",
+      "info": "[Find your access token](http://www.maestrooo.com/instagram)."
+    },
+    {
+      "type": "select",
+      "id": "rows",
+      "label": "Rows",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_per_row",
+      "label": "Image Per Row",
+      "options": [
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_click",
+      "label": "Disable Click on Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram from Super Theme",
+      "category": "Instagram Feed"
+    }
+  ]
+}
+{% endschema %}
+
+
+{% style %}
+:root {
+    {% if section.settings.image_per_row == '3' %}
+        --vasta-width-insta-item: 30%;
+    {% endif %}
+    {% if section.settings.image_per_row == '4' %}
+        --vasta-width-insta-item: 23%;
+    {% endif %}
+    {% if section.settings.image_per_row == '5' %}
+        --vasta-width-insta-item: 18%;
+    {% endif %}
+}
+
+.no-clickable {
+    pointer-events: none;
+}
+{% endstyle %}
+
+<!-- end instafeed.liquid -->
+
+{% javascript %}
+function formatInstagramDate( image ) {
+    var monthNames,
+        date = new Date(image.created_time * 1000);
+
+    m = date.getMonth();
+    d = date.getDate();
+    y = date.getFullYear();
+
+    monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    image.created_time = monthNames[m] + ' ' + d + ', ' + y;
+
+    return true;
+}
+
+window.SectionInstafeed = (function(){
+    function SectionInstafeed() {
+        this.section = null;
+        this.data = null;
+
+        this._run();
+    }
+
+    function getResolution( data ) {
+        return (jQuery(window).width() < 767 || data.image_per_row > 4) ? 'low_resolution' : 'standard_resolution';
+    }
+
+    function newInstafeed( data, resolution, limitphoto ) {
+        return new Instafeed({
+            get: 'user',
+            userId: 'self',
+            accessToken: data.access_token,
+            sortBy: 'most-recent',
+            limit: limitphoto,
+            resolution: resolution,
+            template: data.template,
+
+            after: function() {
+                var images = $('.instagram__image-wrapper');
+
+                images.filter(':nth-child(2n + 1)').addClass('grid__item--mobile-first');
+                images.filter(':nth-child(' + data.image_per_row + 'n + 1)').addClass('grid__item--tablet-first grid__item--desktop-first');
+            },
+            filter: $.proxy(formatInstagramDate)
+        });
+    }
+
+    function runInstafeed( data ) {
+        var resolution, limitphoto;
+
+        if (data.access_token) {
+            resolution = getResolution( data ) ;
+
+            if(jQuery(window).width() < 767) {
+                limitphoto = 6;
+            } else {
+                limitphoto = data.image_per_row * data.rows;
+
+                var feed = newInstafeed( data, resolution, limitphoto );
+
+                console.log('<<<<', feed);
+
+                feed.run();
+            }
+        }
+    }
+
+    SectionInstafeed.prototype = {
+        _run: function() {
+            this.section = document.querySelector('[data-section-type="instafeed"]');
+
+            if (this.section) {
+                this.data = {
+                    access_token: this.section.getAttribute('data-access-token'),
+                    rows: this.section.getAttribute('data-rows'),
+                    image_per_row: this.section.getAttribute('data-image-per-row'),
+                    template: '<div class="instagram__image-wrapper"><a href="{{link}}" id="{{id}}" target="_blank"><div class="instagram__overlay"><p class="instagram__caption">{{caption}}</p><time class="instagram__date">{{model.created_time}}</time></div><img class="instagram__image lazyload" src="{{image}}" data-src="{{image}}"/></a></div>'
+                };
+
+                runInstafeed( this.data );
+            }
+        },
+
+        onLoad: function() {
+            this._run();
+        },
+    };
+
+    return new SectionInstafeed;
+})();
+{% endjavascript %}

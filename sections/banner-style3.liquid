@@ -1,0 +1,463 @@
+<!-- start banner-style3.liquid (SECTION) -->
+<section class="homepage-style-3 banner-style-3-{{ section.id }} {{ section.settings.custom_class }} ">
+    <a href="{{ section.settings.homepage_banner_link }}" class="title-banner-3-{{ section.id }}">
+      {%- assign enable_lazy = section.settings.enable_lazy_load -%}
+      {%- if section.settings.enable_h1 -%}
+        {% if section.settings.homepage_banner_text != blank %}
+        <h1 class="banner-title">{{ section.settings.homepage_banner_text }}</h1>
+        {% else %}
+        <h1 class="banner-title hide">Banner-Desktop-{{ section.id }}</h1>
+        {% endif %} 
+      {%- else -%}
+        {% if section.settings.homepage_banner_text != blank %}
+        <h2 class="banner-title">{{ section.settings.homepage_banner_text }}</h2>
+        {% else %}
+        <h2 class="banner-title hide">{{ section.settings.homepage_banner_text }}</h2>
+        {% endif %} 
+      {%- endif -%}
+      <div class="banner-sub-title" >{{ section.settings.main_banner_sub_title }}</div>
+    </a>
+    
+    <a class="banner-img background-banner-style-3-{{ section.id }}" href="{{ section.settings.homepage_banner_link }}" >
+      
+      {%- if section.settings.homepage_banner_style_3.alt != blank -%}
+        {%- assign banner_alt = section.settings.homepage_banner_style_3.alt | strip_html | escape -%}
+      {%- elsif section.settings.homepage_banner_text != blank -%}
+        {%- assign banner_alt = section.settings.homepage_banner_text | strip_html | escape -%}
+      {%- else -%}
+        {%- assign banner_alt = "Image without description." -%}
+      {%- endif -%}
+
+          <picture>
+             <source media="(min-width: {%- if section.settings.mobile_banner_style_3 != blank -%}768px{%- else -%}0px{%- endif -%})" 
+                    {% if enable_lazy %}data-{% endif %}sizes="100vw" 
+                    {% if enable_lazy %}data-{% endif %}srcset="{{ section.settings.homepage_banner_style_3 | image_url: width: 800 }} 800w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1000 }} 1000w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1100 }} 1100w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1200 }} 1200w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1300 }} 1300w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1400 }} 1400w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1500 }} 1500w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1600 }} 1600w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1700 }} 1700w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1800 }} 1800w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 1900 }} 1900w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 2000 }} 2000w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 2100 }} 2100w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 2200 }} 2200w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 2300 }} 2300w, 
+                    {{ section.settings.homepage_banner_style_3 | image_url: width: 2400 }} 2400w">
+             {%- if section.settings.mobile_banner_style_3 != blank -%}
+              <source media="(max-width: 767px)" 
+                            {% if enable_lazy %}data-{% endif %}sizes="100vw" 
+                            {% if enable_lazy %}data-{% endif %}srcset="{{ section.settings.mobile_banner_style_3 | image_url: width: 450 }} 450w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 550 }} 550w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 650 }} 650w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 750 }} 750w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 850 }} 850w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 950 }} 950w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1050 }} 1050w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1150 }} 1150w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1250 }} 1250w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1350 }} 1350w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1450 }} 1450w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1550 }} 1550w,
+                            {{ section.settings.mobile_banner_style_3 | image_url: width: 1650 }} 1650w">
+             {%- endif -%}
+
+             
+              {% if enable_lazy == true %}
+                <img class="img-banner-link lazyload" data-src="{{ section.settings.homepage_banner_style_3 | image_url: width: 2580 }}" alt="{{ banner_alt }}">
+              {% else %}
+                <img class="img-banner-link" src="{{ section.settings.homepage_banner_style_3 | image_url: width: 2580 }}" alt="{{ banner_alt }}">
+              {% endif %}
+              
+             
+          </picture> 
+    </a>
+</section>
+
+{% style %}
+    #shopify-section-{{ section.id }} .homepage-style-3 {
+      width: 100%;
+    }
+
+    #shopify-section-{{ section.id }} .homepage-style-3 .banner-img {
+     {% unless section.settings.full_with_banne1 %} max-width:1280px; {% endunless %}
+    }
+
+    .homepage-style-3 .title-banner-3-{{ section.id }} {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: {{ section.settings.vasta_headline_align }};
+      left:{{ section.settings.vasta_title_horizontal_position }}%; 
+      top:{{ section.settings.vasta_title_vertical_position }}%;
+      z-index: 2;
+      width: inherit;
+    }
+    .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title,
+    .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title *{ 
+      font-size: {{ section.settings.desktop_text_size }}px;
+      color: {{ section.settings.banner_text_color }};
+      font-weight: {{ section.settings.font_weight }};
+    }
+    .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title,
+    .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title *{ 
+      color: {{ section.settings.banner_text_color }};
+      font-size: {{ section.settings.main_banner_sub_headline_size }}px;
+      font-weight: {{ section.settings.font_weight }};
+    }
+    
+    
+    {% if section.settings.enable_custom_banner_height %}
+    #shopify-section-{{ section.id }} .homepage-style-3 .img-banner-link {
+      height: {{ section.settings.banner_max_height }}px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) { 
+     #shopify-section-{{ section.id }} .homepage-style-3 .img-banner-link {
+        height: auto;
+      }
+    }
+
+    @media (max-width: 1019px) {
+     #shopify-section-{{ section.id }} .homepage-style-3 .img-banner-link {
+        height: {{ section.settings.banner_max_height_tablet }}px;
+      }
+    }
+
+    @media (max-width: 767px) {
+     #shopify-section-{{ section.id }} .homepage-style-3 .img-banner-link {
+        height: {{ section.settings.banner_max_height_mobile }}px;
+      }
+    }
+  {% endif %}
+    @media (max-width: 1019px) {
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title *{ 
+        font-size: {{ section.settings.tablet_text_size }}px;
+      }
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title *{ 
+        font-size: {{ section.settings.main_banner_sub_headline_size_tablet }}px;
+
+      }
+        .homepage-style-3 .title-banner-3-{{ section.id }} {
+          left:{{ section.settings.vasta_title_horizontal_position_tablet }}%; 
+          top:{{ section.settings.vasta_title_vertical_position_tablet }}%;
+          width: inherit;
+      }
+    }
+
+    @media(max-width: 767px){
+      .homepage-style-3 .background-banner-style-3-{{ section.id }}{
+        height:auto;
+      }
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title *{ 
+        font-size: {{ section.settings.mobile_text_size }}px;
+      }
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title *{ 
+        font-size: {{ section.settings.main_banner_sub_headline_size_mobile }}px;
+
+      }
+      .homepage-style-3 .title-banner-3-{{ section.id }} {
+        left:{{ section.settings.vasta_title_horizontal_position_mobile }}%; 
+        top:{{ section.settings.vasta_title_vertical_position_mobile }}%;
+      }
+    }
+    @media(max-width: 479px) {
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-title *{ 
+        font-size: {{ section.settings.mobile_text_size }}px;
+      }
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title,
+      .homepage-style-3 .title-banner-3-{{ section.id }} .banner-sub-title *{ 
+        font-size: {{ section.settings.main_banner_sub_headline_size_mobile }}px;
+
+      }
+    }
+
+
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Banner(Link)",
+  "class": "banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "image_picker",
+      "id": "homepage_banner_style_3",
+      "label": "Banner Image Desktop and Tablet",
+      "info": "1440x500"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_banner_style_3",
+      "label": "Banner Mobile Image",
+      "info": "750x300"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_banner_height",
+      "label": "Enable Custom Banner Height",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height",
+      "min": 250,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height_tablet",
+      "min": 250,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Tablet Banner Height",
+      "default": 430
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height_mobile",
+      "min": 50,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 210
+    },
+    {
+      "type": "checkbox",
+      "id": "full_with_banne1",
+      "label": "Full Width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lazy_load",
+      "label": "Enable Lazy Load",
+      "info": "If this is the first section of the homepage, you have to keep this field unchecked for Google Pagespeed score improvements."
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_h1",
+      "label": "Enable H1 tag",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "homepage_banner_text",
+      "label": "Headline Text"
+    },
+    {
+      "type": "textarea",
+      "id": "main_banner_sub_title",
+      "label": "Sub Headline Text",
+      "placeholder": "Sub Headline text"
+    },
+    {
+      "type": "text",
+      "id": "homepage_banner_link",
+      "label": "Link"
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_size",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Desktop",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Desktop",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tablet_text_size",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Tablet",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Tablet",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_size",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Mobile",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Mobile",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "vasta_headline_align",
+      "label": "Headline Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Horizontal Headline Position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Vertical Headline Position",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Tablet Horizontal Headline Position",
+      "default": 23
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Tablet Vertical Headline Position",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Horizontal Headline Position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Vertical Headline Position",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font Weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "banner_text_color",
+      "label": "Headline Text Color",
+      "default": "#000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner (Link)",
+      "category": "Banner"
+    }
+  ]
+}
+{% endschema %}
+  <!-- end banner-style3.liquid -->

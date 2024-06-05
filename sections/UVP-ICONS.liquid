@@ -1,0 +1,42 @@
+<div class="trust-badges">
+  <ul>
+    {% for block in section.blocks %}
+    <li><img src="{{ block.settings.img | img_url: 'master'}}" alt="img"></li>
+    {% endfor %}
+    
+  </ul>
+</div>
+
+
+{% schema %}
+  {
+    "name": "UVP Icons ",
+    "settings": [],
+    "blocks": [
+    {
+      "type": "uvp-image",
+      "name": "uvp-image",
+      "settings": [
+
+        {
+        "type": "image_picker",
+        "id": "img",
+        "label":"image"
+      }
+      ]
+    }
+  ],
+    
+     "presets": [
+        {
+       "name": "UVP Icons"
+       }
+     ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

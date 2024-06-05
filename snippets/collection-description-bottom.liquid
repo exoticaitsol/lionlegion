@@ -1,0 +1,26 @@
+<!-- start collection-description.liquid (SNIPPET) -->
+
+{% assign show_description = true %}
+
+{% if settings.custom_description contains collection.handle and settings.enable_description %}
+    {% assign show_description = false %}
+{% endif %}
+
+{% if collection.description != blank and settings.announcement_show_description and show_description %}
+    <div class="description-collection text-{{ settings.announcement_description_position }}" style="
+    border-top: 1px solid #e5e5e5;
+    padding-top: 27px;
+">
+        <div class="description-content {% if settings.enable_see_more %}see-more{% endif %} closed text-text ">
+            <div class="description-text  ">
+                {{ collection.description | split: '<!-- split -->' | last }}
+            </div>
+
+            {% if settings.enable_see_more %}
+                <span id="btn-see-more" class="btn-see-more">{{ 'collections.general.see_more' | t }}</span>
+            {% endif %}
+        </div>
+
+    </div>
+{% endif %}
+<!-- End snippet for collection description -->

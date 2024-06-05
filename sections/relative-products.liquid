@@ -1,0 +1,22 @@
+  {%- unless settings.product_disabled_other_fine_products_section -%}
+    {%- section 'relatedproducts' -%}
+  {% else %}
+    <div title="You Might Also Like..." layout="horizontal" sources="related_views,similar_products,related_recently_viewed,related_cart,related_purchase" id="isp-related-widget-1">‎</div>
+  {%- endunless -%}
+{% schema %}
+  {
+    "name": "You Might Also Like",
+    "settings": [],
+      "presets": [
+        {
+         "name":"You Might Also Like"
+      }
+      ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

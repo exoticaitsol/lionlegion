@@ -1,0 +1,42 @@
+
+<section class="main_coll_home second_one">
+  
+  <div class="main_coll_home_inner">
+    {%- for collection in section.settings.collection_list -%}
+    <div class="main_coll_home_box {% if forloop.index > 10 %}mobile-hide-coll{% endif %}">
+      <div class="main_coll_home_img">
+      <a href="{{  collection.url }}">  <img src="{{ collection.featured_image | img_url: '600x600' }}" alt="img"> </a>
+      </div>
+      <div class="main_coll_home_content">
+         <h2 class="title_h3"><a href="{{  collection.url }}">{{ collection.title }}</a></h2>
+      </div>
+     </div>
+     {% endfor %}
+    </div>
+ 
+</section>
+{% schema %}
+  {
+    "name": "Sub Collection",
+    "settings": [
+           {
+                "type": "collection_list",
+                "id": "collection_list",
+                "label": "Collections"
+            }
+    ],
+    
+    
+     "presets": [
+      {
+        "name": "Sub Collection"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

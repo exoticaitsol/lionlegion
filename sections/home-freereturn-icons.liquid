@@ -1,0 +1,64 @@
+<section class="freereturn_sec">
+  <!-- <h1 class="home-head-title"> -->
+ 
+  <div class="freereturn_inner">
+
+     {% for block in section.blocks %}
+    <div class="freereturn_box">
+     
+      <div class="freereturn_img">
+        <img src="{{ block.settings.icon | img_url: "original" }}" alt="img">
+       </div>
+      <div class="freereturn_content">
+         <h4 class="title_h4">{{ block.settings.title }}</h2>
+         <p>{{ block.settings.desc }}</p>
+      </div>
+     </div>
+    {% endfor %}
+    
+      
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Home Free-Return Icons",
+    "settings": [
+    
+    ],
+          "blocks": [
+    {
+      "type": "usp_icon_text",
+      "name": "usp_icon_text",
+      "settings": [
+         {
+          "id": "title",
+          "type": "text",
+          "label": "Add Title"
+        },
+         {
+          "id": "desc",
+          "type": "textarea",
+          "label": "Add description"
+        },
+        {
+          "id": "icon",
+          "type": "image_picker",
+          "label": "Add Icon"
+        }
+      ]
+    }
+  ],
+        "presets": [
+      {
+        "name": "Home Free-Return Icons"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

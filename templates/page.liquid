@@ -1,0 +1,32 @@
+<!-- start page.liquid (TEMPLATE) -->
+<div class="wrapper">
+  {%- liquid
+    if page.handle == 'about-lion-legion'
+      render 'page-header-about'
+    endif
+  -%}
+  {%- if page.title == 'Reviews' -%}
+    <style>
+      #stamped-badge-3 > svg {
+        font-size: initial;
+        font-family: initial;
+      }
+      #stamped-badge-3 > .stamped-badge-powered {
+        display: none;
+      }
+    </style>
+    <h1 class="mx-auto max-w-max">
+      <div id="stamped-reviews-widget" data-widget-type="site-badge" data-badge-type="badge"><span class="rte-h1">{{ page.title }}</span></div>
+      <span class="sr-only">
+        {{ page.title }}
+      </span>
+    </h1>
+  {%- else -%}
+     {%- render 'header-searchbar'%}
+    <h1 class="rte-h1">{{ page.title }}</h1>
+  {%- endif -%}
+   
+  <div class="rte min-h-screen">
+    {{ page.content }}
+  </div>
+</div>

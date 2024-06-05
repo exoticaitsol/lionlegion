@@ -1,0 +1,27 @@
+<!-- start header-searchbar (SNIPPET) -->
+{%- if 'mobile' == style -%}
+    <form id="SearchFormMobile" action="/search" method="get" class="flex justify-center w-full gap-1 mt-4 transition-all duration-300 md:hidden">
+        <input id="SearchInput" aria-label="search-text" type="text" class="w-3/4 p-2 mt-0 border border-gray-200 border-solid search-text h-9 font-base" name="q" value="{{ search.terms | escape }}" placeholder="{{ header_searchbar_placeholder }}" required>
+
+        <button name="SearchButtonMobile" id="SearchButtonMobile" type="submit" class="uppercase button h-9">
+        <span >{{ 'general.search.submit' | t }}</span>
+        </button>
+    </form>
+{%- else -%}
+    <form id="search-form" action="/search" method="get" class="no-mobile">
+        <input aria-label="search-text" type="text" class="search-text" name="q" id="Search-{{ search_id }}" value="{{ search.terms | escape }}" placeholder="{{ header_searchbar_placeholder }}" required>
+        
+        <button id="SearchButton" type="submit" class="button">
+            <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+        </button>
+    </form>
+
+      <!-- <form id="search-form" action="/pages/search-results-page" method="get" class="no-mobile">
+        <input aria-label="search-text" type="text" class="search-text" name="q" id="Search-{{ search_id }}" value="{{ search.terms | escape }}" placeholder="{{ header_searchbar_placeholder }}" required>
+        
+        <button id="SearchButton" type="submit" class="button">
+            <span class="icon-fallback-text">{{ 'general.search.submit' | t }}</span>
+        </button>
+    </form> -->
+ 
+{%- endif -%}

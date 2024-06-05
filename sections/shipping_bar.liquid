@@ -1,0 +1,502 @@
+<!-- start shipping_bar.liquid (SECTION) -->
+<div data-section-type="shipping-bar" class="tested">
+  {%- if section.settings.enabled_shipping_bar -%}
+    {%- if section.settings.enabled_only_homepage == false or template.name == 'index' -%}
+      <div id="shipping-bar" class="shipping-bar {% if section.settings.position %} fixed {% endif %}">
+        <div class="wrapper style-wrapper discount-style">
+          {%- for block in section.blocks -%}
+              {%- if block.type == 'discount-style' and section.settings.shipping_bar_style == "dicount_style" or block.type == 'discount-style' and template == 'cart' and section.settings.anable_discout_in_cart == true -%}
+              <div class="no-mobile shipping-bar_left-section dicount_style">
+                {%- unless settings.disable_shippingbar_text_email -%}
+                  {%- if section.settings.enable_link_shippingbar_text_email -%}
+                    <a href="mailto:{{ settings.text_email }}">{% if settings.text_email != blank %}{% render 'icon-envelope' %}{% endif %} <span>{{settings.text_email}}</span></a>
+                  {%- else -%}
+                    <span>{% if settings.text_email != blank %}{% render 'icon-envelope' %}{% endif %} {{settings.text_email}}</span>
+                  {%- endif -%}
+                {%- endunless -%}
+              </div>
+                <section class="dicount_style">
+                  <p class="hide">Shipping discount</p>
+                  {%- assign value_freeShipping = block.settings.shipping_bar_value_discount | times: 100 -%}
+                  {%- assign quantity_freeShipping = block.settings.shipping_bar_free_qtd_range -%}
+                  {%- if block.settings.shipping_bar_type_freeshipping == "shipping_bar_free_price" -%} <!-- IF FREE SHIPPING BY PRICE -->
+                    {%- if cart.total_price >= value_freeShipping -%}
+                      <p class="shipping-bar-text">{{ block.settings.shipping_bar_freeshipping_text }} </p>
+                      {%- else -%}
+                      <p class="shipping-bar-text text-price free-shipping-bar">{{ block.settings.shipping_bar_free_shipping_before }} <span class="free_shipping money">{{ value_freeShipping | minus: cart.total_price | money }}</span> {{ block.settings.shipping_bar_free_shipping_after }}</p>
+                    {%- endif -%}
+                  {%- elsif block.settings.shipping_bar_type_freeshipping == "shipping_bar_free_qtd" -%} <!-- IF FREE SHIPPING BY QUANTITY -->
+                    {%- if cart.item_count >= quantity_freeShipping %}
+                      <p class="shipping-bar-text">{{ block.settings.shipping_bar_freeshipping_text }} </p>
+                      {%- else -%}
+                      <p class="shipping-bar-text text-quantity free-shipping-bar">{{ block.settings.shipping_bar_free_shipping_before }}&nbsp<span class="free_shipping qtd">{{ quantity_freeShipping | minus: cart.item_count }}</span> {{ block.settings.shipping_bar_free_shipping_after }}</p>
+                    {%- endif -%}
+                  {%- endif -%}
+                </section>
+                <div class="no-mobile shipping-bar_right-section dicount_styles">
+                  {%- unless settings.disable_shippingbar_phone -%}
+                    {%- if section.settings.enable_link_shippingbar_text_phone -%}
+                      <a href="tel:{{ settings.text_tel }}">{% if settings.text_tel != blank %}{% render 'icon-phone' %}{% endif %} <span>{{settings.text_tel}}</span></a>
+                    {%- else -%}
+                      <span>{% if settings.text_tel != blank %}{% render 'icon-phone' %}{% endif %} {{settings.text_tel}}</span>
+                    {%- endif -%}
+                  {%- endunless -%}
+                </div>
+              {%- elsif block.type == 'sections-style' and section.settings.shipping_bar_style == "sections_style" and section.settings.anable_discout_in_cart == false or block.type == 'sections-style' and section.settings.shipping_bar_style == "sections_style" and section.settings.anable_discout_in_cart == true and template != 'cart' -%}
+                <section class="sections_style">
+                  <h3 class="hide">Shipping Bar With Icons</h3>
+                  <div class="shipping-bar-icons shipping-bar_left-section">
+                    {%- assign image_temp = block.settings.shipping-bar_icon-left-section | image_url: width: 60 -%}
+                    {%- unless image_temp contains 'assets/no-image' -%}
+                      {%- if block.settings.shipping-bar_icon-left-section.alt != blank -%}
+                        {%- assign image_alt = block.settings.shipping-bar_icon-left-section.alt | strip_html | escape -%}
+                      {%- elsif block.settings.shipping-bar_text-left-section != blank -%}
+                        {%- assign image_alt = block.settings.shipping-bar_text-left-section | strip_html | escape -%}
+                      {%- else -%}
+                        {%- assign image_alt = "Image without description." -%}
+                      {%- endif -%}
+                      {%- render 'responsive-image',
+                        id_prefix: 'shipping_bar1',
+                        image: block.settings.shipping-bar_icon-left-section,
+                        image_class: 'no-mobile',
+                        active_lazy: false,
+                        no_wrap: true,
+                        alt_text: image_alt,
+                        max_width: 50
+                      -%}
+                    {%- endunless -%}
+
+                    <span>{{ block.settings.shipping-bar_text-left-section }}</span>
+                  </div>
+                  <div class="shipping-bar-icons shipping-bar_middle-section">
+                    {%- assign image_temp = block.settings.shipping-bar_icon-middle-section | image_url: width: 60 -%}
+                    {%- unless image_temp contains 'assets/no-image' -%}
+                      {%- if block.settings.shipping-bar_icon-middle-section.alt != blank -%}
+                        {%- assign image_alt = block.settings.shipping-bar_icon-middle-section.alt | strip_html | escape -%}
+                      {%- elsif block.settings.shipping-bar_text-middle-section != blank -%}
+                        {%- assign image_alt = block.settings.shipping-bar_text-middle-section | strip_html | escape -%}
+                      {%- else -%}
+                        {%- assign image_alt = "Image without description." -%}
+                      {%- endif -%}
+                      {%- render 'responsive-image',
+                        id_prefix: 'shipping_bar2',
+                        image: block.settings.shipping-bar_icon-middle-section,
+                        image_class: 'no-mobile',
+                        active_lazy: false,
+                        no_wrap: true,
+                        alt_text: image_alt,
+                        max_width: 50
+                      -%}
+                    {%- endunless -%}
+
+                    <span>{{ block.settings.shipping-bar_text-middle-section }}</span>
+                  </div>
+                  <div class="shipping-bar-icons shipping-bar_right-section">
+                    {%- assign image_temp = block.settings.shipping-bar_icon-right-section | image_url: width: 60 -%}
+                    {%- unless image_temp contains 'assets/no-image' -%}
+                    {%- if block.settings.shipping-bar_icon-right-section.alt != blank -%}
+                      {%- assign image_alt = block.settings.shipping-bar_icon-right-section.alt | strip_html | escape -%}
+                    {%- elsif block.settings.shipping-bar_text-right-section != blank -%}
+                      {%- assign image_alt = block.settings.shipping-bar_text-right-section | strip_html | escape -%}
+                    {%- else -%}
+                      {%- assign image_alt = "Image without description." -%}
+                    {%- endif -%}
+                    {%- render 'responsive-image',
+                        id_prefix: 'shipping_bar3',
+                        image: block.settings.shipping-bar_icon-right-section,
+                        image_class: 'no-mobile',
+                        active_lazy: false,
+                        no_wrap: true,
+                        alt_text: image_alt,
+                        max_width: 50
+                      -%}
+                    {%- endunless -%}
+
+                    <span>{{ block.settings.shipping-bar_text-right-section }}</span>
+                  </div>
+                </section>
+              {%- elsif block.type == 'info-style' and section.settings.shipping_bar_style == "info_style" and section.settings.anable_discout_in_cart == false or block.type == 'info-style' and section.settings.shipping_bar_style == "info_style" and section.settings.anable_discout_in_cart == true and template != 'cart' -%}
+                <section class="info-style">
+                  <h3 class="hide">Shipping Bar With Info Style</h3>
+                  <div class="no-mobile shipping-bar_left-section dicount_style">
+                    {%- unless settings.disable_shippingbar_text_email != blank -%}
+                      {%- if section.settings.enable_link_shippingbar_text_email -%}
+                      <a href="mailto:{{ settings.text_email }}">{% if settings.text_email != blank %}{% render 'icon-envelope' %}{% endif %} <span>{{settings.text_email}}</span></a>
+                      {%- else -%}
+                        <span>{% if settings.text_email != blank %}{% render 'icon-envelope' %}{% endif %} {{settings.text_email}}</span>
+                      {%- endif -%}
+                    {%- endunless -%}
+                  </div>
+                  <div class="shipping-bar_middle-section">
+                    <span>{{ block.settings.shipping_bar_info_text }}</span>
+                  </div>
+                  <div class="no-mobile shipping-bar_right-section dicount_styles">
+                    {%- unless settings.disable_shippingbar_phone != blank -%}
+                      {%- if section.settings.enable_link_shippingbar_text_phone -%}
+                        <a href="tel:{{ settings.text_tel }}">{% if settings.text_tel != blank %}{% render 'icon-phone' %}{% endif %} <span>{{settings.text_tel}}</span></a>
+                      {%- else -%}
+                        <span>{% if settings.text_tel != blank %}{% render 'icon-phone' %}{% endif %} {{settings.text_tel}}</span>
+                      {%- endif -%}
+                    {%- endunless -%}
+                  </div>
+                </section>
+
+              {%- endif -%}
+          {%- endfor -%}
+          </div>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+  </div>
+
+  <script>
+    var shipping_bar = shipping_bar || {};
+  {% for block in section.blocks %}
+    {% if "discount-style" == block.type %}
+      shipping_bar = {
+        style_shipping: "{{ section.settings.shipping_bar_style | escape }}",
+        enable_discount: {{ section.settings.anable_discout_in_cart }},
+        free_shipping_text: "{{ block.settings.shipping_bar_freeshipping_text | escape }}",
+        first_free_shipping_text: "{{ block.settings.shipping_bar_free_shipping_before | escape }}",
+        second_free_shipping_text: "{{ block.settings.shipping_bar_free_shipping_after | escape }}",
+        text_cart_above_button_sucess:"{{ block.settings.shipping_bar_freeshipping_text | escape }}",
+        text_message_initial_before:"{{ block.settings.shipping_bar_free_shipping_before | escape }}",
+        text_message_initial_after:"{{ block.settings.shipping_bar_free_shipping_after | escape }}",
+
+        price_enable: '{{ block.settings.shipping_bar_type_freeshipping | escape }}',
+        shipping_quantity: {{ block.settings.shipping_bar_free_qtd_range }},
+        shipping_value: {{ block.settings.shipping_bar_value_discount | times: 100 }}
+      };
+    {% endif %}
+  {% endfor %}
+  </script>
+
+  {% style %}
+    :root {
+      {% for block in section.blocks %}
+      {% if 'sections-style' == block.type %}
+      --ship-line-color: {{ block.settings.line_color }};
+      {% endif %}
+          {% if 'discount-style' == block.type %}
+            --freeship-back-color: {{ block.settings.free_shipping_background_color }};
+            --freeship-value-color: {{ block.settings.free_shipping_text_color }};
+          {% endif %}
+      {% endfor %}
+
+      --ship-back-color: {{ section.settings.background_color }};
+      --ship-text-color: {{ section.settings.text_color }};
+
+      --vasta-fixed-filter: {% if section.settings.position %} 69px {% else %} 20px {% endif %};
+
+    }
+    {% if section.settings.position %}
+
+      #shopify-section-header {
+            padding-top: 46px;
+      }
+
+      .blog-sidebar {
+        top: 45px;
+      }
+
+      @media(max-width: 767px){
+        #shopify-section-header {
+          padding-top: 20px;
+          top: 20px;
+        }
+      }
+    {% else %}
+      #shopify-section-header {
+          padding-top: 0px;
+      }
+
+      .template-collection .content-collection.sticky {
+        top: 0px
+      }
+
+      .blog-sidebar {
+        top: 0px;
+      }
+
+    {% endif %}
+
+    {% if section.settings.enabled_shipping_bar != true %}
+      #shopify-section-header {
+          padding-top: 0px;
+      }
+      .template-collection .content-collection.sticky, .blog-sidebar {
+        top: 0px
+      }
+      .blog-sidebar {
+        top: 0px;
+      }
+    {% endif %}
+
+    {% if section.settings.enabled_only_homepage  and template.name != 'index' %}
+       #shopify-section-header {
+          padding-top: 0px;
+      }
+      .template-collection .content-collection.sticky  {
+        top: 0px;
+      }
+      .blog-sidebar {
+        top: 0px;
+      }
+
+    {% endif %}
+  {% endstyle %}
+
+  {% schema %}
+{
+  "name": "Shipping Bar (Sitewide)",
+  "class": "shipping-bar",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_shipping_bar",
+      "label": "Enable Section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_only_homepage",
+      "label": "Enable Shipping bar Only On Homepage",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_link_shippingbar_text_email",
+      "label": "Enable Email Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_link_shippingbar_text_phone",
+      "label": "Enable Phone Link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "shipping_bar_style",
+      "label": "Sitewide Shipping Bar Style",
+      "options": [
+        {
+          "label": "Sections With Icons",
+          "value": "sections_style"
+        },
+        {
+          "label": "Discount Threshold",
+          "value": "dicount_style"
+        },
+        {
+          "label": "Informational",
+          "value": "info_style"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "position",
+      "label": "Enable Sticky Shipping Bar",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "anable_discout_in_cart",
+      "label": "Keep Shipping Bar Discount Threshold Only On Cart Page",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sections-style",
+      "name": "Section With Icons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color",
+          "id": "line_color",
+          "label": "Divisor Line Color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "image_picker",
+          "id": "shipping-bar_icon-left-section",
+          "label": "Icon Image - Left Section",
+          "info": "80x80"
+        },
+        {
+          "type": "text",
+          "id": "shipping-bar_text-left-section",
+          "label": "Text - Left Section"
+        },
+        {
+          "type": "image_picker",
+          "id": "shipping-bar_icon-middle-section",
+          "label": "Icon Image - Middle Section",
+          "info": "80x80"
+        },
+        {
+          "type": "text",
+          "id": "shipping-bar_text-middle-section",
+          "label": "Text - Middle Section"
+        },
+        {
+          "type": "image_picker",
+          "id": "shipping-bar_icon-right-section",
+          "label": "Icon Image - Right Section",
+          "info": "80x80"
+        },
+        {
+          "type": "text",
+          "id": "shipping-bar_text-right-section",
+          "label": "Text - Right Section"
+        }
+      ]
+    },
+    {
+      "type": "discount-style",
+      "name": "Discount Threshold",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Discount Threshold",
+          "info": "Make sure to include the email and phone number to 'Customize>Theme settings > Store Info."
+        },
+        {
+          "type": "select",
+          "id": "shipping_bar_type_freeshipping",
+          "label": "Threshold Default Style",
+          "options": [
+            {
+              "label": "By Price",
+              "value": "shipping_bar_free_price"
+            },
+            {
+              "label": "By Quantity",
+              "value": "shipping_bar_free_qtd"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "free_shipping_background_color",
+          "label": "Discount Price Background Color",
+          "default": "#E32C2B"
+        },
+        {
+          "type": "color",
+          "id": "free_shipping_text_color",
+          "label": "Discount Price Text Color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Settings Of Free Shipping by Price"
+        },
+        {
+          "type": "range",
+          "id": "shipping_bar_value_discount",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "£",
+          "label": "Free Shipping Value",
+          "default": 50
+        },
+        {
+          "type": "header",
+          "content": "Settings of Free Shipping by Quantity"
+        },
+        {
+          "type": "range",
+          "id": "shipping_bar_free_qtd_range",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "label": "Product Qtd of Free Shipping Bar",
+          "default": 10
+        },
+        {
+          "type": "text",
+          "id": "shipping_bar_free_shipping_before",
+          "label": "Text Before Price/Quantity",
+          "default": "WE PAY SHIPPING ON ORDERS OVER"
+        },
+        {
+          "type": "text",
+          "id": "shipping_bar_free_shipping_after",
+          "label": "Text After Price/Quantity"
+        },
+        {
+          "type": "text",
+          "id": "shipping_bar_freeshipping_text",
+          "label": "Free Shipping Message After Threshold is Met",
+          "default": "Congratulations! We'll Pay Your Shipping"
+        }
+      ]
+    },
+    {
+      "type": "info-style",
+      "name": "Informational",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "shipping_bar_info_text",
+          "label": "Center Bar Text",
+          "info": "Make sure to include the email and phone number to 'Customize>Theme settings > Store Info."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+  {% javascript %}
+  window.SectionShippingBar = (function(){
+    function SectionShippingBar() {
+      this._run();
+    }
+
+    SectionShippingBar.prototype = {
+      _run: function() {
+        update_shipping_bar(VastaShop.Cart.current.total_price, VastaShop.Cart.current.item_count);
+      },
+
+      onSelect: function() {
+        this._run();
+      },
+
+      onUnload: function() {
+
+      }
+    };
+
+    return new SectionShippingBar;
+    })();
+  {% endjavascript %}

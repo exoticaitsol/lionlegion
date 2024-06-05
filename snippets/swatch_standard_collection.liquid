@@ -1,0 +1,38 @@
+<!-- start swatch_standard_collection.liquid (SNIPPET) -->
+{%- assign product_temp = prod -%}
+
+{%- for value in product_option.values -%}
+    
+    {%- assign url_variant = product_temp.url -%}
+    {%- assign id_variant = product_temp.id -%}
+    {%- for variant in product_temp.variants -%}
+           
+        {%- if variant.options contains value and variant.featured_image != blank -%}
+            
+            {%- assign url_variant = variant.url -%}  
+            {%- assign id_variant = variant.id -%}         
+        {%- endif -%}
+    {%- endfor -%}
+    
+    {%- assign name_swatch = 'Size' -%}
+    {%- if settings.label_swatch_color_collection != blank -%}
+        {%- assign name_swatch = settings.label_swatch_color_collection -%}
+    {%- endif -%}
+
+    {%- if product_option.name == name_swatch -%}
+    <label class="swatch-element-standard " data-swatch="{{ value | handle }}">
+        <input type="radio" 
+               id="swatch-input-standard-variant-{{ forloop.index }}-{{ id_variant }}"
+               class="swatch-variant-value jq-swatch-element" 
+               value="{{ value | handle }}" 
+               data-swatch-index="{{ swatch_index }}" 
+               name="swatch_element_standard" 
+               {% if forloop.index == 1 and settings.enabled_show_atc_all_variants_choosed == false %} checked {% endif %}
+               {% if swatch_index > 1 %} disabled {% endif %}
+               required/>
+               
+       <a title="Swatch" id="swatch-standard-variant-{{ forloop.index | times: forloop.index }}-{{ id_variant }}" aria-label="Swatch Standard Variant" href="{{ url_variant }}" > <span class="swatch-value {% if config.font_bold_enabled %} bold {% endif %} {{ config.text_transform }}" >{{ value }}</span> </a>
+        <span class="swatch-value-checked">{% render 'icon-check' %}</span>
+    </label>
+    {%- endif -%}
+{%- endfor -%}

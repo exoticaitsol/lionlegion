@@ -1,0 +1,620 @@
+<!-- start banner-style1.liquid (SECTION) -->
+<section class="shopify-section banner homepage-style-1 {{ section.settings.custom_class }}">
+  <h1 class="hide">Funny T Shirts - Lion Legion</h1>
+  <div class="banner-img">
+    {%- assign enable_lazy = section.settings.enable_lazy_load -%}
+    {%- if section.settings.homepage_banner_style_1.alt != blank -%}
+      {%- assign image_alt = section.settings.homepage_banner_style_1.alt | strip_html | escape -%}
+    {%- elsif section.settings.main_banner_title != blank -%}
+      {%- assign image_alt = section.settings.main_banner_title | strip_html | escape -%}
+    {%- else -%}
+      {%- assign image_alt = "Image without description." -%}
+    {%- endif -%}
+
+           <picture>
+             <source media="(min-width: {%- if section.settings.mobile_banner_style_1 != blank -%}768px{%- else -%}0px{%- endif -%})" sizes="100vw" 
+                    src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw" 
+                    srcset="{{ section.settings.homepage_banner_style_1 | image_url: width: 800 }} 800w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1000 }} 1000w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1100 }} 1100w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1200 }} 1200w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1300 }} 1300w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1400 }} 1400w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1500 }} 1500w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1600 }} 1600w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1700 }} 1700w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1800 }} 1800w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 1900 }} 1900w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 2000 }} 2000w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 2100 }} 2100w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 2200 }} 2200w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 2300 }} 2300w, 
+                    {{ section.settings.homepage_banner_style_1 | image_url: width: 2400 }} 2400w">
+             {%- if section.settings.mobile_banner_style_1 != blank -%}
+              <source media="(max-width: 767px)" sizes="100vw" 
+                      src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw" 
+                      srcset="{{ section.settings.mobile_banner_style_1 | image_url: width: 450 }} 450w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 550 }} 550w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 650 }} 650w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 750 }} 750w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 850 }} 850w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 950 }} 950w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1050 }} 1050w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1150 }} 1150w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1250 }} 1250w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1350 }} 1350w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1450 }} 1450w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1550 }} 1550w,
+                            {{ section.settings.mobile_banner_style_1 | image_url: width: 1650 }} 1650w">
+             {%- endif -%}
+             <img {% if enable_lazy %}class="lazyload"{% endif %} src="{{ section.settings.homepage_banner_style_1 | image_url: width: 300 }}" alt="{{ image_alt }}" onload="window.performance.mark('banner.load')">
+          </picture> 
+      {%- if section.settings.main_banner_title != "" -%}
+        <div class="banner-titles">
+           {%- if section.settings.enable_h1 -%} 
+                <h1 class="banner-title">{{ section.settings.main_banner_title }}</h1>
+            {%- else -%}
+                <h2 class="banner-title">{{ section.settings.main_banner_title }}</h2>
+            {%- endif -%}
+          <div class="banner-sub-title">{{ section.settings.main_banner_sub_title }}</div>
+        </div>
+      {%- else -%}
+          <h2 class="hide" style="top:{{ section.settings.vasta_title_vertical_position }}%; left:{{ section.settings.vasta_title_horizontal_position }}%">{{ shop.name }}</h2>
+          <div class="banner-titles">
+            <div class="banner-sub-title" >{{ section.settings.main_banner_sub_title }}</div>
+          </div>
+      {%- endif -%}
+
+      {%- assign count = 0 -%}
+      <div class="slider-buttons" id="CallToAction">
+          {%- for block in section.blocks -%}
+              {%- assign count = count | plus: 1 -%}
+              <a id="Banner1Btn-{{ forloop.index }}" class="{%- if block.settings.show_mobile_buttons == false -%} no-mobile {%- endif %} btn btn-v {{ section.settings.vasta_buttons_hover_effect }}" title="{{ block.settings.linktext | strip_html | escape }}" href="{{ block.settings.link }}">{{ block.settings.linktext }}</a>
+          {%- endfor -%}
+      </div>
+  </div>
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Banner(Three Buttons)",
+  "class": "banner",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "Custom Class",
+      "info": "Custom class to apply css styles for specific sections"
+    },
+    {
+      "type": "image_picker",
+      "id": "homepage_banner_style_1",
+      "label": "Banner Image Desktop and Tablet",
+      "info": "1440x500"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_banner_style_1",
+      "label": "Banner Mobile Image",
+      "info": "750x300"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_banner_height",
+      "label": "Enable Custom Banner Height",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height",
+      "min": 250,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height_tablet",
+      "min": 250,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Tablet Banner Height",
+      "default": 430
+    },
+    {
+      "type": "range",
+      "id": "banner_max_height_mobile",
+      "min": 50,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 210
+    },
+    {
+      "type": "checkbox",
+      "id": "full_with_banne1",
+      "label": "Full Width"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lazy_load",
+      "label": "Enable Lazy Load",
+      "info": "If this is the first section of the homepage, you have to keep this field unchecked for Google Pagespeed score improvements."
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_h1",
+      "label": "Enable H1 tag",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "main_banner_title",
+      "label": "Headline Text",
+      "placeholder": "Headline text"
+    },
+    {
+      "type": "textarea",
+      "id": "main_banner_sub_title",
+      "label": "Sub Headline Text",
+      "placeholder": "Sub Headline text"
+    },
+    {
+      "type": "range",
+      "id": "main_banner_headline_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Desktop",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Desktop",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "main_banner_headline_size_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Tablet",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Tablet",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "main_banner_headline_size_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Headline Font Size on Mobile",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "main_banner_sub_headline_size_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Sub Headline Font Size on Mobile",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "vasta_headline_align",
+      "label": "Headline Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Horizontal Headline Position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop Vertical Headline Position",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Tablet Horizontal Headline Position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position_tablet",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Tablet Vertical Headline Position",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_horizontal_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Horizontal Headline Position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "vasta_title_vertical_position_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile Vertical Headline Position",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "banner_titcolor",
+      "label": "Headline Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "banner_sub_titcolor",
+      "label": "Sub Headline Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "select",
+      "id": "vasta_buttons_hover_effect",
+      "label": "Button Hover Effect",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "effect_1",
+          "label": "Curtain"
+        },
+        {
+          "value": "effect_2",
+          "label": "Fade"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "vasta_buttons_color_1",
+      "label": "Button Background Color",
+      "default": "#000"
+    },
+    {
+      "type": "color",
+      "id": "vasta_buttons_text_color_1",
+      "label": "Button Text Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "vasta_border_color_1",
+      "label": "Button Border Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "vasta_border_color_1_hover",
+      "label": "Button Hover Border Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "vasta_buttons_hover_color_1",
+      "label": "Button Hover Background Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "vasta_buttons_hover_text_color_1",
+      "label": "Button Hover Text Color",
+      "default": "#000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "select",
+      "name": "Button",
+      "settings": [
+        {
+          "id": "linktext",
+          "type": "text",
+          "label": "Button Text",
+          "default": "Click Here"
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Button Link"
+        },
+        {
+          "type": "range",
+          "id": "vasta_button_horizontal_position",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button Horizontal Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "vasta_button_vertical_position",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button Vertical Position",
+          "default": 15
+        },
+        {
+          "type": "checkbox",
+          "id": "show_mobile_buttons",
+          "label": "Show Button On Mobile",
+          "default": false,
+          "info": "This option enable this button on mobile banner."
+        },
+        {
+          "type": "range",
+          "id": "vasta_button_horizontal_position_mobile",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button Horizontal Position on Mobile",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "vasta_button_vertical_position_mobile",
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Button Vertical Position on Mobile",
+          "default": 15
+        },
+        {
+          "type": "range",
+          "id": "vasta_button_max_width",
+          "min": 10,
+          "max": 400,
+          "step": 10,
+          "unit": "px",
+          "label": "Button Max Width on Mobile",
+          "default": 250
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner (Three Buttons)",
+      "category": "Banner"
+    }
+  ]
+}
+{% endschema %}
+<!-- end banner-style1.liquid -->
+
+{% style %}
+  {% for block in section.blocks %}
+  #Banner1Btn-{{ forloop.index }} {
+    left:{{ block.settings.vasta_button_horizontal_position }}%;
+    top:{{ block.settings.vasta_button_vertical_position }}%
+  }
+  {% endfor %}
+  #shopify-section-{{ section.id }} .homepage-style-1 .banner-img {
+      display: block;
+     {% unless section.settings.full_with_banne1 %} max-width:1280px; {% endunless %}
+  }
+  #shopify-section-{{ section.id }} .btn-v {
+    background-color: {{ section.settings.vasta_buttons_color_1 }};
+    color: {{ section.settings.vasta_buttons_text_color_1 }};
+    border: 3px solid {{ section.settings.vasta_border_color_1 }};
+    
+    {% if section.settings.vasta_buttons_hover_effect == 'none' %}
+    transition: unset;
+    {% endif %}
+  }
+  #shopify-section-{{ section.id }} .btn-v:hover {
+    border: 3px solid {{ section.settings.vasta_border_color_1_hover }};
+  }
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .slider-buttons .btn-v.{{ section.settings.vasta_buttons_hover_effect }}:hover {
+    background-color: {{ section.settings.vasta_buttons_hover_color_1 }};
+    color: {{ section.settings.vasta_buttons_hover_text_color_1 }};
+  }
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .slider-buttons .btn-v.effect_1:before{
+    background-color: {{ section.settings.vasta_buttons_hover_color_1 }};
+  }
+
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles{
+    top:{{ section.settings.vasta_title_vertical_position }}%; 
+    left:{{ section.settings.vasta_title_horizontal_position }}%;
+    padding: 0 20px;
+  }
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title,
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title *{
+    color:{{ section.settings.banner_titcolor }};
+    font-size: {{ section.settings.main_banner_headline_size | divided_by: 16.0 }}rem;
+    text-align: {{ section.settings.vasta_headline_align }};
+
+  }
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title,
+  #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title *{
+    font-size: {{ section.settings.main_banner_sub_headline_size | divided_by: 16.0 }}rem;
+    color:{{ section.settings.banner_sub_titcolor }};
+    text-align: {{ section.settings.vasta_headline_align }};
+
+  }
+
+  @media (max-width: 1019px) {
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles{
+      top:{{ section.settings.vasta_title_vertical_position_tablet }}%; 
+      left:{{ section.settings.vasta_title_horizontal_position_tablet }}%;
+      }
+      #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title,
+      #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title *{
+        font-size: {{ section.settings.main_banner_headline_size_tablet | divided_by: 16.0 }}rem;
+      }
+      #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title,
+      #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title *{
+        font-size: {{ section.settings.main_banner_sub_headline_size_tablet | divided_by: 16.0 }}rem;
+      }
+    }
+
+  @media(max-width: 767px) {
+    {% for block in section.blocks %}
+      #Banner1Btn-{{ forloop.index }} {
+        left:{{ block.settings.vasta_button_horizontal_position_mobile }}%;
+        top:{{ block.settings.vasta_button_vertical_position_mobile }}%
+      }
+                            
+	{% comment %}
+      #Banner1Btn-{{ forloop.index }}.btn-v {
+        max-width: {{ block.settings.vasta_button_max_width }}px;
+      }
+	{% endcomment %}
+                            
+    {% endfor %} 
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles{
+      top:{{ section.settings.vasta_title_vertical_position_mobile }}%; 
+      left:{{ section.settings.vasta_title_horizontal_position_mobile }}%;
+    }
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title,
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-title *{
+      font-size: {{ section.settings.main_banner_headline_size_mobile | divided_by: 16.0 }}rem;
+    }
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title,
+    #shopify-section-{{ section.id }} .homepage-style-1.banner .banner-titles .banner-sub-title *{
+      font-size: {{ section.settings.main_banner_sub_headline_size_mobile | divided_by: 16.0 }}rem;
+    }
+  }
+                            
+@media(max-width: 587px) {
+  {% for block in section.blocks %}
+    #Banner1Btn-{{ forloop.index }}.btn-v {
+    max-width: {{ block.settings.vasta_button_max_width }}px;
+    }
+  {% endfor %} 
+}
+  {% if section.settings.enable_custom_banner_height %}
+     #shopify-section-{{ section.id }} .homepage-style-1 .banner-img {
+       overflow: hidden;
+       display: flex;
+       height: 0;
+       padding-top: {{ section.settings.banner_max_height }}px;
+       top: 0;
+       left: 0;
+       width: 100%;
+       position: relative;
+     }
+     #shopify-section-{{ section.id }} .homepage-style-1 .banner-img img {
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       max-width: 100%;
+       width: 100%;
+       object-fit: cover;
+       height: 100%;
+     }
+
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) { 
+    #shopify-section-{{ section.id }} .homepage-style-1 .banner-img img {
+      height: auto;
+    }
+  }
+  @media (max-width: 1019px) {
+    #shopify-section-{{ section.id }} .homepage-style-1 .banner-img {
+      padding-top: {{ section.settings.banner_max_height_tablet }}px;
+    }
+  }
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} .homepage-style-1 .banner-img {
+      padding-top: {{ section.settings.banner_max_height_mobile }}px;
+    }
+  }
+  {% endif %}
+  
+  :root {
+    --banner-title-color:{{ section.settings.banner_titcolor }};
+    --banner-sub-title-color:{{ section.settings.banner_sub_titcolor }};
+  }
+{% endstyle %}

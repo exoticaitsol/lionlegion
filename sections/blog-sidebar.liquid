@@ -1,0 +1,141 @@
+<!-- start blog-sidebar.liquid (SECTION) -->
+{%- comment -%}
+  Recent blog posts
+{%- endcomment -%}
+
+{%- if settings.enable_sidebar_newsletter -%}
+<div class="sidebarrow3">
+  <h3 class="row-title"> {%- if section.settings.sidebar_title == blank -%}{{ shop.name }}{%- else -%}{{ section.settings.sidebar_title }}{%- endif -%}</h3>
+  <p class="row-text">{{ section.settings.sidebar_text }}</p>
+  {% if settings.enable_klaviyo_id %}
+  {%- render 'newsletter-form-klaviyo', id_klaviyo: block.settings.id_klaviyo, section_id: section.id -%}
+  {% endif %}
+</div>
+{%- endif -%}
+{%- if section.settings.show_recent_posts -%}
+<div class="sidebarrow4">
+  <h3 class="title-recents sidebar-title">{{ 'blogs.sidebar.recent_articles' | t }}</h3>
+  <ul class="no-bullets sidebar_list">
+    {%- for article in blogs[blog.handle].articles limit: 6 -%}
+      <li class="sidebar_list_item">
+        <a title="{{ article.title | strip_html | escape }}" id="sidebar-row4-link-{{ forloop.index }}" class="list-link" href="{{ article.url }}">{{ article.title }}</a>
+        <!--br>
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time-->
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+{%- endif -%}
+{%- comment -%}
+  Blog tags
+{%- endcomment -%}
+{%- if section.settings.show_categories -%}
+{%- if section.settings.filter_by_tags == blank -%}
+{%- if blog.all_tags.size > 0 -%}
+  <div class="sidebarrow5">
+    <h3 class="title-recents sidebar-title">{{ 'blogs.sidebar.categories' | t }}</h3>
+    <ul class="no-bullets">
+      {%- for tag in blog.all_tags -%}
+        {%- if current_tags contains tag -%}
+          <li id="sidebar-row5-item-{{ forloop.index }}" class="sidebar_list_item">{{ tag }}</li>
+        {%- else -%}
+          <li id="sidebar-row5-link-{{ forloop.index }}" class="sidebar_list_item">{{ tag | link_to_tag: tag }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+  {%- else -%}
+  {%- if blog.all_tags.size > 0 -%}
+  <div class="sidebarrow5">
+    <h3 class="title-recents sidebar-title">{{ 'blogs.sidebar.categories' | t }}</h3>
+    <ul class="no-bullets">
+      {%- assign list_filter_tags =  section.settings.filter_by_tags | split: ";" -%}
+      {%- for tag in blog.all_tags -%}
+      {%- if list_filter_tags contains tag -%}
+      <li id="sidebar-row5-link-{{ forloop.index }}" class="sidebar_list_item">{{ tag | link_to_tag: tag }}</li>
+      {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+  
+  {%- endif -%}
+{%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.sidebar_left -%}
+  {% style %}
+    .grid.blog-grid{
+      display: flex;
+      flex-direction: row-reverse;
+      width: 100%;
+    }
+  {% endstyle %}
+{%- endif -%}
+
+{%- if section.settings.fixed_sidebar != true -%}
+  {% style %}
+    #shopify-section-blog-sidebar {
+      position: relative;
+      top:0;
+    }
+  {% endstyle %}
+{%- else -%}
+{% style %}
+    #shopify-section-blog-sidebar {
+      position: -webkit-sticky;
+      position: sticky;
+    }
+  {% endstyle %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Blog Sidebar",
+  "class": "blog-sidebar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "label": "Sidebar Left",
+      "id": "sidebar_left"
+    },
+    {
+      "type": "checkbox",
+      "label": "Fixed Sidebar",
+      "id": "fixed_sidebar"
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Recent Posts",
+      "id": "show_recent_posts",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Categories",
+      "id": "show_categories",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title",
+      "label": "Newsletter Widget Title",
+      "placeholder": "Newsletter Widget Title"
+    },
+    {
+      "type": "textarea",
+      "id": "sidebar_text",
+      "label": "Newsletter Widget Text",
+      "default": "Ready to find out more about our new, and upcoming products? Sign up below. "
+    },
+    {
+      "type": "textarea",
+      "id": "filter_by_tags",
+      "label": "Filter Categories By Tag",
+      "placeholder": "Type the tags",
+      "info": "Separate tags handle for ( ; )."
+    }
+  ]
+}
+{% endschema %}
+<!-- end blog-sidebar.liquid -->
